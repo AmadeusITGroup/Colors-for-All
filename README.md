@@ -1,6 +1,12 @@
-# ColorMatrix
+# Colors for all
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.1.
+
+## Installation
+
+Clone project and got to project repository
+
+Run `npm install`
 
 ## Development server
 
