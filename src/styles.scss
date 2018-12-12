@@ -1,0 +1,11 @@
+@import './themes/light.theme';
+html,
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  font-weight: 400;
+  font-size: 13px;
+  overflow: auto;
+  display: flex;
+}

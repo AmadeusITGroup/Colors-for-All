@@ -1,0 +1,43 @@
+:host {
+  .help-container {
+    padding: 20px;
+    display: flex;
+    height: 92vh;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+
+    .description {
+      padding-bottom: 15px;
+      .subsection {
+        padding: 7px 0px;
+      }
+    }
+    .contributors {
+      padding-bottom: 15px;
+    }
+    .features {
+      padding-bottom: 15px;
+    }
+
+    .rules {
+      padding-bottom: 15px;
+      .table-container {
+        width: 80%;
+        padding: 30px;
+        table {
+          width: 100%;
+          border: 1px solid black;
+          text-align: center;
+          border-collapse: collapse;
+          thead th,
+          tbody td {
+            border: black solid 1px;
+          }
+          tbody > tr > td:first-child {
+            font-weight: bolder;
+          }
+        }
+      }
+    }
+  }
+}

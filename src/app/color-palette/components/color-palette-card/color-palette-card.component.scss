@@ -1,0 +1,52 @@
+:host {
+  .color-palette-card {
+    .mat-card-header {
+      display: flex;
+      justify-content: space-between;
+      .mat-card-title {
+        cursor: pointer;
+        max-width: 190px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1.3em;
+        font-weight: 700;
+      }
+      .mat-icon {
+        margin-bottom: 20px;
+      }
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: auto auto auto; //   background-color: #2196F3;
+      max-height: 300px;
+      height: 300px;
+      width: 250px;
+    }
+
+    .grid-container {
+      display: flex;
+      flex-flow: column nowrap;
+      max-height: 300px;
+      height: 300px;
+      width: 250px;
+      &:hover {
+        cursor: pointer;
+      }
+      div {
+        flex: 1;
+      }
+    }
+
+    .grid-item {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 2px;
+      font-size: 30px;
+      text-align: center;
+    }
+    .mat-card-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}

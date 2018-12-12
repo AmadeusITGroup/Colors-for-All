@@ -1,0 +1,13 @@
+:host {
+  height: 100%;
+  padding: 25px;
+  width: 100vw;
+  overflow: auto;
+  .tagline {
+    padding: 20px;
+    font-size: 2em;
+    font-weight: 100;
+    text-align: center;
+    line-height: 1em;
+  }
+}

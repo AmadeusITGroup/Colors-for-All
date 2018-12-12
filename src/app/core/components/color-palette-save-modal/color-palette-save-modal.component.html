@@ -1,0 +1,25 @@
+<div class="save-palette-form-container" [formGroup]="savePaletteFormGroup">
+  <div mat-dialog-title>{{data.action}} color palette</div>
+  <div mat-dialog-content class="save-palette-form-content">
+    <mat-form-field hintLabel="Min {{LABEL_MIN_LENGTH}} Max {{LABEL_MAX_LENGTH}} characters">
+      <input formControlName="colorPaletteTitle" matInput placeholder="Title">
+      <mat-error *ngIf="colorPaletteTitle.errors?.required">Field is required</mat-error>
+      <mat-error *ngIf="colorPaletteTitle.errors?.minlength">The minimum length is set to {{LABEL_MIN_LENGTH}}</mat-error>
+      <mat-error *ngIf="colorPaletteTitle.errors?.maxlength">The maximum length is set to {{LABEL_MAX_LENGTH}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field hintLabel='Please enter your color palette as following example: ["#123456","#234567","#345678"]'>
+      <textarea formControlName="colorPaletteData" matInput rows="14" placeholder="Colors">
+      </textarea>
+      <mat-error *ngIf="colorPaletteData.errors?.required">Field is required</mat-error>
+      <mat-error *ngIf="colorPaletteData.errors?.invalidFormat">The format is invalid <br/>Example: ["#123456","#234567","#345678"]
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="default" (click)="cancel()">Cancel</button>
+    <button mat-raised-button [disabled]="savePaletteFormGroup.invalid" color="primary" class="button-save" (keyup.enter)="saveColorPalette()"
+      (click)="saveColorPalette()">Save</button>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+@import '../../../../styles';
+:host {
+  .page-container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    height: 95vh;
+    background-color: mat-color($light-accent);
+  }
+  .code-container {
+    height: 150px;
+    font-size: 156px;
+  }
+  .error-text {
+    height: 50px;
+    font-size: 36px;
+  }
+}

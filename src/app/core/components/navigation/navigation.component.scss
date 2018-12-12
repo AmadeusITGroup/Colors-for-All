@@ -1,0 +1,66 @@
+:host {
+  ::ng-deep .mat-list-item {
+    font-size: 14px !important;
+  }
+  ::ng-deep .mat-form-field-infix {
+    width: 100px;
+    padding: 0.2375em 0;
+  }
+  .button-create {
+    width: 100%;
+    text-align: left;
+    padding-left: 10px;
+    .icon-create {
+      padding-right: 5px;
+    }
+  }
+  .mat-nav-list {
+    padding-top: 0px;
+  }
+
+  .mat-toolbar-row {
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .button-text {
+        display: block;
+      }
+      .mat-button {
+        line-height: 25px;
+      }
+    }
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      .title {
+        margin-left: 3px;
+        &.truncate-small {
+          max-width: 150px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        &.truncate {
+          max-width: 250px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+    .custom-search {
+      margin: 25px;
+    }
+    &.mat-toolbar-single-row {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      flex: 1;
+    }
+  }
+}

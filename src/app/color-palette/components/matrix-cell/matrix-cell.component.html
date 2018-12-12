@@ -1,0 +1,21 @@
+<div
+  class="cell-container"
+  [ngClass]="{
+    'compliance-x-25': numberOfColors > 10 && data?.compliance === 'X',
+    'compliance-x-75': numberOfColors <= 10 && data?.compliance === 'X'
+  }"
+  [ngStyle]="data?.style"
+  title="{{data?.title}}"
+>
+  <div class="compliance">
+    <ng-container *ngIf="data?.compliance !== 'X'">
+      <span [ngStyle]="setBadgeStyle(data?.style)">{{ data?.compliance }}</span>
+    </ng-container>
+    <ng-container *ngIf="data?.compliance === 'X'">
+      <mat-icon>clear</mat-icon>
+    </ng-container>
+  </div>
+  <div [ngClass]="{ 'ratio-with-badge': data?.compliance !== 'X' }">
+    {{ data?.ratio }}
+  </div>
+</div>

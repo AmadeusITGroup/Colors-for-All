@@ -1,0 +1,31 @@
+:host {
+  .accessbility-info-container {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 1px 10px;
+    font-size: 14px;
+    .double-a,
+    .triple-a {
+      display: flex;
+      flex-flow: row nowrap;
+      align-content: center;
+      height: 23px;
+      margin: 1px 0px;
+
+      .info {
+        display: flex;
+        align-items: center;
+        margin-left: 5px;
+        color: #757575;
+      }
+      .accessibility-chip {
+        display: flex;
+        align-items: center;
+        background-color: #757575;
+        border-radius: 15px;
+        padding: 2px 6px;
+        color: white;
+      }
+    }
+  }
+}

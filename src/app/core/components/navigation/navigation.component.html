@@ -1,0 +1,97 @@
+<mat-toolbar color="accent">
+  <mat-toolbar-row>
+    <ng-container *ngIf="currentHeaderType === HeaderType.COLOR_PALETTE">
+      <div class="toolbar-left">
+        <div class="title">Colors for all</div>
+      </div>
+      <div class="toolbar-right">
+        <button mat-raised-button color="primary" class="button-create" (click)="createColorPalette()">
+          <mat-icon class="icon-create">add</mat-icon>
+          <span>Create</span>
+        </button>
+        <button type="button" aria-label="Help" mat-icon-button (click)="goToHelp()">
+          <mat-icon aria-label="Help">
+            help_outline
+          </mat-icon>
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="currentHeaderType === HeaderType.DETAILED_COLOR_PALETTE">
+      <div class="toolbar-left">
+        <button mat-icon-button (click)="goBackToColorPaletteList()">
+          <mat-icon aria-label="Back to main view">
+            arrow_back
+          </mat-icon>
+        </button>
+        <div class="title" [ngClass]="{'truncate-small':currentScreenSize === ScreenSize.MEDIUM,'truncate':currentScreenSize === ScreenSize.SMALL}">{{selectedColorPaletteSnapShot?.title}}</div>
+      </div>
+      <cm-matrix-custom-form *ngIf="currentScreenSize === ScreenSize.MEDIUM || currentScreenSize === ScreenSize.LARGE"
+        class="custom-search"></cm-matrix-custom-form>
+      <div *ngIf="currentScreenSize === ScreenSize.LARGE" class="toolbar-right">
+        <button mat-button (click)="editColorPalette(selectedColorPaletteSnapShot?.id)">
+          <mat-icon class="icon-edit">edit</mat-icon>
+          <span class="button-text">EDIT</span>
+        </button>
+        <button mat-button (click)="duplicateColorPalette(selectedColorPaletteSnapShot?.id)">
+          <mat-icon>file_copy</mat-icon>
+          <span class="button-text">DUPLICATE</span>
+        </button>
+        <button mat-button (click)="deleteColorPalette(selectedColorPaletteSnapShot?.id)">
+          <mat-icon>delete</mat-icon>
+          <span class="button-text">DELETE</span>
+        </button>
+        <button type="button" aria-label="Help" mat-icon-button (click)="goToHelp()">
+          <mat-icon aria-label="Help">
+            help_outline
+          </mat-icon>
+        </button>
+      </div>
+      <div *ngIf="currentScreenSize === ScreenSize.SMALL || currentScreenSize === ScreenSize.MEDIUM" class="toolbar-right">
+        <mat-menu #navigationMenu="matMenu">
+          <button mat-menu-item (click)="editColorPalette(selectedColorPaletteSnapShot?.id)">
+            <mat-icon class="icon-edit">edit</mat-icon>
+            <span class="button-text">EDIT</span>
+          </button>
+          <button mat-menu-item (click)="duplicateColorPalette(selectedColorPaletteSnapShot?.id)">
+            <mat-icon>file_copy</mat-icon>
+            <span class="button-text">DUPLICATE</span>
+          </button>
+          <button mat-menu-item (click)="deleteColorPalette(selectedColorPaletteSnapShot?.id)">
+            <mat-icon>delete</mat-icon>
+            <span class="button-text">DELETE</span>
+          </button>
+          <button type="button" aria-label="Help" mat-menu-item (click)="goToHelp()">
+            <mat-icon aria-label="Help">
+              help_outline
+            </mat-icon>
+            <span class="button-text">HELP</span>
+          </button>
+        </mat-menu>
+
+        <button mat-icon-button [matMenuTriggerFor]="navigationMenu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="currentHeaderType === HeaderType.HELP">
+      <div class="toolbar-left">
+        <button mat-icon-button (click)="goBackToColorPaletteList()">
+          <mat-icon aria-label="Back to main view">
+            arrow_back
+          </mat-icon>
+
+        </button>
+        <div class="title">Help</div>
+      </div>
+
+    </ng-container>
+  </mat-toolbar-row>
+  <mat-toolbar-row *ngIf="currentScreenSize === ScreenSize.SMALL && currentHeaderType === HeaderType.DETAILED_COLOR_PALETTE">
+    <cm-matrix-custom-form class="custom-search"></cm-matrix-custom-form>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<ng-content></ng-content>

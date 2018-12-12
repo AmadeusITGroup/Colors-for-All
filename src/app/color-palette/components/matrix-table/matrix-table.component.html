@@ -1,0 +1,23 @@
+<div class="table-container">
+  <table>
+    <thead>
+        <th class="first-header-cell">
+          <div class="header-title">{{selectedMatrix?.size}} px</div>
+          <div class="header-fontweight">{{selectedMatrix?.fontWeight}}</div>
+          </th>
+      <th class="color-header text-header" title="{{backgroundColor}}" *ngFor="let backgroundColor of colorPalette?.data" [style.backgroundColor]="backgroundColor">
+          <div>{{backgroundColor}}</div>
+      </th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let backgroundColor of colorPalette?.data">
+          <th title="{{backgroundColor}}" class="text-header" [style.backgroundColor]="backgroundColor">
+            <div>{{backgroundColor}}</div>
+          </th>
+          <td [style.backgroundColor]="backgroundColor" *ngFor="let foregroundColor of colorPalette?.data">
+            <cm-matrix-cell [numberOfColors]="colorPalette?.data.length" [data]="computeColorMatrixData(backgroundColor,foregroundColor,selectedMatrix.size,selectedMatrix.fontWeight)"></cm-matrix-cell>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

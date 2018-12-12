@@ -1,0 +1,23 @@
+:host {
+  .cell-container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+  }
+  .ratio-with-badge {
+    margin-top: 12px;
+  }
+  .compliance {
+    span {
+      padding: 4px 8px;
+    }
+  }
+  .compliance-x-75 {
+    color: rgba($color: white, $alpha: 0.75) !important;
+  }
+
+  .compliance-x-25 {
+    color: rgba($color: white, $alpha: 0.25) !important;
+  }
+}
