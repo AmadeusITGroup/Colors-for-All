@@ -1,5 +1,31 @@
 # Colors for all
 
+![Alt text](./assets/img/colors-for-all.png?raw=true 'Colors for all')
+
+## What is Colors-for-all?
+
+Colors-for-all enables you to easily check color contrasts and WCAG compliance (AA or AAA levels as defined by W3C) between specific colors in one shot ! This online application is available for UX/UI designers or any other people involved in digital accessibility.
+
+## Features
+
+You can perform the following actions for each palette :
+
+- create
+
+- edit
+
+- duplicate
+
+- delete
+
+- save locally
+
+There is no limit in the number of colors for each palette.
+
+The application generates automatically a matrix (same colors horizontally and vertically) from this palette. Each cell of the matrix is the combination between 2 colors (foreground/background). The ratio and WCAG level is automatically computed and displayed for each combination. All accessible combinations (AA or AAA) are visually highlighted.
+
+Thanks to this tool, you can wisely choose the best combinations of colors (foreground/background) to use in your own projects. This helps you design more “accessible” products.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.1.
 
 ## Installation
