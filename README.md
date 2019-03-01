@@ -6,11 +6,9 @@
 
 Colors-for-all enables you to easily check color contrasts and WCAG compliance (AA or AAA levels as defined by W3C) between specific colors in one shot ! This online application is available for UX/UI designers or any other people involved in digital accessibility.
 
-Click the following button to launch "Colors for all".
+Try it now!
 
-<p style="text-align:center">
-<button name="button" style="font-size:20px;font-weight:700;background-color:#005EB8;border-radius:50px;padding:10px 20px;color:white;border:none;"  onclick="https://AmadeusITGroup.github.io/Colors-for-All/">Colors-for-all</button>
-</p>
+[![Alt text](./assets/img/button.png?raw=true 'Colors for all')](https://AmadeusITGroup.github.io/Colors-for-All/)
 
 ## Features
 
