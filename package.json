@@ -19,7 +19,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "compodoc": "compodoc -p tsconfig.json -w -s --port 3500"
+    "compodoc": "compodoc -p tsconfig.json -w -s --port 3500",
+    "deploy": "ng build --prod --base-href \"https://AmadeusITGroup.github.io/Colors-for-All/\" && ngh --dir dist/colors-for-all/"
   },
   "private": true,
   "dependencies": {
