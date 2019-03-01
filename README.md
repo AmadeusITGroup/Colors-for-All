@@ -8,7 +8,9 @@ Colors-for-all enables you to easily check color contrasts and WCAG compliance (
 
 Click the following button to launch "Colors for all".
 
-<center><button name="button" style="font-size:20px;font-weight:700;background-color:#005EB8;border-radius:50px;padding:10px 20px;color:white;border:none;"  onclick="window.open('https://AmadeusITGroup.github.io/Colors-for-All/')">Colors for all</button></center>
+<p style="text-align:center">
+<button name="button" style="font-size:20px;font-weight:700;background-color:#005EB8;border-radius:50px;padding:10px 20px;color:white;border:none;"  onclick="https://AmadeusITGroup.github.io/Colors-for-All/">Colors-for-all</button>
+</p>
 
 ## Features
 
