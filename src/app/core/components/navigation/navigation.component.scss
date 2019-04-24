@@ -1,7 +1,16 @@
 :host {
+  display: flex;
+  flex-flow: column nowrap;
+  .fixed-header {
+    position: fixed;
+    top: 0;
+    z-index: 150;
+  }
+
   ::ng-deep .mat-list-item {
     font-size: 14px !important;
   }
+
   ::ng-deep .mat-form-field-infix {
     width: 100px;
     padding: 0.2375em 0;

@@ -1,0 +1,44 @@
+@import '../../../../themes/light.theme';
+$icon-size: 100px;
+.mat-card {
+  .color-palette-creation-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 209px;
+    height: 300px;
+    padding: 20px;
+    .icon-text-container {
+      display: flex;
+      flex-flow: column nowrap;
+
+      .create-color-palette-icon {
+        color: rgba(0, 0, 0, 0.25);
+        font-size: $icon-size;
+        width: $icon-size;
+        height: $icon-size;
+        vertical-align: middle;
+        align-self: center;
+      }
+      .create-color-palette-text {
+        font-size: 1.3em;
+        font-weight: 700;
+        margin: 20px auto;
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+  &:hover {
+    cursor: pointer;
+    .color-palette-creation-card-content {
+      .icon-text-container {
+        .create-color-palette-text {
+          color: mat-color($light-primary);
+        }
+        .create-color-palette-icon {
+          color: mat-color($light-primary);
+        }
+      }
+    }
+  }
+}

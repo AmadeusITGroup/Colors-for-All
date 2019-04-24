@@ -1,13 +1,17 @@
 :host {
-  height: 100%;
-  padding: 25px;
+  height: 90vh;
+  padding: 65px 25px 25px 25px;
   width: 100vw;
-  overflow: auto;
+  overflow-y: auto;
+  position: fixed;
+  display: flex;
+  flex-flow: column nowrap;
   .tagline {
     padding: 20px;
     font-size: 2em;
     font-weight: 100;
     text-align: center;
     line-height: 1em;
+    color: rgba(0, 0, 0, 0.85);
   }
 }

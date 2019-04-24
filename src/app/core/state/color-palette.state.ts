@@ -133,14 +133,15 @@ export class ColorPaletteState implements NgxsOnInit {
           colorPalettesFromLocalStorage.ids.length
         )
       ) {
-        const colorPalette: ColorPalette = this.colorPaletteService.getDefaultColorPalette();
-        const colorPaletteDefaultEntity = {};
-        colorPaletteDefaultEntity[colorPalette.id] = colorPalette;
+        const colorPalettes: ColorPalette[] = this.colorPaletteService.getDefaultColorPalettes();
         ctx.setState({
           ...state,
-          ids: [colorPalette.id],
-          entities: colorPaletteDefaultEntity,
-          selected: colorPalette.id
+          ids: colorPalettes.map(cp => cp.id),
+          entities: colorPalettes.reduce((acc, curr) => {
+            acc[curr['id']] = curr;
+            return acc;
+          }, {}),
+          selected: colorPalettes[0].id
         });
       } else {
         ctx.setState({ ...colorPalettesFromLocalStorage });

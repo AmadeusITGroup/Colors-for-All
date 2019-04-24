@@ -1,5 +1,4 @@
-import { ScreenSize } from './../../enums/screen-size.enum';
-import { ColorPalette } from './../../models/color-palette.model';
+import { LayoutModule } from '@angular/cdk/layout';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
@@ -7,8 +6,8 @@ import {
   MatDialog,
   MatDialogModule,
   MatDialogRef,
-  MatToolbarModule,
-  MatMenuModule
+  MatMenuModule,
+  MatToolbarModule
 } from '@angular/material';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,13 +20,14 @@ import * as uuid from 'uuid';
 import { ColorPaletteSaveModalComponent } from '../color-palette-save-modal/color-palette-save-modal.component';
 import { MockComponent, mockRoutes } from './../../../../../mock/routes.mock';
 import { ColorPaletteConfirmDeleteModalComponent } from './../../../color-palette/components/color-palette-confirm-delete-modal/color-palette-confirm-delete-modal.component';
+import { ScreenSize } from './../../enums/screen-size.enum';
+import { ColorPalette } from './../../models/color-palette.model';
 import {
   DeleteColorPalette,
   SaveColorPalette
 } from './../../state/color-palette.actions';
 import { ColorPaletteState } from './../../state/color-palette.state';
 import { NavigationComponent } from './navigation.component';
-import { LayoutModule, BreakpointObserver } from '@angular/cdk/layout';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;

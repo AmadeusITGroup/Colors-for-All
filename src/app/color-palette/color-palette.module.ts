@@ -11,6 +11,7 @@ import {
 import { CoreModule } from './../core/core.module';
 import { ColorPaletteRoutingModule } from './color-palette-routing.module';
 import { ColorPaletteCardComponent } from './components/color-palette-card/color-palette-card.component';
+import { ColorPaletteCreationCardComponent } from './components/color-palette-creation-card/color-palette-creation-card.component';
 import { ColorPaletteListComponent } from './components/color-palette-list/color-palette-list.component';
 import { HelpComponent } from './components/help/help.component';
 import { MatrixCellComponent } from './components/matrix-cell/matrix-cell.component';
@@ -38,7 +39,8 @@ const DECLARATIONS = [
   MatrixCellComponent,
   ColorPaletteListComponent,
   ColorPaletteCardComponent,
-  HelpComponent
+  HelpComponent,
+  ColorPaletteCreationCardComponent
 ];
 
 @NgModule({

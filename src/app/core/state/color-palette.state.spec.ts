@@ -61,30 +61,48 @@ const defaultColorPalette = {
   id: defaultColorPaletteId,
   title: 'Default',
   data: [
-    '#0D0D0D',
-    '#1A1A1A',
-    '#262626',
+    '#6f2b8d',
+    '#004485',
+    '#005eb8',
+    '#009dd1',
+    '#9bcaeb',
+    '#1a7ead',
+    '#008540',
+    '#ead300',
+    '#f7a827',
+    '#e95326',
+    '#ec0e0e',
+    '#ce0058',
+    '#9e6900',
+    '#000000',
+    '#191919',
     '#333333',
-    '#454545',
-    '#6D6D6D',
-    '#959595',
-    '#BDBDBD',
-    '#DCDCDC',
-    '#E9E9E9',
-    '#F7F7F7',
-    '#FFFFFF',
-    '#005EB8',
-    '#00A9E0',
-    '#9BCAEB',
-    '#CE0058',
-    '#6F2B8D',
-    '#E95326',
-    '#AB5C00',
-    '#F7A827',
-    '#FEEB3D',
-    '#33D681',
-    '#00A34E',
-    '#00701B'
+    '#4c4c4c',
+    '#666666',
+    '#7f7f7f',
+    '#999999',
+    '#b2b2b2',
+    '#cccccc',
+    '#e8e8e8',
+    '#f2f2f2',
+    '#ffffff'
+  ]
+};
+
+const googleColorPaletteId = '222';
+const googleColorPalette = {
+  id: googleColorPaletteId,
+  title: 'Google',
+  data: [
+    '#4285f3',
+    '#34a853',
+    '#fbbc05',
+    '#ea4335',
+    '#ffffff',
+    '#1a0dab',
+    '#006621',
+    '#777777',
+    '#212121'
   ]
 };
 
@@ -112,36 +130,38 @@ describe('ColorPaletteState', () => {
       store.reset({ colorPalettes: DEFAULT_COLOR_PALETTE_STATE });
     });
     it('Should set default state', async () => {
-      store.selectOnce(state => state.colorPalettes).subscribe(state => {
-        expect(state.ids).toEqual([]);
-        expect(state.entities).toEqual({});
-        expect(state.error).toEqual(null);
-        expect(state.selected).toEqual(null);
-        expect(state.selectedMatrix).toEqual({
-          size: 12,
-          fontWeight: FontWeight.NORMAL
+      store
+        .selectOnce(state => state.colorPalettes)
+        .subscribe(state => {
+          expect(state.ids).toEqual([]);
+          expect(state.entities).toEqual({});
+          expect(state.error).toEqual(null);
+          expect(state.selected).toEqual(null);
+          expect(state.selectedMatrix).toEqual({
+            size: 12,
+            fontWeight: FontWeight.NORMAL
+          });
+          expect(state.sizes).toEqual(range(RANGE_START, RANGE_END));
+          expect(state.fontWeights).toEqual([
+            FontWeight.LIGHTER,
+            FontWeight.NORMAL,
+            FontWeight.BOLD,
+            FontWeight.BOLDER,
+            FontWeight.ONE_HUNDRED,
+            FontWeight.TWO_HUNDRED,
+            FontWeight.THREE_HUNDRED,
+            FontWeight.FOUR_HUNDRED,
+            FontWeight.FIVE_HUNDRED,
+            FontWeight.SIX_HUNDRED,
+            FontWeight.SEVEN_HUNDRED,
+            FontWeight.EIGHT_HUNDRED,
+            FontWeight.NINE_HUNDRED
+          ]);
+          expect(state.accessibilityInfo).toEqual({
+            doubleA: null,
+            tripleA: null
+          });
         });
-        expect(state.sizes).toEqual(range(RANGE_START, RANGE_END));
-        expect(state.fontWeights).toEqual([
-          FontWeight.LIGHTER,
-          FontWeight.NORMAL,
-          FontWeight.BOLD,
-          FontWeight.BOLDER,
-          FontWeight.ONE_HUNDRED,
-          FontWeight.TWO_HUNDRED,
-          FontWeight.THREE_HUNDRED,
-          FontWeight.FOUR_HUNDRED,
-          FontWeight.FIVE_HUNDRED,
-          FontWeight.SIX_HUNDRED,
-          FontWeight.SEVEN_HUNDRED,
-          FontWeight.EIGHT_HUNDRED,
-          FontWeight.NINE_HUNDRED
-        ]);
-        expect(state.accessibilityInfo).toEqual({
-          doubleA: null,
-          tripleA: null
-        });
-      });
     });
 
     it('Should select color palettes list', async () => {
@@ -238,79 +258,64 @@ describe('ColorPaletteState', () => {
       });
     });
     describe('LoadColorPalettes', () => {
-      const expectedDefaultColorPaletteId = defaultColorPaletteId;
-      const expectedColorPalette = defaultColorPalette;
-      it('Should load default colorPalette', async () => {
+      const expectedDefaultColorPaletteIds = [
+        defaultColorPaletteId,
+        googleColorPaletteId
+      ];
+      const expectedColorPalettes: {
+        [key: string]: ColorPalette;
+      } = {};
+      expectedColorPalettes[defaultColorPaletteId] = defaultColorPalette;
+      expectedColorPalettes[googleColorPaletteId] = googleColorPalette;
+      it('Should load default colorPalettes', async () => {
         spyOn(localStorage, 'getItem').and.callFake(key => undefined);
-        spyOn(uuid, 'v4').and.returnValue(expectedDefaultColorPaletteId);
-        spyOn(colorPaletteService, 'getDefaultColorPalette').and.returnValue({
-          id: '111',
-          title: 'Default',
-          data: [
-            '#0D0D0D',
-            '#1A1A1A',
-            '#262626',
-            '#333333',
-            '#454545',
-            '#6D6D6D',
-            '#959595',
-            '#BDBDBD',
-            '#DCDCDC',
-            '#E9E9E9',
-            '#F7F7F7',
-            '#FFFFFF',
-            '#005EB8',
-            '#00A9E0',
-            '#9BCAEB',
-            '#CE0058',
-            '#6F2B8D',
-            '#E95326',
-            '#AB5C00',
-            '#F7A827',
-            '#FEEB3D',
-            '#33D681',
-            '#00A34E',
-            '#00701B'
-          ]
-        });
+        spyOn(uuid, 'v4').and.returnValue(defaultColorPaletteId);
+        spyOn(colorPaletteService, 'getDefaultColorPalettes').and.returnValue([
+          defaultColorPalette,
+          googleColorPalette
+        ]);
         store.dispatch(new LoadColorPalettes());
-        store.selectOnce(state => state.colorPalettes).subscribe(result => {
-          expect(result.ids).toEqual([expectedDefaultColorPaletteId]);
-          expect(result.selected).toEqual(expectedDefaultColorPaletteId);
-          expect(result.entities).toEqual({
-            '111': expectedColorPalette
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(result.ids).toEqual(expectedDefaultColorPaletteIds);
+            expect(result.selected).toEqual(defaultColorPaletteId);
+            expect(result.entities).toEqual(expectedColorPalettes);
           });
-        });
       });
       it('Should load localStorage content in colorPalette', async () => {
         spyOn(localStorage, 'getItem').and.returnValue(
           JSON.stringify({
             colorPalettes: {
-              ids: [expectedDefaultColorPaletteId],
-              entities: { '111': expectedColorPalette },
-              selected: expectedDefaultColorPaletteId
+              ids: expectedDefaultColorPaletteIds,
+              entities: expectedColorPalettes,
+              selected: defaultColorPaletteId
             }
           })
         );
-        spyOn(colorPaletteService, 'getDefaultColorPalette').and.callThrough();
-        spyOn(uuid, 'v4').and.returnValue(expectedDefaultColorPaletteId);
+        spyOn(colorPaletteService, 'getDefaultColorPalettes').and.callThrough();
+        spyOn(uuid, 'v4').and.returnValue(defaultColorPaletteId);
 
         store.dispatch(new LoadColorPalettes());
-        store.selectOnce(state => state.colorPalettes).subscribe(result => {
-          expect(result.ids).toEqual([expectedDefaultColorPaletteId]);
-          expect(result.entities).toEqual({ '111': expectedColorPalette });
-          expect(result.selected).toEqual('111');
-        });
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(result.ids).toEqual(expectedDefaultColorPaletteIds);
+            expect(result.entities).toEqual(expectedColorPalettes);
+            expect(result.selected).toEqual('111');
+          });
       });
       it('Should dispatch an error if unable to parse localStorage json data', async () => {
         spyOn(localStorage, 'getItem').and.callFake(key => {
           return '';
         });
-        spyOn(colorPaletteService, 'getDefaultColorPalette');
+        spyOn(colorPaletteService, 'getDefaultColorPalettes');
         store.dispatch(new LoadColorPalettes());
-        store.selectOnce(state => state.colorPalettes).subscribe(result => {
-          expect(result.error).toBeDefined();
-        });
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(result.error).toBeDefined();
+          });
       });
     });
     describe('SaveColorPalette', () => {
@@ -327,17 +332,21 @@ describe('ColorPaletteState', () => {
         spyOn(store, 'dispatch').and.callThrough();
         const newColorPalette: ColorPalette = expectedColorPalette;
         store.dispatch(new SaveColorPalette(newColorPalette));
-        store.select(state => state.colorPalettes).subscribe(result => {
-          expect(result.ids).toEqual([expectedDefaultColorPaletteId]);
-          expect(result.entities).toEqual({ '111': expectedColorPalette });
-          expect(store.dispatch).toHaveBeenCalledTimes(2);
-          expect(router.navigate).toHaveBeenCalledWith([`/color-palette/111`]);
-          expect(store.dispatch).toHaveBeenCalledWith(
-            new ShowSuccessSnackBar(
-              'Color Palette has been created successfully'
-            )
-          );
-        });
+        store
+          .select(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(result.ids).toEqual([expectedDefaultColorPaletteId]);
+            expect(result.entities).toEqual({ '111': expectedColorPalette });
+            expect(store.dispatch).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledWith([
+              `/color-palette/111`
+            ]);
+            expect(store.dispatch).toHaveBeenCalledWith(
+              new ShowSuccessSnackBar(
+                'Color Palette has been created successfully'
+              )
+            );
+          });
       });
       it('Should update a color palette', async () => {
         const expectedColorPalette = {
@@ -349,16 +358,22 @@ describe('ColorPaletteState', () => {
         spyOn(store, 'dispatch').and.callThrough();
         const newColorPalette: ColorPalette = expectedColorPalette;
         store.dispatch(new SaveColorPalette(newColorPalette));
-        store.selectOnce(state => state.colorPalettes).subscribe(result => {
-          expect(uuid.v4).not.toHaveBeenCalled();
-          expect(result.ids).toEqual([expectedDefaultColorPaletteId]);
-          expect(result.entities).toEqual({ '111': expectedColorPalette });
-          expect(store.dispatch).toHaveBeenCalledTimes(2);
-          expect(router.navigate).toHaveBeenCalledWith([`/color-palette/111`]);
-          expect(store.dispatch).toHaveBeenCalledWith(
-            new ShowSuccessSnackBar('Color Palette has been saved successfully')
-          );
-        });
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(uuid.v4).not.toHaveBeenCalled();
+            expect(result.ids).toEqual([expectedDefaultColorPaletteId]);
+            expect(result.entities).toEqual({ '111': expectedColorPalette });
+            expect(store.dispatch).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledWith([
+              `/color-palette/111`
+            ]);
+            expect(store.dispatch).toHaveBeenCalledWith(
+              new ShowSuccessSnackBar(
+                'Color Palette has been saved successfully'
+              )
+            );
+          });
       });
       it('Should dispatch an error when unable to save', async () => {
         const expectedColorPalette = {
@@ -369,11 +384,15 @@ describe('ColorPaletteState', () => {
         spyOn(store, 'dispatch').and.callThrough();
         const newColorPalette: ColorPalette = expectedColorPalette;
         store.dispatch(new SaveColorPalette(newColorPalette));
-        store.selectOnce(state => state.colorPalettes).subscribe(() => {
-          expect(store.dispatch).not.toHaveBeenCalledWith(
-            new ShowSuccessSnackBar('Color Palette has been saved successfully')
-          );
-        });
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(() => {
+            expect(store.dispatch).not.toHaveBeenCalledWith(
+              new ShowSuccessSnackBar(
+                'Color Palette has been saved successfully'
+              )
+            );
+          });
       });
     });
     describe('DeleteColorPalette', () => {
@@ -395,30 +414,34 @@ describe('ColorPaletteState', () => {
       it('Should delete color palette and display snackbar', async () => {
         spyOn(store, 'dispatch').and.callThrough();
         store.dispatch(new DeleteColorPalette('111'));
-        store.selectOnce(state => state.colorPalettes).subscribe(result => {
-          expect(result.ids).toEqual([]);
-          expect(result.entities).toEqual({});
-          expect(result.selected).toEqual(null);
-          expect(router.navigate).toHaveBeenCalledWith(['/color-palette']);
-          expect(store.dispatch).toHaveBeenCalledWith(
-            new ShowSuccessSnackBar(
-              'Color Palette has been deleted successfully.'
-            )
-          );
-        });
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(result.ids).toEqual([]);
+            expect(result.entities).toEqual({});
+            expect(result.selected).toEqual(null);
+            expect(router.navigate).toHaveBeenCalledWith(['/color-palette']);
+            expect(store.dispatch).toHaveBeenCalledWith(
+              new ShowSuccessSnackBar(
+                'Color Palette has been deleted successfully.'
+              )
+            );
+          });
       });
       it('Should dispatch an error and display an error snackbar', async () => {
         store.reset(null);
         spyOn(store, 'dispatch').and.callThrough();
         store.dispatch(new DeleteColorPalette('111'));
-        store.selectOnce(state => state.colorPalettes).subscribe(result => {
-          expect(result.error.message).toEqual(
-            `Cannot read property 'ids' of null`
-          );
-          expect(store.dispatch).toHaveBeenCalledWith(
-            new ShowErrorSnackBar(`Cannot read property 'ids' of null`)
-          );
-        });
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(result.error.message).toEqual(
+              `Cannot read property 'ids' of null`
+            );
+            expect(store.dispatch).toHaveBeenCalledWith(
+              new ShowErrorSnackBar(`Cannot read property 'ids' of null`)
+            );
+          });
       });
     });
     describe('SetSelectedColorPalette', () => {
@@ -439,15 +462,19 @@ describe('ColorPaletteState', () => {
       });
       it('Should set defined selected color palette', async () => {
         store.dispatch(new SetSelectedColorPalette('111'));
-        store.selectOnce(state => state.colorPalettes).subscribe(result => {
-          expect(result.selected).toEqual('111');
-        });
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(result.selected).toEqual('111');
+          });
       });
       it('Should set default color palette', async () => {
         store.dispatch(new SetSelectedColorPalette());
-        store.selectOnce(state => state.colorPalettes).subscribe(result => {
-          expect(result.selected).toEqual('111');
-        });
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(result.selected).toEqual('111');
+          });
       });
     });
     describe('SetSelectedMatrix', () => {
@@ -460,12 +487,14 @@ describe('ColorPaletteState', () => {
         const expectedSize = 14;
         const expectedFontWeight = FontWeight.BOLD;
         store.dispatch(new SetSelectedMatrix(expectedSize, expectedFontWeight));
-        store.selectOnce(state => state.colorPalettes).subscribe(result => {
-          expect(result.selectedMatrix).toEqual({
-            size: expectedSize,
-            fontWeight: expectedFontWeight
+        store
+          .selectOnce(state => state.colorPalettes)
+          .subscribe(result => {
+            expect(result.selectedMatrix).toEqual({
+              size: expectedSize,
+              fontWeight: expectedFontWeight
+            });
           });
-        });
       });
     });
   });

@@ -43,6 +43,6 @@ describe('ColorPaletteListComponent', () => {
     const colorPaletteListContainer = colorPaletteListComponent.querySelector(
       '.color-palette-list-container'
     );
-    expect(colorPaletteListContainer.children.length).toEqual(2);
+    expect(colorPaletteListContainer.children.length).toEqual(3);
   });
 });

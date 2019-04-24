@@ -65,7 +65,6 @@ export class NavigationComponent implements OnInit {
 
     this.router.events.subscribe(events => {
       if (events instanceof NavigationEnd) {
-        console.log('URL', events.url);
         if (
           events.url.match(/^\/color\-palette$/) ||
           events.url.match(/^\/$/)

@@ -1,20 +1,21 @@
-<mat-toolbar color="accent">
+<mat-toolbar color="accent" [ngClass]="{'fixed-header':currentHeaderType === HeaderType.COLOR_PALETTE}">
   <mat-toolbar-row>
     <ng-container *ngIf="currentHeaderType === HeaderType.COLOR_PALETTE">
       <div class="toolbar-left">
-        <div class="title">Colors for all</div>
+          <div class="title">Colors for all</div>
+        </div>
+        <div class="toolbar-right">
+          <button mat-raised-button color="primary" class="button-create" (click)="createColorPalette()">
+            <mat-icon class="icon-create">add</mat-icon>
+            <span>Create</span>
+          </button>
+          <button type="button" aria-label="Help" mat-icon-button (click)="goToHelp()">
+            <mat-icon aria-label="Help">
+              help_outline
+            </mat-icon>
+          </button>
       </div>
-      <div class="toolbar-right">
-        <button mat-raised-button color="primary" class="button-create" (click)="createColorPalette()">
-          <mat-icon class="icon-create">add</mat-icon>
-          <span>Create</span>
-        </button>
-        <button type="button" aria-label="Help" mat-icon-button (click)="goToHelp()">
-          <mat-icon aria-label="Help">
-            help_outline
-          </mat-icon>
-        </button>
-      </div>
+     
     </ng-container>
 
     <ng-container *ngIf="currentHeaderType === HeaderType.DETAILED_COLOR_PALETTE">
