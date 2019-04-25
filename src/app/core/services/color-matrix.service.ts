@@ -83,7 +83,7 @@ export class ColorMatrixService {
         fontWeight === FontWeight.SIX_HUNDRED
       ) {
         accessibilityInfo = {
-          doubleA: 3,
+          doubleA: 4.5,
           tripleA: 7
         };
       } else {

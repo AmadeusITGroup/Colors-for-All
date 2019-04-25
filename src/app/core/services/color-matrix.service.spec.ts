@@ -60,16 +60,16 @@ describe('ColorMatrixService', () => {
       const result = service.calculateAccessibilityInfo(15, FontWeight.BOLD);
       expect(result).toEqual(expectedResult);
     });
-    it('should return doubleA 3 and tripleA 7 when size=18.66 and font normal', () => {
-      const expectedResult = { doubleA: 3, tripleA: 7 };
+    it('should return doubleA 4.5 and tripleA 7 when size=18.66 and font normal', () => {
+      const expectedResult = { doubleA: 4.5, tripleA: 7 };
       const result = service.calculateAccessibilityInfo(
         18.66,
         FontWeight.NORMAL
       );
       expect(result).toEqual(expectedResult);
     });
-    it('should return doubleA 3 and tripleA 7 when size=23.99 and font normal', () => {
-      const expectedResult = { doubleA: 3, tripleA: 7 };
+    it('should return doubleA 4.5 and tripleA 7 when size=23.99 and font normal', () => {
+      const expectedResult = { doubleA: 4.5, tripleA: 7 };
       const result = service.calculateAccessibilityInfo(
         23.99,
         FontWeight.NORMAL
