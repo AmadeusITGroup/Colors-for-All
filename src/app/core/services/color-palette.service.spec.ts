@@ -105,7 +105,7 @@ describe('ColorPaletteService', () => {
       },
       {
         id: '123',
-        title: 'Boostrap',
+        title: 'Bootstrap',
         data: BOOTSTRAP_COLOR_SPAN
       }
     ];

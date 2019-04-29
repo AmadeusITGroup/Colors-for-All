@@ -99,7 +99,7 @@ export class ColorPaletteService {
       },
       {
         id: uuid.v4(),
-        title: 'Boostrap',
+        title: 'Bootstrap',
         data: this.BOOTSTRAP_COLOR_SPAN
       }
     ];
