@@ -108,7 +108,7 @@ const googleColorPalette = {
 
 describe('ColorPaletteState', () => {
   let store: Store;
-  let router: Router;
+  let router: any;
   let colorPaletteService: ColorPaletteService;
   let colorMatrixService: ColorMatrixService;
   beforeEach(async () => {

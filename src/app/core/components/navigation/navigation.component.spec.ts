@@ -33,8 +33,8 @@ describe('NavigationComponent', () => {
   let component: NavigationComponent;
   let fixture: ComponentFixture<NavigationComponent>;
   let store: Store;
-  let router: Router;
-  let dialog: MatDialog;
+  let router: any;
+  let dialog: any;
   const colorPaletteId = '4564';
   const selectedColorPaletteSnapShot = {
     id: colorPaletteId,

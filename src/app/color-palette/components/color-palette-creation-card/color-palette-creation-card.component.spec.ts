@@ -18,7 +18,7 @@ import { ColorPaletteCreationCardComponent } from './color-palette-creation-card
 describe('ColorPaletteCreationCardComponent', () => {
   let component: ColorPaletteCreationCardComponent;
   let fixture: ComponentFixture<ColorPaletteCreationCardComponent>;
-  let dialog: MatDialog;
+  let dialog: any;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [

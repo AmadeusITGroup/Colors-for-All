@@ -27,7 +27,7 @@ describe('ColorPaletteCardComponent', () => {
   let component: ColorPaletteCardComponent;
   let fixture: ComponentFixture<ColorPaletteCardComponent>;
   let store: Store;
-  let dialog: MatDialog;
+  let dialog: any;
   let router: any;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
