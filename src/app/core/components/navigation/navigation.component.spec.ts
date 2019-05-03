@@ -116,6 +116,7 @@ describe('NavigationComponent', () => {
         afterClosed: () => of(modalResult)
       });
       spyOn(store, 'dispatch');
+      spyOn(router, 'navigate').and.callFake(() => {});
 
       component.createColorPalette();
 
@@ -137,6 +138,7 @@ describe('NavigationComponent', () => {
     };
     it('should open colorPalette edit modal', () => {
       spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of() });
+      spyOn(router, 'navigate').and.callFake(() => {});
 
       component.selectedColorPaletteSnapShot = selectedColorPaletteSnapShot;
       component.editColorPalette(colorPaletteId);
@@ -153,6 +155,7 @@ describe('NavigationComponent', () => {
         afterClosed: () => of(modalResult)
       });
       spyOn(store, 'dispatch');
+      spyOn(router, 'navigate').and.callFake(() => {});
 
       component.selectedColorPaletteSnapShot = selectedColorPaletteSnapShot;
       component.editColorPalette(colorPaletteId);
@@ -172,6 +175,8 @@ describe('NavigationComponent', () => {
     it('should open color palette delete confirmation modal', () => {
       component.selectedColorPaletteSnapShot = selectedColorPaletteSnapShot;
       spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of() });
+      spyOn(router, 'navigate').and.callFake(() => {});
+
       component.deleteColorPalette(colorPaletteId);
       expect(dialog.open).toHaveBeenCalledWith(
         ColorPaletteConfirmDeleteModalComponent,
@@ -188,6 +193,8 @@ describe('NavigationComponent', () => {
         afterClosed: () => of(true)
       });
       spyOn(store, 'dispatch');
+      spyOn(router, 'navigate').and.callFake(() => {});
+
       component.deleteColorPalette(colorPaletteId);
       expect(dialog.open).toHaveBeenCalledWith(
         ColorPaletteConfirmDeleteModalComponent,
@@ -215,6 +222,7 @@ describe('NavigationComponent', () => {
     it('should open color palette delete confirmation modal', () => {
       spyOn(uuid, 'v4').and.returnValue('1234');
       spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of() });
+      spyOn(router, 'navigate').and.callFake(() => {});
 
       component.selectedColorPaletteSnapShot = selectedColorPaletteSnapShot;
       component.duplicateColorPalette(duplicatedColorPalette.id);
@@ -232,7 +240,7 @@ describe('NavigationComponent', () => {
         afterClosed: () => of(modalResult)
       });
       spyOn(store, 'dispatch');
-
+      spyOn(router, 'navigate').and.callFake(() => {});
       component.selectedColorPaletteSnapShot = selectedColorPaletteSnapShot;
       component.duplicateColorPalette(duplicatedColorPalette.id);
 
