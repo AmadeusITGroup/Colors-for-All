@@ -6,7 +6,11 @@
     top: 0;
     z-index: 150;
   }
-
+  .Appicon{
+    height: 32px;
+    width: 32px;
+    margin-right: 12px;
+  }
   ::ng-deep .mat-list-item {
     font-size: 14px !important;
   }
