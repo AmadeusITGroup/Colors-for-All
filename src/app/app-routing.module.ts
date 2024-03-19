@@ -6,7 +6,7 @@ import { PageNotFoundComponent } from './core/components/page-not-found/page-not
 const routes: Routes = [
   {
     path: 'color-palette',
-    loadChildren: './color-palette/color-palette.module#ColorPaletteModule'
+    loadChildren: () => import('./color-palette/color-palette.module').then((m) => m.ColorPaletteModule)
   },
   {
     path: '',
@@ -24,4 +24,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

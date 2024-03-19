@@ -1,17 +1,31 @@
 import { ColorMatrixSelection } from './../../models/color-matrix.model';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { SetSelectedMatrix } from '../../state/color-palette.actions';
 import { ColorPaletteState } from '../../state/color-palette.state';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { AsyncPipe, NgFor } from '@angular/common';
+import { AccessibilityInfoPanelComponent } from '../accessibility-info-panel/accessibility-info-panel.component';
 
 @Component({
   selector: 'cm-matrix-custom-form',
   templateUrl: './matrix-custom-form.component.html',
-  styleUrls: ['./matrix-custom-form.component.scss']
+  styleUrls: ['./matrix-custom-form.component.scss'],
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatSelectModule,
+    NgFor,
+    AsyncPipe,
+    AccessibilityInfoPanelComponent,
+    FormsModule,
+    ReactiveFormsModule
+  ]
 })
 export class MatrixCustomFormComponent implements OnInit {
   @Select(ColorPaletteState.selectedMatrix)
@@ -24,7 +38,7 @@ export class MatrixCustomFormComponent implements OnInit {
   public customPaletteSearch: FormGroup;
   private stopSelectedMatrixSubscription = new Subject<boolean>();
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   ngOnInit() {
     this.customPaletteSearch = new FormGroup({

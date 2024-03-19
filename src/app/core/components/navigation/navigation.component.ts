@@ -3,7 +3,7 @@ import { ColorPalette } from './../../models/color-palette.model';
 import { ColorPaletteSaveModalComponent } from './../../../core/components/color-palette-save-modal/color-palette-save-modal.component';
 import { HeaderType } from './../../../core/enums/header.enum';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -14,11 +14,27 @@ import { ColorPaletteState } from '../../../core/state/color-palette.state';
 import { ColorPaletteConfirmDeleteModalComponent } from './../../../color-palette/components/color-palette-confirm-delete-modal/color-palette-confirm-delete-modal.component';
 import { DeleteColorPalette } from './../../../core/state/color-palette.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatButtonModule } from '@angular/material/button';
+import { NgClass, NgIf } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatrixCustomFormComponent } from '../matrix-custom-form/matrix-custom-form.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'cm-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    NgIf,
+    MatToolbarModule,
+    NgClass,
+    MatIconModule,
+    MatrixCustomFormComponent,
+    MatMenuModule
+  ]
 })
 export class NavigationComponent implements OnInit {
   @Select(ColorPaletteState.selectedColorPalette)
@@ -37,7 +53,7 @@ export class NavigationComponent implements OnInit {
     private router: Router,
     private store: Store,
     private breakPointObserver: BreakpointObserver
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.selectedColorPalette$.subscribe(selectedColorPalette => {

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { ColorPaletteState } from './core/state/color-palette.state';
 import { AppState } from './shared/state/app.state';
+import { NavigationComponent } from './core/components/navigation/navigation.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,9 +26,10 @@ import { AppState } from './shared/state/app.state';
       key: '@@STATE'
     }),
     NgxsLoggerPluginModule.forRoot({ disabled: environment.production }),
-    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production })
+    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
+    NavigationComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

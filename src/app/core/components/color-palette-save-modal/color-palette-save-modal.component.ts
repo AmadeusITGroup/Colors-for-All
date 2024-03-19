@@ -1,14 +1,28 @@
 import { ColorPalette } from './../../models/color-palette.model';
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 import { colorPaletteValidator } from './color-palette.validator';
+import { NgIf } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'cm-color-palette-save-modal',
   templateUrl: './color-palette-save-modal.component.html',
-  styleUrls: ['./color-palette-save-modal.component.scss']
+  styleUrls: ['./color-palette-save-modal.component.scss'],
+  standalone: true,
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    MatButtonModule
+  ]
 })
 export class ColorPaletteSaveModalComponent implements OnInit {
   public jsonStatus: boolean;
@@ -27,7 +41,7 @@ export class ColorPaletteSaveModalComponent implements OnInit {
     public dialogRef: MatDialogRef<ColorPaletteSaveModalComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: { action: string; colorPalette?: ColorPalette }
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (!!this.data.colorPalette) {

@@ -1,7 +1,8 @@
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Action, State } from '@ngxs/store';
 
 import { ShowErrorSnackBar, ShowSuccessSnackBar } from './app.actions';
+import { Injectable } from '@angular/core';
 
 export interface AppStateModel {
   version: number;
@@ -13,9 +14,10 @@ export interface AppStateModel {
     version: 1
   }
 })
+@Injectable()
 export class AppState {
   private static readonly SNACKBAR_BAR = 2000;
-  constructor(public snackBar: MatSnackBar) {}
+  constructor(public snackBar: MatSnackBar) { }
 
   @Action(ShowSuccessSnackBar)
   showSuccessSnackBar(_, action: ShowSuccessSnackBar) {

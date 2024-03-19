@@ -28,6 +28,7 @@ import {
 } from './color-palette.actions';
 import { Router } from '@angular/router';
 import { ColorMatrixService } from '../services/color-matrix.service';
+import { Injectable } from '@angular/core';
 
 export const RANGE_START = 12;
 export const RANGE_END = 25;
@@ -69,6 +70,7 @@ export interface ColorPaletteStateModel {
   name: 'colorPalettes',
   defaults: DEFAULT_COLOR_PALETTE_STATE
 })
+@Injectable()
 export class ColorPaletteState implements NgxsOnInit {
   @Selector()
   static colorPalettes(state: ColorPaletteStateModel): ColorPalette[] {
@@ -108,7 +110,7 @@ export class ColorPaletteState implements NgxsOnInit {
     private router: Router,
     private colorPaletteService: ColorPaletteService,
     private colorMatrixService: ColorMatrixService
-  ) {}
+  ) { }
   ngxsOnInit(ctx: StateContext<ColorPaletteStateModel>) {
     ctx.dispatch(new LoadColorPalettes());
     ctx.dispatch(new SetSelectedColorPalette());

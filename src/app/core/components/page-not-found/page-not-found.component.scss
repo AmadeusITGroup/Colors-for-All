@@ -1,4 +1,6 @@
+@use '@angular/material' as mat;
 @import '../../../../styles';
+
 :host {
   .page-container {
     display: flex;
@@ -6,7 +8,7 @@
     align-items: center;
     justify-content: center;
     height: 95vh;
-    background-color: mat-color($light-accent);
+    background-color: mat.get-color-from-palette($light-accent);
   }
   .code-container {
     height: 150px;

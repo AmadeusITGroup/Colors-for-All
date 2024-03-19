@@ -6,12 +6,19 @@ import { Observable } from 'rxjs';
 
 import { SetSelectedColorPalette } from '../../../core/state/color-palette.actions';
 import { ColorPaletteState } from '../../../core/state/color-palette.state';
+import { AsyncPipe } from '@angular/common';
+import { MatrixTableComponent } from '../../components/matrix-table/matrix-table.component';
 
 @Component({
   selector: 'cm-color-palette-detail-page',
   templateUrl: './color-palette-detail-page.component.html',
   styleUrls: ['./color-palette-detail-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    MatrixTableComponent
+  ]
 })
 export class ColorPaletteDetailPageComponent implements OnInit {
   @Select(ColorPaletteState.selectedColorPalette)
@@ -19,7 +26,7 @@ export class ColorPaletteDetailPageComponent implements OnInit {
   @Select(ColorPaletteState.selectedMatrix)
   selectedMatrix$: Observable<ColorPaletteMatrix>;
 
-  constructor(private route: ActivatedRoute, private store: Store) {}
+  constructor(private route: ActivatedRoute, private store: Store) { }
 
   ngOnInit() {
     this.route.params.subscribe(p => {
