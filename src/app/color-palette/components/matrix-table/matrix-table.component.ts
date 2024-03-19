@@ -4,19 +4,26 @@ import { ColorPaletteMatrix } from './../../../core/models/color-palette-matrix.
 import { ColorPalette } from './../../../core/models/color-palette.model';
 import { FontWeight } from '../../../core/enums/font-weight.enum';
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { NgFor } from '@angular/common';
+import { MatrixCellComponent } from '../matrix-cell/matrix-cell.component';
 
 @Component({
   selector: 'cm-matrix-table',
   templateUrl: './matrix-table.component.html',
   styleUrls: ['./matrix-table.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgFor,
+    MatrixCellComponent
+  ]
 })
 export class MatrixTableComponent {
   @Input()
   colorPalette: ColorPalette;
   @Input()
   selectedMatrix: ColorPaletteMatrix;
-  constructor(private colorMatrixService: ColorMatrixService) {}
+  constructor(private colorMatrixService: ColorMatrixService) { }
 
   public computeColorMatrixData(
     backgroundColor: string,

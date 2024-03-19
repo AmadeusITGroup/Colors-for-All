@@ -5,19 +5,17 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-  MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatIconModule,
-  MatListModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatToolbarModule,
-  MatDialogModule,
-  MatInputModule,
-  MatMenuModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { MatrixCustomFormComponent } from './components/matrix-custom-form/matrix-custom-form.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -25,40 +23,30 @@ import { ColorPaletteSaveModalComponent } from './components/color-palette-save-
 import { ColorPaletteConfirmDeleteModalComponent } from '../color-palette/components/color-palette-confirm-delete-modal/color-palette-confirm-delete-modal.component';
 import { ColorPaletteService } from './services/color-palette.service';
 
-const MODULES = [
-  CommonModule,
-  MatButtonModule,
-  LayoutModule,
-  MatToolbarModule,
-  MatSidenavModule,
-  MatIconModule,
-  MatListModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatSelectModule,
-  ReactiveFormsModule,
-  MatDialogModule,
-  MatInputModule,
-  MatMenuModule,
-  LayoutModule
-];
-const DECLARATIONS = [
-  NavigationComponent,
-  PageNotFoundComponent,
-  MatrixCustomFormComponent,
-  ColorPaletteSaveModalComponent,
-  ColorPaletteConfirmDeleteModalComponent,
-  AccessibilityInfoPanelComponent
-];
-
 @NgModule({
-  imports: MODULES,
-  declarations: DECLARATIONS,
-  providers: [ColorMatrixService, ColorPaletteService],
-  exports: [...MODULES, ...DECLARATIONS],
-  entryComponents: [
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatInputModule,
+    MatMenuModule,
+    LayoutModule,
+    NavigationComponent,
+    PageNotFoundComponent,
+    MatrixCustomFormComponent,
     ColorPaletteSaveModalComponent,
-    ColorPaletteConfirmDeleteModalComponent
-  ]
+    ColorPaletteConfirmDeleteModalComponent,
+    AccessibilityInfoPanelComponent
+  ],
+  providers: [ColorMatrixService, ColorPaletteService],
 })
-export class CoreModule {}
+export class CoreModule { }

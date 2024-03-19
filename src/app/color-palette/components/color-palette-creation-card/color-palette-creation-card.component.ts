@@ -1,18 +1,26 @@
 import { ColorPaletteSaveModalComponent } from './../../../core/components/color-palette-save-modal/color-palette-save-modal.component';
 import { SaveColorPalette } from './../../../core/state/color-palette.actions';
 import { Store } from '@ngxs/store';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'cm-color-palette-creation-card',
   templateUrl: './color-palette-creation-card.component.html',
-  styleUrls: ['./color-palette-creation-card.component.scss']
+  styleUrls: ['./color-palette-creation-card.component.scss'],
+  standalone: true,
+  imports: [
+    MatDialogModule,
+    MatIconModule,
+    MatCardModule
+  ]
 })
 export class ColorPaletteCreationCardComponent implements OnInit {
-  constructor(private dialog: MatDialog, private store: Store) {}
+  constructor(private dialog: MatDialog, private store: Store) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   public createColorPalette() {
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {

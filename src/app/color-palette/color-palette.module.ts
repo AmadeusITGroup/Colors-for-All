@@ -2,11 +2,19 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
+} from '@angular/material/button';
+import {
   MatCardModule,
+} from '@angular/material/card';
+import {
   MatDialogModule,
+} from '@angular/material/dialog';
+import {
   MatIconModule,
+} from '@angular/material/icon';
+import {
   MatMenuModule
-} from '@angular/material';
+} from '@angular/material/menu';
 
 import { CoreModule } from './../core/core.module';
 import { ColorPaletteRoutingModule } from './color-palette-routing.module';
@@ -20,33 +28,25 @@ import { ColorPaletteDetailPageComponent } from './containers/color-palette-deta
 import { ColorPalettePageComponent } from './containers/color-palette-page/color-palette-page.component';
 import { ColorPaletteExistsGuard } from './guards/color-palette-exists.guard';
 
-const MODULES = [
-  CoreModule,
-  ColorPaletteRoutingModule,
-  LayoutModule,
-  MatIconModule,
-  MatCardModule,
-  MatButtonModule,
-  MatDialogModule,
-  MatMenuModule
-];
-
-const DECLARATIONS = [
-  ColorPalettePageComponent,
-  ColorPaletteDetailPageComponent,
-  ColorPaletteDetailPageComponent,
-  MatrixTableComponent,
-  MatrixCellComponent,
-  ColorPaletteListComponent,
-  ColorPaletteCardComponent,
-  HelpComponent,
-  ColorPaletteCreationCardComponent
-];
-
 @NgModule({
-  imports: MODULES,
-  declarations: DECLARATIONS,
-  providers: [ColorPaletteExistsGuard],
-  entryComponents: []
+  imports: [
+    CoreModule,
+    ColorPaletteRoutingModule,
+    LayoutModule,
+    MatIconModule,
+    MatCardModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatMenuModule,
+    ColorPalettePageComponent,
+    ColorPaletteDetailPageComponent,
+    MatrixTableComponent,
+    MatrixCellComponent,
+    ColorPaletteListComponent,
+    ColorPaletteCardComponent,
+    HelpComponent,
+    ColorPaletteCreationCardComponent
+  ],
+  providers: [ColorPaletteExistsGuard]
 })
-export class ColorPaletteModule {}
+export class ColorPaletteModule { }

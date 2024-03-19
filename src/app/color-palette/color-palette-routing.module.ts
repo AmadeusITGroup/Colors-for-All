@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ColorPaletteDetailPageComponent } from './containers/color-palette-detail-page/color-palette-detail-page.component';
 import { ColorPalettePageComponent } from './containers/color-palette-page/color-palette-page.component';
 import { ColorPaletteExistsGuard } from './guards/color-palette-exists.guard';
+import { CommonModule } from '@angular/common';
 
 const GUARDS = [ColorPaletteExistsGuard];
 export const routes: Routes = [
@@ -28,4 +29,4 @@ export const routes: Routes = [
   exports: [RouterModule],
   providers: [...GUARDS]
 })
-export class ColorPaletteRoutingModule {}
+export class ColorPaletteRoutingModule { }

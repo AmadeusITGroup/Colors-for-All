@@ -1,4 +1,6 @@
+@use '@angular/material' as mat;
 @import '../../../../themes/light.theme';
+
 $icon-size: 100px;
 .mat-card {
   .color-palette-creation-card-content {
@@ -33,10 +35,10 @@ $icon-size: 100px;
     .color-palette-creation-card-content {
       .icon-text-container {
         .create-color-palette-text {
-          color: mat-color($light-primary);
+          color: mat.get-color-from-palette($light-primary);
         }
         .create-color-palette-icon {
-          color: mat-color($light-primary);
+          color: mat.get-color-from-palette($light-primary);
         }
       }
     }
