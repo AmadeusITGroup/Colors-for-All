@@ -52,6 +52,11 @@
       justify-content: left;
       .title {
         margin-left: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        font-weight: 700;
+        font-size: 20px;
         &.truncate-small {
           max-width: 150px;
           white-space: nowrap;
