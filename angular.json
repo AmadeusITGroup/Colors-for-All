@@ -135,5 +135,8 @@
       }
     }
   },
-  "defaultProject": "colors-for-all"
+  "defaultProject": "colors-for-all",
+  "cli": {
+    "analytics": false
+  }
 }

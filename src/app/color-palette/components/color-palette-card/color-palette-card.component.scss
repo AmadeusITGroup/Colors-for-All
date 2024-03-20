@@ -1,9 +1,10 @@
 :host {
   .color-palette-card {
-    .mat-card-header {
+    .mat-mdc-card-header {
       display: flex;
       justify-content: space-between;
-      .mat-card-title {
+      padding: 6px 16px 0!important;
+      .mat-mdc-card-title {
         cursor: pointer;
         max-width: 190px;
         white-space: nowrap;
@@ -11,11 +12,20 @@
         text-overflow: ellipsis;
         font-size: 1.3em;
         font-weight: 700;
+        padding: 0px 0px 0!important;
       }
       .mat-icon {
         margin-bottom: 20px;
         color: rgba(0, 0, 0, 0.4);
       }
+    }
+    .mat-mdc-card {
+      position: relative;
+      height: 100%;
+    }
+    .ng-star-inserted{
+      display: flex;
+      justify-content: space-between;
     }
     .grid-container {
       display: grid;
@@ -41,7 +51,7 @@
 
     .grid-item {
       background-color: rgba(255, 255, 255, 0.8);
-      padding: 2px;
+      padding: 1px;
       font-size: 30px;
       text-align: center;
     }

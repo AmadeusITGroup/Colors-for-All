@@ -9,7 +9,7 @@
     </mat-form-field>
 
     <mat-form-field hintLabel='Please enter your color palette as following example: ["#123456","#234567","#345678"]'>
-      <textarea formControlName="colorPaletteData" matInput rows="14" placeholder="Colors">
+      <textarea formControlName="colorPaletteData" matInput rows="11" placeholder="Colors">
       </textarea>
       <mat-error *ngIf="colorPaletteData.errors?.required">Field is required</mat-error>
       <mat-error *ngIf="colorPaletteData.errors?.invalidFormat">The format is invalid <br/>Example: ["#123456","#234567","#345678"]
@@ -18,8 +18,8 @@
 
   </div>
   <div mat-dialog-actions>
-    <button mat-raised-button color="default" (click)="cancel()">Cancel</button>
-    <button mat-raised-button [disabled]="savePaletteFormGroup.invalid" color="primary" class="button-save" (keyup.enter)="saveColorPalette()"
+    <button mat-stroked-button color="primary" (click)="cancel()">Cancel</button>
+    <button mat-flat-button [disabled]="savePaletteFormGroup.invalid" color="primary" class="button-save" (keyup.enter)="saveColorPalette()"
       (click)="saveColorPalette()">Save</button>
   </div>
 </div>
