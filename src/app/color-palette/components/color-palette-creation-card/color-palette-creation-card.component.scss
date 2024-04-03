@@ -2,13 +2,13 @@
 @import '../../../../themes/light.theme';
 
 $icon-size: 100px;
-.mat-card {
+.mat-mdc-card {
   .color-palette-creation-card-content {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 209px;
-    height: 300px;
+    height: 299px;
     padding: 20px;
     .icon-text-container {
       display: flex;

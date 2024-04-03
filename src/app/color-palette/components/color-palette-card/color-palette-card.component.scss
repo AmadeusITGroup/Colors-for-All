@@ -21,7 +21,9 @@
     }
     .mat-mdc-card {
       position: relative;
-      height: 100%;
+    }
+    .mat-mdc-card-content>:last-child:not(.mat-mdc-card-footer) {
+      margin-bottom: 0;
     }
     .ng-star-inserted{
       display: flex;
