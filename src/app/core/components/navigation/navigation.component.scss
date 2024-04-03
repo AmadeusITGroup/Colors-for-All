@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 :host {
   display: flex;
   flex-flow: column nowrap;
@@ -35,7 +36,8 @@
     z-index: 100;
     display: flex;
     justify-content: space-between;
-    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.3);
+    background-color: #FFF;
+    box-shadow: 0px 1px 15px -1px rgba(0, 0, 70, 0.5), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
     .toolbar-right {
       display: flex;
       align-items: center;

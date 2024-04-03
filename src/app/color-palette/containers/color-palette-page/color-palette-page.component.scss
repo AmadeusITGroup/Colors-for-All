@@ -1,3 +1,6 @@
+@use '@angular/material' as mat;
+@import '../../../../themes/light.theme';
+
 :host {
   height: 90vh;
   padding: 65px 25px 25px 25px;
@@ -9,9 +12,9 @@
   .tagline {
     padding-top: 40px;
     font-size: 2em;
-    font-weight: 100;
+    font-weight: 400;
     text-align: center;
     line-height: 1em;
-    color: rgba(0, 0, 0, 0.85);
+    color: rgba(0, 0, 0, 0.7);
   }
 }

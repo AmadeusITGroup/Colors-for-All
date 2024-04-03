@@ -1,5 +1,16 @@
 :host {
   .color-palette-card {
+    transition: transform .2s;
+    transition-timing-function: ease-in-out;
+    box-shadow: 0px 1px 15px -1px rgba(0, 0, 70, 0.5), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    &:hover {
+      cursor: pointer;
+      -ms-transform: scale(1.05); /* IE 9 */
+      -webkit-transform: scale(1.05); /* Safari 3-8 */
+      transform: scale(1.05);
+      z-index: 100;
+      box-shadow: 0px 15px 25px -1px rgba(0, 0, 70, 0.5), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    }
     .mat-mdc-card-header {
       display: flex;
       justify-content: space-between;
@@ -43,9 +54,6 @@
       max-height: 300px;
       height: 300px;
       width: 250px;
-      &:hover {
-        cursor: pointer;
-      }
       div {
         flex: 1;
       }

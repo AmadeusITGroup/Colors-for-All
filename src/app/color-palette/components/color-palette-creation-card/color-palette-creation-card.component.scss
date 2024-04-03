@@ -3,6 +3,9 @@
 
 $icon-size: 100px;
 .mat-mdc-card {
+  box-shadow: 0px 1px 15px -1px rgba(0, 0, 70, 0.5), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  transition: transform .2s;
+  transition-timing-function: ease-in-out;
   .color-palette-creation-card-content {
     display: flex;
     align-items: center;
@@ -15,7 +18,7 @@ $icon-size: 100px;
       flex-flow: column nowrap;
 
       .create-color-palette-icon {
-        color: rgba(0, 0, 0, 0.25);
+        color: mat.get-color-from-palette($light-primary);
         font-size: $icon-size;
         width: $icon-size;
         height: $icon-size;
@@ -26,19 +29,24 @@ $icon-size: 100px;
         font-size: 1.3em;
         font-weight: 700;
         margin: 20px auto;
-        color: rgba(0, 0, 0, 0.4);
+        color: mat.get-color-from-palette($light-primary);
       }
     }
   }
   &:hover {
     cursor: pointer;
+    -ms-transform: scale(1.05); /* IE 9 */
+    -webkit-transform: scale(1.05); /* Safari 3-8 */
+    transform: scale(1.05);
+    box-shadow: 0px 15px 25px -1px rgba(0, 0, 70, 0.5), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    background-color: mat.get-color-from-palette($light-primary);
     .color-palette-creation-card-content {
       .icon-text-container {
         .create-color-palette-text {
-          color: mat.get-color-from-palette($light-primary);
+          color: white;
         }
         .create-color-palette-icon {
-          color: mat.get-color-from-palette($light-primary);
+          color: white;
         }
       }
     }
