@@ -1,4 +1,13 @@
 :host {
+  .custom-search {
+    margin: 25px;
+  }
+  &.mat-toolbar-single-row {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    flex: 1;
+  }
   .custom-search-container {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -24,7 +33,7 @@
       margin-left: 10px;
     }
   }
-  ::ng-deep .mat-form-field {
+  ::ng-deep .mat-mdc-form-field {
     margin-left: 15px;
     .mat-form-field-wrapper {
       margin-top: 18px;

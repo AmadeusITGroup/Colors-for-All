@@ -1,7 +1,7 @@
 <div class="custom-search-container">
   <div class="custom-search-form" [formGroup]="customPaletteSearch">
 
-    <mat-form-field>
+    <mat-form-field class="shortField">
       <mat-label>Font-size</mat-label>
       <mat-select formControlName="size" placeholder="Size">
         <mat-option *ngFor="let i of colorPalettesSizes$ | async" [value]="i">
@@ -9,7 +9,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="mediumField">
       <mat-label>Font-weight</mat-label>
       <mat-select formControlName="fontWeight" placeholder="Weight">
         <mat-option *ngFor="let fw of colorPalettesFontWeights$ | async" [value]="fw">

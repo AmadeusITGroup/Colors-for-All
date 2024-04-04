@@ -12,11 +12,26 @@ body {
   font-family: Roboto;
   background-color: mat.get-color-from-palette($light-accent);
 }
+.mat-mdc-text-field-wrapper {
+  height: 64px;
+  margin-top: 19px;
+  flex: auto;
+  will-change: auto;
+}
 .mat-mdc-card-header-text {
   display: flex;
   align-items: center;
 }
+.shortField{
+  width: 120px;
+}
+.mediumField{
+  width: 150px;
+}
+mat-label{
+  font-size: 16px;
+}
 .mat-mdc-select-value-text{
   font-weight: 700;
-  font-size: 13px;
+  font-size: 16px;
 }
