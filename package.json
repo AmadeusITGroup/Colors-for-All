@@ -2,11 +2,14 @@
   "name": "colors-for-all",
   "version": "1.0.0",
   "contributors": [
-    "Alexandre Saker <Alexandre.Saker@amadeus.com>"
+    "Jean-Pierre Boutherin<jean-pierre.boutherin@amadeus.com>"
   ],
   "description": "Check the contrast of all your colors in one shot!",
   "keywords": [
     "colors",
+    "contrast",
+    "accessibility",
+    "brand",
     "UI",
     "UX",
     "WCAG",
