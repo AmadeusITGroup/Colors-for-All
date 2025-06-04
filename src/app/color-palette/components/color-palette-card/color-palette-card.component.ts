@@ -64,7 +64,7 @@ export class ColorPaletteCardComponent implements OnInit {
   public editColorPalette(id: string): void {
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {
       width: '500px',
-      height: '500px',
+      height: '550px',
       data: {
         action: 'Edit',
         colorPalette: this.colorPalette
@@ -86,7 +86,7 @@ export class ColorPaletteCardComponent implements OnInit {
     this.store.dispatch(new SaveColorPalette(duplicatedColorPalette));
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {
       width: '500px',
-      height: '500px',
+      height: '550px',
       data: {
         action: 'Edit',
         colorPalette: duplicatedColorPalette

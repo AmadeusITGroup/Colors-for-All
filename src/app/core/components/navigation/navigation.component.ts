@@ -107,7 +107,7 @@ export class NavigationComponent implements OnInit {
   public createColorPalette() {
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {
       width: '500px',
-      height: '500px',
+      height: '550px',
       data: {
         action: 'Create'
       }
@@ -122,7 +122,7 @@ export class NavigationComponent implements OnInit {
   public editColorPalette(id: string): void {
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {
       width: '500px',
-      height: '500px',
+      height: '550px',
       data: {
         action: 'Edit',
         colorPalette: this.selectedColorPaletteSnapShot
@@ -162,7 +162,7 @@ export class NavigationComponent implements OnInit {
     this.store.dispatch(new SaveColorPalette(duplicatedColorPalette));
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {
       width: '500px',
-      height: '500px',
+      height: '550px',
       data: {
         action: 'Edit',
         colorPalette: duplicatedColorPalette

@@ -55,7 +55,7 @@ describe('ColorPaletteCreationCardComponent', () => {
 
     expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
       width: '500px',
-      height: '500px',
+      height: '550px',
       data: { action: 'Create' }
     });
   });

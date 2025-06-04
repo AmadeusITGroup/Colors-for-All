@@ -25,7 +25,7 @@ export class ColorPaletteCreationCardComponent implements OnInit {
   public createColorPalette() {
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {
       width: '500px',
-      height: '500px',
+      height: '550px',
       data: {
         action: 'Create'
       }

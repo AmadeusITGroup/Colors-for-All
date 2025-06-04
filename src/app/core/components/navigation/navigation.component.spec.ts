@@ -106,7 +106,7 @@ describe('NavigationComponent', () => {
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
         width: '500px',
-        height: '500px',
+        height: '550px',
         data: { action: 'Create' }
       });
     });
@@ -122,7 +122,7 @@ describe('NavigationComponent', () => {
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
         width: '500px',
-        height: '500px',
+        height: '550px',
         data: { action: 'Create' }
       });
       expect(store.dispatch).toHaveBeenCalledWith(
@@ -145,7 +145,7 @@ describe('NavigationComponent', () => {
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
         width: '500px',
-        height: '500px',
+        height: '550px',
         data: { action: 'Edit', colorPalette: selectedColorPaletteSnapShot }
       });
     });
@@ -162,7 +162,7 @@ describe('NavigationComponent', () => {
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
         width: '500px',
-        height: '500px',
+        height: '550px',
         data: { action: 'Edit', colorPalette: selectedColorPaletteSnapShot }
       });
       expect(store.dispatch).toHaveBeenCalledWith(
@@ -229,7 +229,7 @@ describe('NavigationComponent', () => {
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
         width: '500px',
-        height: '500px',
+        height: '550px',
         data: { action: 'Edit', colorPalette: duplicatedColorPalette }
       });
     });
@@ -249,7 +249,7 @@ describe('NavigationComponent', () => {
       );
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
         width: '500px',
-        height: '500px',
+        height: '550px',
         data: { action: 'Edit', colorPalette: duplicatedColorPalette }
       });
       expect(store.dispatch).toHaveBeenCalledWith(
