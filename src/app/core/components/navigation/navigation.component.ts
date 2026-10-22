@@ -20,6 +20,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatrixCustomFormComponent } from '../matrix-custom-form/matrix-custom-form.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatrixLoadingService } from '../../services/matrix-loading.service';
+import { HelpComponent } from '../../../color-palette/components/help/help.component';
 
 @Component({
   selector: 'cm-navigation',
@@ -52,7 +54,8 @@ export class NavigationComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private store: Store,
-    private breakPointObserver: BreakpointObserver
+    private breakPointObserver: BreakpointObserver,
+    private matrixLoading: MatrixLoadingService
   ) { }
 
   ngOnInit() {
@@ -98,21 +101,78 @@ export class NavigationComponent implements OnInit {
   }
 
   public goToHelp() {
-    this.router.navigate(['/color-palette/help']);
+    const existing = this.dialog.getDialogById('help-side-panel');
+    if (existing) {
+      return existing;
+    }
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 500;
+    return this.dialog.open(HelpComponent, {
+      id: 'help-side-panel',
+      panelClass: 'help-side-panel',
+      width: '760px',
+      maxWidth: '100vw',
+      height: '100dvh',
+      maxHeight: '100dvh',
+      position: { top: '0', right: '0' },
+      enterAnimationDuration: duration,
+      exitAnimationDuration: duration,
+      ariaLabel: 'Help',
+      delayFocusTrap: false,
+      autoFocus: '#help-close-button'
+    });
   }
   public goBackToColorPaletteList() {
-    this.router.navigate(['/color-palette']);
+    if (this.currentHeaderType === HeaderType.DETAILED_COLOR_PALETTE) {
+      return this.matrixLoading.backToPalettes(this.selectedColorPaletteSnapShot?.id);
+    }
+    return this.router.navigate(['/color-palette']);
   }
 
-  public createColorPalette() {
+  public downloadColorPalette(): void {
+    const palette = this.selectedColorPaletteSnapShot;
+    if (!palette) {
+      return;
+    }
+    const colors = palette.data.map((hex, index) => {
+      const name = palette.names?.[index]?.trim();
+      return name ? { hex, name } : hex;
+    });
+    const now = new Date();
+    const date = [String(now.getFullYear()).slice(-2), String(now.getMonth() + 1).padStart(2, '0'), String(now.getDate()).padStart(2, '0')].join('-');
+    const title = palette.title.trim().replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_').replace(/[. ]+$/g, '') || 'Palette';
+    const blob = new Blob([JSON.stringify(colors, null, 2)], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${title}_${date}.json`;
+    document.body.appendChild(link);
+    try {
+      link.click();
+    } finally {
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  public createColorPalette(input?: HTMLInputElement) {
+    if (input && !input.files?.length) {
+      return;
+    }
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {
-      width: '500px',
-      height: '550px',
+      width: '680px',
+      maxWidth: 'calc(100vw - 24px)',
+      height: 'min(760px, calc(100dvh - 32px))',
       data: {
         action: 'Create'
       }
     });
+    if (input) {
+      dialogRef.afterOpened().subscribe(() => dialogRef.componentInstance.importPaletteFile(input));
+    }
     dialogRef.afterClosed().subscribe(result => {
+      if (input) {
+        input.value = '';
+      }
       if (!!result) {
         this.store.dispatch(new SaveColorPalette(result));
       }
@@ -121,8 +181,9 @@ export class NavigationComponent implements OnInit {
 
   public editColorPalette(id: string): void {
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {
-      width: '500px',
-      height: '550px',
+      width: '680px',
+      maxWidth: 'calc(100vw - 24px)',
+      height: 'min(760px, calc(100dvh - 32px))',
       data: {
         action: 'Edit',
         colorPalette: this.selectedColorPaletteSnapShot
@@ -157,12 +218,14 @@ export class NavigationComponent implements OnInit {
     const duplicatedColorPalette = {
       id: uuid.v4(),
       title: `${this.selectedColorPaletteSnapShot.title}_Copy`,
-      data: this.selectedColorPaletteSnapShot.data
+      data: this.selectedColorPaletteSnapShot.data,
+      ...(this.selectedColorPaletteSnapShot.names ? { names: [...this.selectedColorPaletteSnapShot.names] } : {})
     } as ColorPalette;
     this.store.dispatch(new SaveColorPalette(duplicatedColorPalette));
     const dialogRef = this.dialog.open(ColorPaletteSaveModalComponent, {
-      width: '500px',
-      height: '550px',
+      width: '680px',
+      maxWidth: 'calc(100vw - 24px)',
+      height: 'min(760px, calc(100dvh - 32px))',
       data: {
         action: 'Edit',
         colorPalette: duplicatedColorPalette

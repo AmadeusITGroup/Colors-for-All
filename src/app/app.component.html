@@ -1,4 +1,39 @@
-<div class="mat-typography">
+<div class="mat-typography" [class.matrix-content-entering]="matrixLoading.revealing" [attr.aria-busy]="(matrixLoading.loading$ | async) ? 'true' : null">
     <cm-navigation></cm-navigation>
     <router-outlet></router-outlet>
 </div>
+<section *ngIf="(matrixLoading.loading$ | async) && matrixLoading.skeletonVisible" class="matrix-skeleton" [class.is-revealing]="matrixLoading.revealing" role="status" aria-live="polite" aria-atomic="true">
+    <span class="loading-status">Loading...</span>
+    <div class="skeleton-toolbar" aria-hidden="true">
+        <span class="skeleton-bone skeleton-back"></span>
+        <span class="skeleton-bone skeleton-title"></span>
+        <div class="skeleton-toolbar-controls">
+            <span class="skeleton-bone skeleton-control"></span>
+            <span class="skeleton-bone skeleton-control"></span>
+            <span class="skeleton-bone skeleton-action"></span>
+        </div>
+    </div>
+    <div class="skeleton-settings" aria-hidden="true">
+        <span class="skeleton-bone skeleton-mode"></span>
+        <span class="skeleton-bone skeleton-control"></span>
+        <span class="skeleton-bone skeleton-control"></span>
+    </div>
+    <div class="skeleton-matrix" aria-hidden="true">
+        <div class="skeleton-corner"><span class="skeleton-bone skeleton-value"></span></div>
+        <div *ngFor="let column of skeletonColumns" class="skeleton-column-header">
+            <span class="skeleton-bone skeleton-column-name"></span>
+            <span class="skeleton-bone skeleton-column-code"></span>
+        </div>
+        <ng-container *ngFor="let row of skeletonRows">
+            <div class="skeleton-row-header">
+                <span class="skeleton-bone skeleton-row-name"></span>
+                <span class="skeleton-bone skeleton-row-code"></span>
+            </div>
+            <div *ngFor="let column of skeletonColumns" class="skeleton-cell">
+                <span class="skeleton-bone skeleton-symbol"></span>
+                <span class="skeleton-bone skeleton-value"></span>
+                <span class="skeleton-bone skeleton-usage"></span>
+            </div>
+        </ng-container>
+    </div>
+</section>

@@ -24,7 +24,12 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "LICENSE.md",
+                "input": "node_modules/apca-w3",
+                "output": "assets/apca-w3"
+              }
             ],
             "styles": [
               "src/styles.scss"
@@ -72,6 +77,17 @@
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
+          "configurations": {
+            "contrast": {
+              "main": "",
+              "polyfills": ["zone.js", "zone.js/testing"],
+              "tsConfig": "src/tsconfig.contrast-spec.json",
+              "karmaConfig": "src/karma.contrast.conf.js",
+              "include": ["src/app/core/services/color-matrix.service.spec.ts", "src/app/core/services/matrix-loading.service.spec.ts", "src/app/core/state/color-palette.state.spec.ts", "src/app/core/components/color-palette-save-modal/color-palette-save-modal.component.spec.ts", "src/app/core/services/color-palette.service.spec.ts", "src/app/color-palette/components/matrix-table/matrix-table.component.spec.ts", "src/app/color-palette/components/help/help.component.spec.ts", "src/app/core/components/navigation/navigation-download.spec.ts"],
+              "watch": false,
+              "browsers": "ChromeHeadless"
+            }
+          },
           "options": {
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",

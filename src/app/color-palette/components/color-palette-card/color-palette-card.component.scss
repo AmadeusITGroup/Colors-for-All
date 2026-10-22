@@ -51,6 +51,7 @@
     .grid-container {
       display: flex;
       flex-flow: column nowrap;
+      overflow: hidden;
       max-height: 300px;
       height: 300px;
       width: 250px;

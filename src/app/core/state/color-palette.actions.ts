@@ -1,5 +1,6 @@
 import { ColorPalette } from './../models/color-palette.model';
 import { FontWeight } from '../enums/font-weight.enum';
+import { ContrastModel } from '../models/color-matrix.model';
 
 export class LoadColorPalettes {
   static readonly type = '[ColorPalette] LoadColorPalettes';
@@ -27,5 +28,5 @@ export class SetSelectedColorPalette {
 
 export class SetSelectedMatrix {
   static readonly type = '[ColorPalette] SetSelectedMatrix';
-  constructor(public size: number, public fontWeight: FontWeight) {}
+  constructor(public size: number, public fontWeight: FontWeight, public contrastModel?: ContrastModel) {}
 }

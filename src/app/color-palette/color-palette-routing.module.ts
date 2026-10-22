@@ -1,4 +1,3 @@
-import { HelpComponent } from './components/help/help.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -15,7 +14,8 @@ export const routes: Routes = [
   },
   {
     path: 'help',
-    component: HelpComponent
+    redirectTo: '',
+    pathMatch: 'full'
   },
   {
     path: ':id',

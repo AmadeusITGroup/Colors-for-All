@@ -8,14 +8,19 @@
   title="{{data?.title}}"
 >
   <div class="compliance">
-    <ng-container *ngIf="data?.compliance !== 'X'">
+    <ng-container *ngIf="data?.compliance !== 'X' && data?.lc == null">
       <span [ngStyle]="setBadgeStyle(data?.style)">{{ data?.compliance }}</span>
     </ng-container>
+    <mat-icon *ngIf="data?.lc != null && data?.compliance !== 'X'" aria-hidden="false" aria-label="APCA contrast threshold met">check</mat-icon>
     <ng-container *ngIf="data?.compliance === 'X'">
-      <mat-icon>clear</mat-icon>
+      <mat-icon aria-hidden="false" [attr.aria-label]="data?.lc != null ? 'Below APCA contrast threshold' : 'Below WCAG AA'">clear</mat-icon>
     </ng-container>
   </div>
-  <div [ngClass]="{ 'ratio-with-badge': data?.compliance !== 'X' }">
+  <ng-container *ngIf="data?.lc != null">
+    <div class="apca-value">{{ data.lc | number:'1.1-1':'en-US' }}</div>
+    <div *ngIf="data.compliance !== 'X' && data.usage" class="apca-usage">{{ data.usage }}</div>
+  </ng-container>
+  <div *ngIf="data?.lc == null" [ngClass]="{ 'ratio-with-badge': data?.compliance !== 'X' }">
     {{ data?.ratio }}
   </div>
 </div>

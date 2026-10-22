@@ -1,26 +1,25 @@
 import { ColorMatrixService } from './../../../core/services/color-matrix.service';
-import { fakeAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MatrixTableComponent } from './matrix-table.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '../../../../../node_modules/@angular/core';
 import { FontWeight } from '../../../core/enums/font-weight.enum';
+import { MatrixLoadingService } from '../../../core/services/matrix-loading.service';
 
 describe('MatrixTableComponent', () => {
   let component: MatrixTableComponent;
   let fixture: ComponentFixture<MatrixTableComponent>;
   let colorMatrixService: ColorMatrixService;
-  beforeEach(fakeAsync(() => {
-    TestBed.configureTestingModule({
-      providers: [ColorMatrixService],
-      declarations: [MatrixTableComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      providers: [ColorMatrixService, { provide: MatrixLoadingService, useValue: jasmine.createSpyObj('MatrixLoadingService', ['reveal']) }],
+      imports: [MatrixTableComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(MatrixTableComponent);
     component = fixture.componentInstance;
     colorMatrixService = TestBed.get(ColorMatrixService);
     fixture.detectChanges();
-  }));
+  });
 
   it('should compile', () => {
     expect(component).toBeTruthy();
@@ -42,7 +41,30 @@ describe('MatrixTableComponent', () => {
       backgroundColor,
       foregroundColor,
       size,
-      fontWeight
+      fontWeight,
+      'WCAG'
     );
+  });
+
+  it('should show optional names before hex values on separate lines in both matrix axes', () => {
+    fixture.componentRef.setInput('selectedMatrix', { size: 16, fontWeight: FontWeight.NORMAL, contrastModel: 'APCA' });
+    fixture.componentRef.setInput('colorPalette', { title: 'Named', data: ['#fff', '#000'], names: ['Neutral-0', ''] });
+    fixture.detectChanges();
+    const column = fixture.nativeElement.querySelector('thead th.color-header .color-label');
+    const row = fixture.nativeElement.querySelector('tbody th .color-label');
+    [column, row].forEach(label => {
+      expect(label.children[0].textContent.trim()).toBe('Neutral-0');
+      expect(label.children[1].textContent.trim()).toBe('#fff');
+    });
+    expect(fixture.nativeElement.querySelectorAll('thead .color-name').length).toBe(1);
+    expect(fixture.nativeElement.querySelectorAll('tbody .color-name').length).toBe(1);
+  });
+
+  it('should distinguish names for repeated hex values by their position', () => {
+    fixture.componentRef.setInput('selectedMatrix', { size: 16, fontWeight: FontWeight.NORMAL });
+    fixture.componentRef.setInput('colorPalette', { title: 'Duplicates', data: ['#fff', '#fff'], names: ['First', 'Second'] });
+    fixture.detectChanges();
+    const names = Array.from(fixture.nativeElement.querySelectorAll('thead .color-name')) as HTMLElement[];
+    expect(names.map(element => element.textContent)).toEqual(['First', 'Second']);
   });
 });

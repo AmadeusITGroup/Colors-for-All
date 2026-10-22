@@ -1,20 +1,103 @@
 :host {
-  .save-palette-form-container {
-    .save-palette-form-content {
-      display: flex;
-      flex-flow: column nowrap;
-      flex: 1 1 auto;
-      min-height: 350px;
-      .mat-form-field {
-        width: 90%;
-      }
-      .form-label {
-        flex: 1;
-        padding: 10px;
-      }
-    }
-    .mat-dialog-actions {
-      justify-content: flex-end;
-    }
+  display: block;
+  height: 100%;
+  .save-palette-form-container { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+  .palette-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    gap: 8px 16px;
+    padding: 16px 24px;
+    &::before { display: none; }
+    span { min-width: 0; overflow-wrap: anywhere; }
+    button { flex-shrink: 0; }
   }
+  .save-palette-form-content { display: flex; flex-direction: column; flex: 1; min-height: 0; max-height: none; padding-bottom: 0; }
+  mat-form-field { width: 100%; min-width: 0; }
+  input[formControlName="colorPaletteTitle"] { font-size: 20px; font-weight: 700; }
+  .palette-views { min-height: 0; flex: 1; }
+  .list-view, .json-view { padding: 16px 0 24px; }
+  .color-entry { border-bottom: 1px solid #dedee2; background: #fff; }
+  .color-row {
+    display: grid;
+    grid-template-columns: 28px 64px minmax(80px, 1fr) repeat(3, 32px);
+    gap: 6px;
+    align-items: center;
+    min-height: 72px;
+  }
+  .row-icon { width: 32px; height: 32px; padding: 4px; }
+  ::ng-deep .row-icon .mat-mdc-button-touch-target { width: 100%; height: 100%; }
+  .drag-handle { cursor: grab; color: #69696f; }
+  .color-preview {
+    width: 64px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid #a6a6ad;
+    border-radius: 4px;
+    cursor: pointer;
+    &:focus-visible { outline: 2px solid #007c83; outline-offset: 2px; }
+  }
+  .color-fields {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 4px 0;
+  }
+  .hex-input,
+  .color-name-input {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 8px 4px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: transparent;
+    font: inherit;
+    font-size: 14px;
+    &:focus { outline: 2px solid #007c83; outline-offset: 1px; }
+    &.invalid { border-color: #b3261e; }
+  }
+  .color-name-input { padding: 4px; font-size: 14px; }
+  .selected .color-row { background: #f3f7f7; }
+  .color-error { margin: 4px 0 12px; color: #b3261e; font-size: 13px; }
+  .add-color { margin-top: 16px; }
+  textarea { font-family: monospace; font-size: 14px; line-height: 1.6; }
+  [mat-dialog-actions] { justify-content: flex-end; flex-shrink: 0; gap: 8px; padding: 12px 24px; }
+  ::ng-deep .mat-mdc-tab-body-wrapper { min-height: 0; flex: 1; }
+  @media (max-width: 499px) {
+    .color-row { grid-template-columns: 28px 44px repeat(3, minmax(28px, 1fr)); gap: 3px; }
+    .color-fields { grid-column: 3 / -1; grid-row: 1; grid-template-columns: 74px minmax(0, 1fr); gap: 4px; }
+    .move-up, .move-down, .color-menu-trigger { grid-row: 2; justify-self: end; }
+    .move-up { grid-column: 3; }
+    .move-down { grid-column: 4; }
+    .color-menu-trigger { grid-column: 5; }
+    .row-icon { width: 28px; height: 32px; padding: 4px 2px; }
+    .color-preview { width: 44px; }
+    .hex-input { font-size: 12px; padding: 8px 2px; }
+  }
+}
+.cdk-drag-preview { box-sizing: border-box; border-radius: 4px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); }
+.cdk-drag-placeholder { opacity: 0.3; }
+
+.color-picker-popover {
+  padding: 0 16px 16px;
+  .picker-toolbar { display: flex; align-items: center; justify-content: space-between; min-height: 48px; }
+  hex-color-picker { display: flex; flex-direction: column; width: 100%; height: 200px; }
+  .picker-formats { display: flex; margin: 16px 0 12px; }
+  mat-button-toggle { flex: 1; font-size: 13px; }
+  .picker-channels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .picker-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    font-size: 13px;
+    input { box-sizing: border-box; width: 100%; min-width: 0; padding: 8px; border: 1px solid #929299; border-radius: 4px; font: inherit; }
+    input:focus-visible { outline: 2px solid #007c83; outline-offset: 1px; }
+  }
+  .color-error { color: #b3261e; font-size: 13px; margin-bottom: 0; }
 }

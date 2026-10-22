@@ -21,6 +21,7 @@
     "build": "ng build",
     "build:prod": "ng build --configuration production",
     "test": "ng test",
+    "test:contrast": "ng test --configuration=contrast",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "compodoc": "compodoc -p tsconfig.json -w -s --port 3500"
@@ -42,11 +43,14 @@
     "@ngxs/router-plugin": "^3.5.0",
     "@ngxs/storage-plugin": "^3.5.0",
     "@ngxs/store": "^3.5.0",
+    "apca-w3": "0.1.9",
     "classlist.js": "^1.1.20150312",
+    "colorjs.io": "0.7.1",
     "core-js": "^2.6.9",
     "lodash": "^4.17.15",
     "rxjs": "^7.0.0",
     "uuid": "^3.3.3",
+    "vanilla-colorful": "0.7.2",
     "zone.js": "^0.14.0"
   },
   "devDependencies": {

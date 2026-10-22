@@ -28,6 +28,7 @@ import {
 } from './../../state/color-palette.actions';
 import { ColorPaletteState } from './../../state/color-palette.state';
 import { NavigationComponent } from './navigation.component';
+import { HelpComponent } from '../../../color-palette/components/help/help.component';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;
@@ -85,10 +86,14 @@ describe('NavigationComponent', () => {
     expect(component.selectedColorPalette$.subscribe).toHaveBeenCalled();
   });
 
-  it('Should navigate to help when goToHelp method called', () => {
+  it('Should open the Help side panel without navigating when goToHelp is called', () => {
     spyOn(router, 'navigate').and.callFake(() => {});
+    spyOn(dialog, 'open');
     component.goToHelp();
-    expect(router.navigate).toHaveBeenCalledWith(['/color-palette/help']);
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(dialog.open).toHaveBeenCalledWith(HelpComponent, jasmine.objectContaining({
+      id: 'help-side-panel', panelClass: 'help-side-panel', position: { top: '0', right: '0' }
+    }));
   });
 
   it('Should navigate to color palette list when goBackToColorPaletteList method called', () => {
@@ -105,8 +110,9 @@ describe('NavigationComponent', () => {
       component.createColorPalette();
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
-        width: '500px',
-        height: '550px',
+        width: '680px',
+        maxWidth: 'calc(100vw - 24px)',
+        height: 'min(760px, calc(100dvh - 32px))',
         data: { action: 'Create' }
       });
     });
@@ -121,8 +127,9 @@ describe('NavigationComponent', () => {
       component.createColorPalette();
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
-        width: '500px',
-        height: '550px',
+        width: '680px',
+        maxWidth: 'calc(100vw - 24px)',
+        height: 'min(760px, calc(100dvh - 32px))',
         data: { action: 'Create' }
       });
       expect(store.dispatch).toHaveBeenCalledWith(
@@ -144,8 +151,9 @@ describe('NavigationComponent', () => {
       component.editColorPalette(colorPaletteId);
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
-        width: '500px',
-        height: '550px',
+        width: '680px',
+        maxWidth: 'calc(100vw - 24px)',
+        height: 'min(760px, calc(100dvh - 32px))',
         data: { action: 'Edit', colorPalette: selectedColorPaletteSnapShot }
       });
     });
@@ -161,8 +169,9 @@ describe('NavigationComponent', () => {
       component.editColorPalette(colorPaletteId);
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
-        width: '500px',
-        height: '550px',
+        width: '680px',
+        maxWidth: 'calc(100vw - 24px)',
+        height: 'min(760px, calc(100dvh - 32px))',
         data: { action: 'Edit', colorPalette: selectedColorPaletteSnapShot }
       });
       expect(store.dispatch).toHaveBeenCalledWith(
@@ -228,8 +237,9 @@ describe('NavigationComponent', () => {
       component.duplicateColorPalette(duplicatedColorPalette.id);
 
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
-        width: '500px',
-        height: '550px',
+        width: '680px',
+        maxWidth: 'calc(100vw - 24px)',
+        height: 'min(760px, calc(100dvh - 32px))',
         data: { action: 'Edit', colorPalette: duplicatedColorPalette }
       });
     });
@@ -248,8 +258,9 @@ describe('NavigationComponent', () => {
         new SaveColorPalette(duplicatedColorPalette)
       );
       expect(dialog.open).toHaveBeenCalledWith(ColorPaletteSaveModalComponent, {
-        width: '500px',
-        height: '550px',
+        width: '680px',
+        maxWidth: 'calc(100vw - 24px)',
+        height: 'min(760px, calc(100dvh - 32px))',
         data: { action: 'Edit', colorPalette: duplicatedColorPalette }
       });
       expect(store.dispatch).toHaveBeenCalledWith(

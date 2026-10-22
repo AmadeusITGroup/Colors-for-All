@@ -20,8 +20,9 @@
     width: 100px;
     padding: 0.2375em 0;
   }
+  .button-upload { margin-right: 8px; flex-shrink: 0; }
   .button-create {
-    width: 100%;
+    flex-shrink: 0;
     text-align: left;
     padding-left: 10px;
     .icon-create {
@@ -72,6 +73,32 @@
           overflow: hidden;
           text-overflow: ellipsis;
         }
+      }
+    }
+  }
+  .settings-row {
+    display: none;
+  }
+  @media (max-width: 1199px) {
+    .desktop-settings {
+      display: none;
+    }
+    .settings-row {
+      display: flex;
+      justify-content: center;
+      height: auto;
+      min-height: 80px;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .toolbar-left {
+      min-width: 0;
+      flex: 1;
+      .title {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

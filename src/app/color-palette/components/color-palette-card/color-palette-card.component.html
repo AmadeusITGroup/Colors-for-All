@@ -1,4 +1,4 @@
-<mat-card class="color-palette-card">
+<mat-card class="color-palette-card" [attr.data-palette-id]="colorPalette?.id" tabindex="-1">
   <mat-card-header>
     <mat-card-title (click)="goToColorPalette()">{{colorPalette?.title}}</mat-card-title>
     <div *ngIf="colorPalette?.id">

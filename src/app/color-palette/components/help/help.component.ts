@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'cm-help',
   templateUrl: './help.component.html',
   styleUrls: ['./help.component.scss'],
   standalone: true,
-  imports: []
+  imports: [MatButtonModule, MatIconModule]
 })
-export class HelpComponent implements OnInit {
-  constructor() { }
+export class HelpComponent {
+  constructor(public dialogRef: MatDialogRef<HelpComponent>) { }
 
-  ngOnInit() { }
+  public close(): void {
+    this.dialogRef.close();
+  }
 }

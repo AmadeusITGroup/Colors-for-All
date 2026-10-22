@@ -1,25 +1,91 @@
 <div class="save-palette-form-container" [formGroup]="savePaletteFormGroup">
-  <div mat-dialog-title>{{data.action}} color palette</div>
+  <div mat-dialog-title class="palette-dialog-header">
+    <span>{{data.action}} color palette</span>
+    <button type="button" mat-stroked-button color="primary" [disabled]="importingFile" (click)="paletteFile.click()">
+      <mat-icon>upload_file</mat-icon>Upload file
+    </button>
+    <input #paletteFile type="file" accept=".json,application/json" hidden (change)="importPaletteFile(paletteFile)">
+  </div>
   <div mat-dialog-content class="save-palette-form-content">
+    <p *ngIf="importError" class="color-error" role="alert">{{importError}}</p>
+    <p *ngIf="importingFile" role="status">Importing file...</p>
     <mat-form-field hintLabel="Min {{LABEL_MIN_LENGTH}} Max {{LABEL_MAX_LENGTH}} characters">
-      <input formControlName="colorPaletteTitle" matInput placeholder="Title">
+      <input #paletteTitle cdkFocusInitial formControlName="colorPaletteTitle" matInput placeholder="Title">
       <mat-error *ngIf="colorPaletteTitle.errors?.required">Field is required</mat-error>
       <mat-error *ngIf="colorPaletteTitle.errors?.minlength">The minimum length is set to {{LABEL_MIN_LENGTH}}</mat-error>
       <mat-error *ngIf="colorPaletteTitle.errors?.maxlength">The maximum length is set to {{LABEL_MAX_LENGTH}}</mat-error>
     </mat-form-field>
 
-    <mat-form-field hintLabel='Please enter your color palette as following example: ["#123456","#234567","#345678"]'>
-      <textarea formControlName="colorPaletteData" matInput rows="11" placeholder="Colors">
-      </textarea>
-      <mat-error *ngIf="colorPaletteData.errors?.required">Field is required</mat-error>
-      <mat-error *ngIf="colorPaletteData.errors?.invalidFormat">The format is invalid <br/>Example: ["#123456","#234567","#345678"]
-      </mat-error>
-    </mat-form-field>
+    <mat-tab-group animationDuration="0ms" class="palette-views">
+      <mat-tab label="List">
+        <div class="list-view">
+          <p *ngIf="jsonDraftInvalid" class="color-error" role="alert">Invalid JSON. Correct the JSON before editing colors.</p>
+          <p *ngIf="!jsonDraftInvalid && colors.length === 0" class="color-error" role="alert">A palette must contain at least one color.</p>
+          <div cdkDropList [cdkDropListData]="colors" [cdkDropListDisabled]="jsonDraftInvalid" (cdkDropListDropped)="dropColor($event)" class="color-list" aria-label="Palette colors">
+            <div *ngFor="let row of colors; let index = index; trackBy: trackColor" cdkDrag cdkDragPreviewContainer="parent" class="color-entry" [class.selected]="selectedColorId === row.id">
+              <div class="color-row">
+                <button type="button" mat-icon-button cdkDragHandle class="row-icon drag-handle" [disabled]="jsonDraftInvalid" [attr.aria-label]="'Drag color ' + (index + 1)" title="Drag to reorder"><mat-icon>drag_indicator</mat-icon></button>
+                <button type="button" class="color-preview" [style.background-color]="row.hex" [disabled]="jsonDraftInvalid" (click)="openColorPicker(row, colorPicker)" [attr.aria-label]="'Pick color ' + (index + 1)" title="Pick color"></button>
+                <div class="color-fields">
+                  <input class="hex-input" [value]="row.draft" [disabled]="jsonDraftInvalid" [class.invalid]="row.invalid" [attr.aria-invalid]="row.invalid" [attr.aria-label]="'Color ' + (index + 1) + ' hex code'" (focus)="selectColor(row)" (input)="updateColorText(row, $any($event.target).value)" (blur)="commitColorText(row)" spellcheck="false" autocomplete="off">
+                  <input class="color-name-input" [value]="row.name" [disabled]="jsonDraftInvalid" [attr.aria-label]="'Color ' + (index + 1) + ' name (optional)'" placeholder="Name" [title]="row.name || 'Name (optional)'" (focus)="selectColor(row)" (input)="updateColorName(row, $any($event.target).value)" autocomplete="off">
+                </div>
+                <button type="button" mat-icon-button class="row-icon move-up" [disabled]="index === 0 || jsonDraftInvalid" (click)="moveColor(index, -1)" [attr.aria-label]="'Move color ' + (index + 1) + ' up'" title="Move up"><mat-icon>arrow_upward</mat-icon></button>
+                <button type="button" mat-icon-button class="row-icon move-down" [disabled]="index === colors.length - 1 || jsonDraftInvalid" (click)="moveColor(index, 1)" [attr.aria-label]="'Move color ' + (index + 1) + ' down'" title="Move down"><mat-icon>arrow_downward</mat-icon></button>
+                <button type="button" mat-icon-button class="row-icon color-menu-trigger" [matMenuTriggerFor]="colorMenu" [disabled]="jsonDraftInvalid" [attr.aria-label]="'More actions for color ' + (index + 1)" title="More actions"><mat-icon>more_vert</mat-icon></button>
+                <mat-menu #colorMenu="matMenu">
+                  <button type="button" mat-menu-item [disabled]="row.invalid" (click)="duplicateColor(index)"><mat-icon>file_copy</mat-icon><span>Duplicate</span></button>
+                  <button type="button" mat-menu-item (click)="deleteColor(index)"><mat-icon>delete</mat-icon><span>Delete</span></button>
+                </mat-menu>
+              </div>
+            </div>
+          </div>
+          <p *ngIf="colorError" class="color-error" role="alert">{{colorError}}</p>
+          <button type="button" mat-stroked-button color="primary" class="add-color" [disabled]="jsonDraftInvalid" (click)="addColor()"><mat-icon>add</mat-icon>Add color</button>
+        </div>
+      </mat-tab>
+      <mat-tab label="JSON">
+        <div class="json-view">
+          <mat-form-field>
+            <mat-label>Colors</mat-label>
+            <textarea formControlName="colorPaletteData" matInput rows="12" spellcheck="false"></textarea>
+            <mat-error *ngIf="colorPaletteData.errors?.required">Field is required</mat-error>
+            <mat-error *ngIf="colorPaletteData.errors?.invalidFormat">Enter a non-empty JSON array of hex strings or objects with a hex value and an optional name.</mat-error>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
 
   </div>
   <div mat-dialog-actions>
     <button mat-stroked-button color="primary" (click)="cancel()">Cancel</button>
-    <button mat-flat-button [disabled]="savePaletteFormGroup.invalid" color="primary" class="button-save" (keyup.enter)="saveColorPalette()"
+    <button mat-flat-button [disabled]="importingFile || savePaletteFormGroup.invalid || hasInvalidColorValues" color="primary" class="button-save"
       (click)="saveColorPalette()">Save</button>
   </div>
 </div>
+
+<ng-template #colorPicker>
+  <div class="color-picker-popover" *ngIf="pickerRow">
+    <div class="picker-toolbar">
+      <strong>Color</strong>
+      <button type="button" mat-icon-button mat-dialog-close aria-label="Close color picker" title="Close"><mat-icon>close</mat-icon></button>
+    </div>
+    <hex-color-picker [color]="pickerRow.hex" (color-changed)="updatePickerVisual($any($event).detail.value)"></hex-color-picker>
+    <mat-button-toggle-group class="picker-formats" [value]="pickerFormat" (change)="setPickerFormat($event.value)" aria-label="Color format" [hideSingleSelectionIndicator]="true">
+      <mat-button-toggle value="HEX">HEX</mat-button-toggle>
+      <mat-button-toggle value="RGB">RGB</mat-button-toggle>
+      <mat-button-toggle value="HSL">HSL</mat-button-toggle>
+    </mat-button-toggle-group>
+    <label *ngIf="pickerFormat === 'HEX'" class="picker-field">
+      <span>HEX</span>
+      <input class="picker-hex-input" [value]="pickerHexDraft" (input)="updatePickerHex($any($event.target).value)" aria-label="HEX color" [attr.aria-invalid]="pickerRow.invalid" spellcheck="false" autocomplete="off">
+    </label>
+    <div *ngIf="pickerFormat !== 'HEX'" class="picker-channels">
+      <label *ngFor="let definition of pickerChannels[pickerFormat]; let index = index" class="picker-field">
+        <span>{{definition.label}}</span>
+        <input type="number" [value]="pickerCoordinates[index]" min="0" [max]="definition.max" [step]="pickerFormat === 'RGB' ? 1 : 0.1" (input)="updatePickerChannel(index, $any($event.target).value)" [attr.aria-label]="definition.label" [attr.aria-invalid]="pickerChannelsInvalid">
+      </label>
+    </div>
+    <p *ngIf="pickerRow.invalid || pickerChannelsInvalid" class="color-error" role="alert">Enter a valid color value.</p>
+  </div>
+</ng-template>

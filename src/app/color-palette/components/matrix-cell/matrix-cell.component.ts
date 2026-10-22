@@ -1,4 +1,4 @@
-import { NgClass, NgStyle, NgIf } from '@angular/common';
+import { DecimalPipe, NgClass, NgStyle, NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ColorMatrixCell } from './../../../core/models/color-matrix.model';
 import {
@@ -18,6 +18,7 @@ import {
     NgClass,
     NgStyle,
     NgIf,
+    DecimalPipe,
     MatIconModule
   ]
 })

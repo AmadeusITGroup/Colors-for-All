@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.spec.json",
+  "compilerOptions": {
+    "module": "ES2022"
+  },
+  "files": [],
+  "include": [
+    "app/core/services/color-matrix.service.spec.ts",
+    "app/core/services/matrix-loading.service.spec.ts",
+    "app/core/state/color-palette.state.spec.ts",
+    "app/core/components/color-palette-save-modal/color-palette-save-modal.component.spec.ts",
+    "app/core/services/color-palette.service.spec.ts",
+    "app/color-palette/components/matrix-table/matrix-table.component.spec.ts",
+    "app/color-palette/components/help/help.component.spec.ts",
+    "app/core/components/navigation/navigation-download.spec.ts"
+  ]
+}

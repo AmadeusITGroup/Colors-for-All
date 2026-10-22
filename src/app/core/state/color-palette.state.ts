@@ -37,7 +37,7 @@ export const DEFAULT_COLOR_PALETTE_STATE = {
   entities: {},
   error: null,
   selected: null,
-  selectedMatrix: { size: 12, fontWeight: FontWeight.NORMAL },
+  selectedMatrix: { size: 12, fontWeight: FontWeight.FOUR_HUNDRED, contrastModel: 'APCA' as const },
   sizes: range(RANGE_START, RANGE_END),
   fontWeights: [
     FontWeight.LIGHTER,
@@ -74,7 +74,9 @@ export interface ColorPaletteStateModel {
 export class ColorPaletteState implements NgxsOnInit {
   @Selector()
   static colorPalettes(state: ColorPaletteStateModel): ColorPalette[] {
-    return Object.keys(state.entities).map(key => state.entities[key]);
+    const order = { Default: 0, Material: 1 };
+    return Object.keys(state.entities).map(key => state.entities[key])
+      .sort((first, second) => (order[first.title] ?? 2) - (order[second.title] ?? 2));
   }
 
   @Selector()
@@ -127,6 +129,12 @@ export class ColorPaletteState implements NgxsOnInit {
       const parsedStoredState = JSON.parse(storedState);
       const colorPalettesFromLocalStorage =
         parsedStoredState.colorPalettes || null;
+      const storedMatrix = colorPalettesFromLocalStorage && colorPalettesFromLocalStorage.selectedMatrix;
+      const selectedMatrix = this.normalizeMatrix({
+        ...state.selectedMatrix,
+        ...storedMatrix,
+        contrastModel: storedMatrix && storedMatrix.contrastModel === 'WCAG' ? 'WCAG' : 'APCA'
+      });
 
       if (
         !(
@@ -138,6 +146,7 @@ export class ColorPaletteState implements NgxsOnInit {
         const colorPalettes: ColorPalette[] = this.colorPaletteService.getDefaultColorPalettes();
         ctx.setState({
           ...state,
+          selectedMatrix,
           ids: colorPalettes.map(cp => cp.id),
           entities: colorPalettes.reduce((acc, curr) => {
             acc[curr['id']] = curr;
@@ -146,7 +155,21 @@ export class ColorPaletteState implements NgxsOnInit {
           selected: colorPalettes[0].id
         });
       } else {
-        ctx.setState({ ...colorPalettesFromLocalStorage });
+        const entities = { ...colorPalettesFromLocalStorage.entities };
+        Object.keys(entities).forEach(id => {
+          if (this.colorPaletteService.isLegacyBootstrapPalette(entities[id])) {
+            delete entities[id];
+            return;
+          }
+          entities[id] = this.colorPaletteService.upgradeGooglePalette(
+            this.colorPaletteService.upgradeDefaultPalette(entities[id])
+          );
+        });
+        const ids = colorPalettesFromLocalStorage.ids.filter(id => !!entities[id]);
+        const selected = entities[colorPalettesFromLocalStorage.selected]
+          ? colorPalettesFromLocalStorage.selected
+          : ids[0] || null;
+        ctx.setState({ ...state, ...colorPalettesFromLocalStorage, ids, entities, selected, selectedMatrix });
       }
     } catch (error) {
       ctx.dispatch(new SetError(error));
@@ -232,12 +255,28 @@ export class ColorPaletteState implements NgxsOnInit {
     ctx: StateContext<ColorPaletteStateModel>,
     action: SetSelectedMatrix
   ) {
+    const selectedMatrix = this.normalizeMatrix({
+      size: action.size,
+      fontWeight: action.fontWeight,
+      contrastModel: action.contrastModel || ctx.getState().selectedMatrix.contrastModel || 'APCA'
+    });
     ctx.patchState({
-      selectedMatrix: { size: action.size, fontWeight: action.fontWeight },
+      selectedMatrix,
       accessibilityInfo: this.colorMatrixService.calculateAccessibilityInfo(
-        action.size,
-        action.fontWeight
+        selectedMatrix.size,
+        selectedMatrix.fontWeight
       )
     });
+  }
+
+  private normalizeMatrix(matrix: ColorMatrixSelection): ColorMatrixSelection {
+    const isAPCA = matrix.contrastModel === 'APCA';
+    return {
+      ...matrix,
+      size: Math.max(12, Math.min(isAPCA ? 120 : 24, matrix.size)),
+      fontWeight: isAPCA
+        ? String(this.colorMatrixService.normalizeFontWeight(matrix.fontWeight)) as FontWeight
+        : matrix.fontWeight
+    };
   }
 }

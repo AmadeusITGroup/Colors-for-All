@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { inputToRGB } from '@ctrl/tinycolor';
+import { inputToRGB, TinyColor } from '@ctrl/tinycolor';
+import { calcAPCA, fontLookupAPCA } from 'apca-w3';
 
 import { FontWeight } from '../../core/enums/font-weight.enum';
-import { ColorMatrixCell } from '../models/color-matrix.model';
+import { ColorMatrixCell, ContrastModel } from '../models/color-matrix.model';
 import { AccessibilityInfo } from './../models/accessibility-info.model';
 
 @Injectable({
@@ -15,8 +16,10 @@ export class ColorMatrixService {
     backgroundColor: string,
     foregroundColor: string,
     size: number,
-    fontWeight: FontWeight
+    fontWeight: FontWeight,
+    contrastModel: ContrastModel = 'WCAG'
   ): ColorMatrixCell {
+    const colorTitle = `Text ${new TinyColor(foregroundColor).toHexString().toUpperCase()} / Background ${new TinyColor(backgroundColor).toHexString().toUpperCase()}`;
     const LtextColor = this.toRgb(backgroundColor);
     const LbackgroundColor = this.toRgb(foregroundColor);
     const style = {
@@ -25,6 +28,34 @@ export class ColorMatrixService {
       'background-color': backgroundColor,
       color: foregroundColor
     } as object;
+    if (contrastModel === 'APCA') {
+      const lc = Number(calcAPCA(foregroundColor, backgroundColor));
+      const weight = this.normalizeFontWeight(fontWeight);
+      const fontSizes = fontLookupAPCA(lc);
+      const recommendations = this.getAPCATextRecommendations(lc, weight, Number(fontSizes[weight / 100]));
+      const usage = recommendations.find(entry => size >= entry.minimumFontSize);
+      const minimumFontSize = recommendations.length
+        ? Math.min(...recommendations.map(entry => entry.minimumFontSize))
+        : undefined;
+      const accessible = Math.abs(lc) >= 15;
+      const usageLabel = !accessible ? 'Not accessible' : usage ? usage.usage : 'No text';
+      const exceedsSuggestedMaximum = Math.abs(lc) > 90 && size > 36 && weight >= 700;
+      return {
+        backgroundColor,
+        foregroundColor,
+        style,
+        title: `${colorTitle}\nLc ${lc.toFixed(1)}; ${accessible ? 'Usage: ' : ''}${usageLabel}` +
+          (usageLabel === 'No text' ? '. This may include dividers, and in some cases large buttons or thick focus visible outlines, but does not include fine details which have a higher minimum.' : '') +
+          (!usage && minimumFontSize < 400 ? `\nMinimum: ${minimumFontSize}px at weight ${weight}` : '') +
+          (exceedsSuggestedMaximum ? '; Suggested maximum: Lc 90 for very large bold text (advisory)' : ''),
+        compliance: accessible ? 'Recommended' : 'X',
+        ratio: Number(lc.toFixed(1)),
+        lc,
+        usage: accessible ? usageLabel : undefined,
+        minimumFontSize,
+        referenceFontSize: Number(fontSizes[4])
+      };
+    }
     const ratio = this.calculateRatio(
       this.getContrast(LtextColor, LbackgroundColor)
     );
@@ -33,10 +64,48 @@ export class ColorMatrixService {
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
       style: style,
-      title: this.setRatioTitle(ratio),
+      title: `${colorTitle}\n${this.setRatioTitle(ratio)}`,
       compliance: level,
       ratio: ratio
     };
+  }
+
+  private getAPCATextRecommendations(
+    lc: number,
+    weight: number,
+    lookupMinimum = Number(fontLookupAPCA(lc)[weight / 100])
+  ): { minimumFontSize: number; usage: string }[] {
+    const referenceWeight = Math.min(weight, 700);
+    const preferredBody = { 200: 24, 300: 18, 400: 14, 500: 14, 600: 14, 700: 14 };
+    const body = { 200: 48, 300: 24, 400: 18, 500: 16, 600: 16, 700: 14 };
+    const fluent = { 200: 48, 300: 36, 400: 24, 500: 21, 600: 18, 700: 16 };
+    const large = { 400: 36, 500: 36, 600: 36, 700: 24 };
+    const levels = [
+      { minimumLc: 90, minimumFontSize: preferredBody[referenceWeight], usage: 'Small body text only' },
+      { minimumLc: 75, minimumFontSize: body[referenceWeight], usage: 'Body text OK' },
+      { minimumLc: 90, minimumFontSize: weight >= 400 ? 12 : undefined, usage: 'Fluent text only' },
+      { minimumLc: 75, minimumFontSize: weight >= 400 ? 15 : undefined, usage: 'Fluent text only' },
+      { minimumLc: 60, minimumFontSize: fluent[referenceWeight], usage: 'Fluent text only' },
+      { minimumLc: 45, minimumFontSize: large[referenceWeight], usage: 'Large & Sub-fluent text' },
+      { minimumLc: 30, minimumFontSize: lookupMinimum, usage: 'Spot & Non text only' }
+    ];
+    return levels.filter(entry =>
+      Math.abs(lc) >= entry.minimumLc && entry.minimumFontSize > 0 && entry.minimumFontSize < 400
+    );
+  }
+
+  public normalizeFontWeight(fontWeight: FontWeight): number {
+    switch (fontWeight) {
+      case FontWeight.LIGHTER:
+        return 100;
+      case FontWeight.NORMAL:
+        return 400;
+      case FontWeight.BOLD:
+      case FontWeight.BOLDER:
+        return 700;
+      default:
+        return Number(fontWeight);
+    }
   }
 
   public calculateAccessibilityInfo(

@@ -35,3 +35,61 @@ mat-label{
   font-weight: 700;
   font-size: 16px;
 }
+
+.help-side-panel .mat-mdc-dialog-container .mdc-dialog__container {
+  transform: translateX(0);
+  animation: help-panel-enter 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.help-side-panel .mat-mdc-dialog-container.mdc-dialog--closing .mdc-dialog__container {
+  animation-name: help-panel-exit;
+}
+
+.help-side-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+  height: 100%;
+  border-radius: 0;
+  transform: none;
+  transition: none;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .help-side-panel .mat-mdc-dialog-container .mdc-dialog__container {
+    animation: none;
+  }
+}
+
+@keyframes help-panel-enter {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes help-panel-exit {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
+html.palette-transition-active {
+  view-transition-name: none;
+}
+
+html.palette-transition-active::view-transition-group(palette-surface) {
+  animation-duration: 500ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.palette-transition-active::view-transition-old(palette-surface),
+html.palette-transition-active::view-transition-new(palette-surface) {
+  height: 100%;
+  object-fit: fill;
+  mix-blend-mode: normal;
+  animation-duration: 500ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.palette-transition-active::view-transition-group(palette-surface),
+  html.palette-transition-active::view-transition-old(palette-surface),
+  html.palette-transition-active::view-transition-new(palette-surface) {
+    animation-duration: 0s;
+  }
+}
