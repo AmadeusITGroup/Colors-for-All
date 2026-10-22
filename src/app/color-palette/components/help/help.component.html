@@ -1,7 +1,7 @@
 <section class="help-panel-layout">
   <header class="help-panel-header">
     <h2>Help</h2>
-    <button id="help-close-button" type="button" mat-icon-button (click)="close()" aria-label="Close Help" title="Close Help">
+    <button id="help-close-button" type="button" mat-icon-button (click)="close()" aria-label="Close Help" matTooltip="Close Help">
       <mat-icon>close</mat-icon>
     </button>
   </header>
@@ -18,8 +18,8 @@
     <div class="subsection">
       2 modes are offered: 
       <ul>
-        <li>APCA (default)</li>
-        <li>WCAG</li>
+        <li>WCAG (default)</li>
+        <li>APCA</li>
       </ul>
       The APCA / WCAG selector in a palette's header switches the entire matrix. Your choice is remembered locally.
     </div>
@@ -40,7 +40,11 @@
       There is no limit in the number of colors for each palette. The application generates automatically a matrix
       (same colors horizontally and vertically) from this palette. Each cell of the matrix is the combination between 2
       colors (foreground/background). The ratio (WCAG) or Lc value (APCA) is automatically computed and displayed for each
-      combination. All accessible matches are visually highlighted.
+      combination. All accessible matches are visually highlighted. The count in the matrix's top-left cell follows the
+      selected contrast mode; swapping foreground and background counts as a separate combination.
+      The More options menu can download the palette as <code>palette-name_YY-MM-DD.json</code> or export accessible
+      combinations in JSON, XLS, CSV, TXT, or PDF. Exports follow the active contrast mode and filters; PDF includes
+      small previews of both colors. Use Upload file in the homepage header to import a palette, then Click Save.
     </div>
   </div>
   <div class="features">

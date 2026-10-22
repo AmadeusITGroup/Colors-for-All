@@ -2,19 +2,23 @@
   <mat-card-header>
     <mat-card-title (click)="goToColorPalette()">{{colorPalette?.title}}</mat-card-title>
     <div *ngIf="colorPalette?.id">
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+      <button type="button" mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options" matTooltip="More options">
         <mat-icon>more_vert</mat-icon>
       </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="editColorPalette(colorPalette?.id)">
+      <mat-menu #menu="matMenu" class="navigation-actions-menu">
+        <button mat-menu-item matTooltip="Download this palette as JSON" (click)="downloadColorPalette()">
+          <mat-icon>download</mat-icon>
+          <span>Download</span>
+        </button>
+        <button mat-menu-item matTooltip="Edit this palette" (click)="editColorPalette(colorPalette?.id)">
           <mat-icon>edit</mat-icon>
           <span>Edit</span>
         </button>
-        <button mat-menu-item (click)="duplicateColorPalette(colorPalette?.id)">
+        <button mat-menu-item matTooltip="Duplicate this palette" (click)="duplicateColorPalette(colorPalette?.id)">
           <mat-icon>file_copy</mat-icon>
           <span>Duplicate</span>
         </button>
-        <button mat-menu-item (click)="deleteColorPalette(colorPalette?.id)">
+        <button mat-menu-item matTooltip="Delete this palette" (click)="deleteColorPalette(colorPalette?.id)">
           <mat-icon>delete</mat-icon>
           <span>Delete</span>
         </button>

@@ -141,7 +141,7 @@ describe('ColorPaletteState', () => {
           expect(state.selectedMatrix).toEqual({
             size: 12,
             fontWeight: FontWeight.FOUR_HUNDRED,
-            contrastModel: 'APCA'
+            contrastModel: 'WCAG'
           });
           expect(state.sizes).toEqual(range(RANGE_START, RANGE_END));
           expect(state.fontWeights).toEqual([
@@ -495,7 +495,7 @@ describe('ColorPaletteState', () => {
             expect(result.selectedMatrix).toEqual({
               size: expectedSize,
               fontWeight: FontWeight.SEVEN_HUNDRED,
-              contrastModel: 'APCA'
+              contrastModel: 'WCAG'
             });
           });
       });
@@ -525,8 +525,8 @@ describe('APCA matrix preferences', () => {
     state = new ColorPaletteState(null, null, new ColorPaletteService(), new ColorMatrixService());
   });
 
-  it('defaults to APCA and numeric normal weight', () => {
-    expect(snapshot.selectedMatrix).toEqual({ size: 12, fontWeight: FontWeight.FOUR_HUNDRED, contrastModel: 'APCA' });
+  it('defaults to WCAG and numeric normal weight', () => {
+    expect(snapshot.selectedMatrix).toEqual({ size: 12, fontWeight: FontWeight.FOUR_HUNDRED, contrastModel: 'WCAG' });
   });
 
   it('should display Default and Material first while preserving the order of remaining palettes', () => {
@@ -581,7 +581,7 @@ describe('APCA matrix preferences', () => {
     state.loadColorPalettes(context);
     expect(snapshot.ids).toEqual(saved.ids);
     expect(snapshot.entities).toEqual(saved.entities);
-    expect(snapshot.selectedMatrix).toEqual({ size: 18, fontWeight: FontWeight.FOUR_HUNDRED, contrastModel: 'APCA' });
+    expect(snapshot.selectedMatrix).toEqual({ size: 18, fontWeight: FontWeight.NORMAL, contrastModel: 'WCAG' });
   });
 
   it('restores an explicitly saved WCAG preference', () => {

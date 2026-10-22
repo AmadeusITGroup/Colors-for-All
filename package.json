@@ -47,6 +47,7 @@
     "classlist.js": "^1.1.20150312",
     "colorjs.io": "0.7.1",
     "core-js": "^2.6.9",
+    "jspdf": "^4.2.1",
     "lodash": "^4.17.15",
     "rxjs": "^7.0.0",
     "uuid": "^3.3.3",
@@ -54,7 +55,7 @@
     "zone.js": "^0.14.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^21.2.27",
+    "@angular-devkit/build-angular": "^17.3.0",
     "@angular/cli": "^17.3.0",
     "@angular/compiler-cli": "^17.3.0",
     "@angular/language-service": "^17.3.0",

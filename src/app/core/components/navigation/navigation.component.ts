@@ -15,13 +15,17 @@ import { ColorPaletteConfirmDeleteModalComponent } from './../../../color-palett
 import { DeleteColorPalette } from './../../../core/state/color-palette.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatButtonModule } from '@angular/material/button';
-import { NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatrixCustomFormComponent } from '../matrix-custom-form/matrix-custom-form.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatrixLoadingService } from '../../services/matrix-loading.service';
 import { HelpComponent } from '../../../color-palette/components/help/help.component';
+import { APCA_USAGE_FILTERS, MatrixFilterCounts, MatrixFilterService, WCAG_LEVEL_FILTERS } from '../../services/matrix-filter.service';
+import { AccessibleCombinationsExportService, AccessibleExportFormat } from '../../services/accessible-combinations-export.service';
 
 @Component({
   selector: 'cm-navigation',
@@ -30,12 +34,16 @@ import { HelpComponent } from '../../../color-palette/components/help/help.compo
   standalone: true,
   imports: [
     MatButtonModule,
+    AsyncPipe,
     NgIf,
+    NgFor,
     MatToolbarModule,
     NgClass,
     MatIconModule,
+    MatTooltipModule,
     MatrixCustomFormComponent,
-    MatMenuModule
+    MatMenuModule,
+    MatCheckboxModule
   ]
 })
 export class NavigationComponent implements OnInit {
@@ -49,14 +57,48 @@ export class NavigationComponent implements OnInit {
   public HeaderType = HeaderType;
   public selectedColorPaletteSnapShot: ColorPalette;
   public currentScreenSize: ScreenSize;
+  public filterCounts$: Observable<MatrixFilterCounts>;
+  public apcaUsageOptions = APCA_USAGE_FILTERS;
+  public wcagLevelOptions = WCAG_LEVEL_FILTERS;
   public ScreenSize = ScreenSize;
   constructor(
     private dialog: MatDialog,
     private router: Router,
     private store: Store,
     private breakPointObserver: BreakpointObserver,
-    private matrixLoading: MatrixLoadingService
-  ) { }
+    private matrixLoading: MatrixLoadingService,
+    private matrixFilter: MatrixFilterService,
+    private accessibleExport: AccessibleCombinationsExportService
+  ) {
+    this.filterCounts$ = matrixFilter.counts$;
+  }
+
+  public get isAPCA(): boolean {
+    return this.store.selectSnapshot(ColorPaletteState.selectedMatrix)?.contrastModel !== 'WCAG';
+  }
+
+  public get filteredOutItemCount(): number {
+    const filters = this.matrixFilter.filters;
+    return this.isAPCA
+      ? APCA_USAGE_FILTERS.length - filters.apcaUsages.length
+      : WCAG_LEVEL_FILTERS.length - filters.wcagLevels.length;
+  }
+
+  public isAPCAUsageSelected(usage: string): boolean {
+    return this.matrixFilter.filters.apcaUsages.includes(usage);
+  }
+
+  public isWCAGLevelSelected(level: string): boolean {
+    return this.matrixFilter.filters.wcagLevels.includes(level);
+  }
+
+  public setAPCAUsage(usage: string, checked: boolean): void {
+    this.matrixFilter.setAPCAUsage(usage, checked);
+  }
+
+  public setWCAGLevel(level: string, checked: boolean): void {
+    this.matrixFilter.setWCAGLevel(level, checked);
+  }
 
   ngOnInit() {
     this.selectedColorPalette$.subscribe(selectedColorPalette => {
@@ -152,6 +194,15 @@ export class NavigationComponent implements OnInit {
       link.remove();
       URL.revokeObjectURL(url);
     }
+  }
+
+  public exportAccessibleCombinations(format: AccessibleExportFormat): void {
+    const palette = this.selectedColorPaletteSnapShot;
+    const matrix = this.store.selectSnapshot(ColorPaletteState.selectedMatrix);
+    if (!palette || !matrix) {
+      return;
+    }
+    this.accessibleExport.download(format, palette, matrix);
   }
 
   public createColorPalette(input?: HTMLInputElement) {

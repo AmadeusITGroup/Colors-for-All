@@ -83,7 +83,7 @@
               "polyfills": ["zone.js", "zone.js/testing"],
               "tsConfig": "src/tsconfig.contrast-spec.json",
               "karmaConfig": "src/karma.contrast.conf.js",
-              "include": ["src/app/core/services/color-matrix.service.spec.ts", "src/app/core/services/matrix-loading.service.spec.ts", "src/app/core/state/color-palette.state.spec.ts", "src/app/core/components/color-palette-save-modal/color-palette-save-modal.component.spec.ts", "src/app/core/services/color-palette.service.spec.ts", "src/app/color-palette/components/matrix-table/matrix-table.component.spec.ts", "src/app/color-palette/components/help/help.component.spec.ts", "src/app/core/components/navigation/navigation-download.spec.ts"],
+              "include": ["src/app/core/services/color-matrix.service.spec.ts", "src/app/core/services/matrix-loading.service.spec.ts", "src/app/core/state/color-palette.state.spec.ts", "src/app/core/components/color-palette-save-modal/color-palette-save-modal.component.spec.ts", "src/app/core/services/color-palette.service.spec.ts", "src/app/color-palette/components/matrix-table/matrix-table.component.spec.ts", "src/app/color-palette/components/help/help.component.spec.ts", "src/app/core/components/navigation/navigation-download.spec.ts", "src/app/core/services/accessible-combinations-export.service.spec.ts"],
               "watch": false,
               "browsers": "ChromeHeadless"
             }

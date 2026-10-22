@@ -1,24 +1,25 @@
 <div class="custom-search-container">
   <div class="custom-search-form" [formGroup]="customPaletteSearch">
 
-    <div class="model-selector">
-      <mat-button-toggle-group formControlName="contrastModel" aria-label="Contrast model" [hideSingleSelectionIndicator]="true">
-        <mat-button-toggle value="APCA">APCA</mat-button-toggle>
-        <mat-button-toggle value="WCAG">WCAG</mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
+    <mat-form-field class="modelField mobile-icon-select">
+      <mat-label>Model</mat-label>
+      <mat-select formControlName="contrastModel" aria-label="Contrast model" panelWidth="max-content" panelClass="matrix-select-panel">
+        <mat-option value="WCAG">WCAG</mat-option>
+        <mat-option value="APCA">APCA</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-    <mat-form-field class="shortField">
-      <mat-label>Font-size</mat-label>
-      <mat-select formControlName="size" placeholder="Size">
+    <mat-form-field class="shortField mobile-icon-select">
+      <mat-label>Size</mat-label>
+      <mat-select formControlName="size" aria-label="Font size" panelWidth="max-content" panelClass="matrix-select-panel">
         <mat-option *ngFor="let i of isAPCA ? apcaSizes : (colorPalettesSizes$ | async)" [value]="i">
           {{i}} px
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="mediumField">
-      <mat-label>Font-weight</mat-label>
-      <mat-select formControlName="fontWeight" placeholder="Weight">
+    <mat-form-field class="mediumField mobile-icon-select">
+      <mat-label>Weight</mat-label>
+      <mat-select formControlName="fontWeight" aria-label="Font weight" panelWidth="max-content" panelClass="matrix-select-panel">
         <mat-option *ngFor="let fw of isAPCA ? apcaWeights : (colorPalettesFontWeights$ | async)" [value]="fw">
           {{fw}}
         </mat-option>

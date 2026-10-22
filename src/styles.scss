@@ -36,6 +36,110 @@ mat-label{
   font-size: 16px;
 }
 
+.mat-icon {
+  font-family: 'Material Symbols Outlined';
+  font-weight: 400;
+  font-style: normal;
+  font-feature-settings: 'liga';
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+button .mat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  font-family: 'Material Symbols Outlined';
+  font-size: 26px;
+  line-height: 1;
+  vertical-align: middle;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 26;
+}
+
+.mat-mdc-button-base .mat-icon,
+.mat-mdc-button .mat-icon,
+.mat-mdc-icon-button .mat-icon,
+.mat-mdc-menu-item .mat-icon {
+  width: 26px;
+  height: 26px;
+  font-size: 26px !important;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 26;
+}
+
+button > .mat-icon {
+  width: 26px !important;
+  height: 26px !important;
+  flex: 0 0 26px;
+}
+
+button.mat-mdc-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  max-width: 280px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background-color: #263238;
+  color: #ffffff;
+  font-family: Roboto, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.matrix-select-panel.mat-mdc-select-panel {
+  width: max-content;
+  max-width: calc(100vw - 16px);
+}
+
+.matrix-select-panel .mat-mdc-option .mdc-list-item__primary-text {
+  white-space: nowrap;
+}
+
+.matrix-filter-menu .mat-mdc-menu-content {
+  padding: 8px;
+}
+
+.matrix-filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: min(70vh, 420px);
+  min-width: 220px;
+  overflow-y: auto;
+}
+
+.matrix-filter-options .mat-mdc-checkbox {
+  min-height: 36px;
+}
+
+.navigation-actions-menu .mat-mdc-menu-item {
+  min-height: 56px;
+  align-items: center;
+}
+
+.navigation-actions-menu .mat-mdc-menu-item .mat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-size: 26px;
+  line-height: 1;
+  flex: 0 0 36px;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 26;
+}
+
+.navigation-actions-menu .mat-mdc-menu-item .mat-mdc-menu-item-text {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+}
+
 .help-side-panel .mat-mdc-dialog-container .mdc-dialog__container {
   transform: translateX(0);
   animation: help-panel-enter 500ms cubic-bezier(0.22, 1, 0.36, 1) both;

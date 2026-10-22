@@ -1,5 +1,6 @@
 import { DecimalPipe, NgClass, NgStyle, NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ColorMatrixCell } from './../../../core/models/color-matrix.model';
 import {
   ChangeDetectionStrategy,
@@ -19,7 +20,8 @@ import {
     NgStyle,
     NgIf,
     DecimalPipe,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule
   ]
 })
 export class MatrixCellComponent implements OnInit {
@@ -29,6 +31,8 @@ export class MatrixCellComponent implements OnInit {
   data: ColorMatrixCell;
   @Input()
   type: string;
+  @Input()
+  filtered = false;
 
   ngOnInit() { }
 

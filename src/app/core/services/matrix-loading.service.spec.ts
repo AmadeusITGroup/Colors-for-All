@@ -6,6 +6,9 @@ import { Store } from '@ngxs/store';
 import { MatDialog } from '@angular/material/dialog';
 import { ColorPaletteCardComponent } from '../../color-palette/components/color-palette-card/color-palette-card.component';
 import { SetSelectedColorPalette } from '../state/color-palette.actions';
+import { ColorMatrixService } from './color-matrix.service';
+import { MatrixFilterService } from './matrix-filter.service';
+import { AccessibleCombinationsExportService } from './accessible-combinations-export.service';
 
 describe('MatrixLoadingService', () => {
   let service: MatrixLoadingService;
@@ -20,7 +23,15 @@ describe('MatrixLoadingService', () => {
     dispatch = jasmine.createSpy('dispatch');
     TestBed.configureTestingModule({ providers: [{ provide: Router, useValue: { events, navigate } }] });
     service = TestBed.inject(MatrixLoadingService);
-    card = new ColorPaletteCardComponent({ dispatch } as unknown as Store, TestBed.inject(Router), {} as MatDialog, service);
+    card = new ColorPaletteCardComponent(
+      { dispatch } as unknown as Store,
+      TestBed.inject(Router),
+      {} as MatDialog,
+      service,
+      TestBed.inject(ColorMatrixService),
+      TestBed.inject(MatrixFilterService),
+      TestBed.inject(AccessibleCombinationsExportService)
+    );
     card.colorPalette = { id: 'palette-one', title: 'Palette', data: ['#fff', '#000'] };
   });
 

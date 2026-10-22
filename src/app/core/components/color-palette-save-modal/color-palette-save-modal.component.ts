@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subject } from 'rxjs';
@@ -46,6 +47,7 @@ interface PaletteColorRow {
     MatTabsModule,
     MatIconModule,
     MatMenuModule,
+    MatTooltipModule,
     MatButtonToggleModule,
     DragDropModule
   ]

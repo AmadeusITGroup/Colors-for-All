@@ -3,10 +3,19 @@ import { ColorMatrixService } from './../../../core/services/color-matrix.servic
 import { ColorPaletteMatrix } from './../../../core/models/color-palette-matrix.model';
 import { ColorPalette } from './../../../core/models/color-palette.model';
 import { FontWeight } from '../../../core/enums/font-weight.enum';
-import { afterNextRender, Component, Input, ChangeDetectionStrategy, NgZone } from '@angular/core';
+import { afterNextRender, Component, Input, ChangeDetectionStrategy, NgZone, OnChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { MatrixCellComponent } from '../matrix-cell/matrix-cell.component';
 import { MatrixLoadingService } from '../../../core/services/matrix-loading.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatrixFilterService, MatrixFilters } from '../../../core/services/matrix-filter.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+interface MatrixTableCell {
+  data: ColorMatrixCell;
+  visible: boolean;
+}
 
 @Component({
   selector: 'cm-matrix-table',
@@ -17,20 +26,86 @@ import { MatrixLoadingService } from '../../../core/services/matrix-loading.serv
   imports: [
     NgFor,
     NgIf,
+    MatTooltipModule,
     MatrixCellComponent
   ]
 })
-export class MatrixTableComponent {
+export class MatrixTableComponent implements OnChanges, OnDestroy {
   @Input()
   colorPalette: ColorPalette;
   @Input()
   selectedMatrix: ColorPaletteMatrix;
+  public matrixRows: MatrixTableCell[][] = [];
+  public accessibleCombinations = 0;
+  private filters: MatrixFilters;
+  private destroy$ = new Subject<void>();
+
   constructor(
     private colorMatrixService: ColorMatrixService,
     matrixLoading: MatrixLoadingService,
-    zone: NgZone
+    zone: NgZone,
+    private matrixFilter: MatrixFilterService,
+    private changeDetector: ChangeDetectorRef
   ) {
     afterNextRender(() => queueMicrotask(() => zone.run(() => matrixLoading.reveal())));
+    this.matrixFilter.filters$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(filters => {
+        this.filters = filters;
+        this.applyFilters();
+        this.changeDetector.markForCheck();
+      });
+  }
+
+  ngOnChanges(): void {
+    this.matrixRows = [];
+    const colors = this.colorPalette?.data || [];
+    if (!this.selectedMatrix || !colors.length) {
+      return;
+    }
+
+    colors.forEach(backgroundColor => {
+      const row = colors.map(foregroundColor =>
+        ({
+          data: this.computeColorMatrixData(
+            backgroundColor,
+            foregroundColor,
+            this.selectedMatrix.size,
+            this.selectedMatrix.fontWeight as FontWeight,
+            this.selectedMatrix.contrastModel
+          ),
+          visible: true
+        })
+      );
+      this.matrixRows.push(row);
+    });
+    this.matrixFilter.setMatrixCounts(
+      this.selectedMatrix.contrastModel || 'WCAG',
+      this.matrixRows.map(row => row.map(cell => cell.data))
+    );
+    this.applyFilters();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private applyFilters(): void {
+    this.accessibleCombinations = 0;
+    this.matrixRows.forEach(row => row.forEach(cell => {
+      cell.visible = cell.data.compliance === 'X' || this.isIncludedByFilter(cell.data);
+      if (cell.visible && cell.data.compliance !== 'X') {
+        this.accessibleCombinations++;
+      }
+    }));
+  }
+
+  private isIncludedByFilter(cell: ColorMatrixCell): boolean {
+    if (this.selectedMatrix?.contrastModel === 'WCAG') {
+      return this.filters?.wcagLevels.includes(cell.compliance) ?? true;
+    }
+    return this.filters?.apcaUsages.includes(cell.usage || '') ?? true;
   }
 
   public get hasColorNames(): boolean {

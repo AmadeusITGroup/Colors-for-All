@@ -7,6 +7,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ColorPaletteSaveModalComponent } from './color-palette-save-modal.component';
 import { parseColorPaletteData, colorPaletteValidator } from './color-palette.validator';
 import { NavigationComponent } from '../navigation/navigation.component';
+import { MatrixFilterService } from '../../services/matrix-filter.service';
 import { Subject } from 'rxjs';
 
 describe('ColorPaletteSaveModalComponent', () => {
@@ -52,7 +53,7 @@ describe('ColorPaletteSaveModalComponent', () => {
         componentInstance: { importPaletteFile: importFile }
       });
       store = jasmine.createSpyObj('Store', ['dispatch']);
-      navigation = new NavigationComponent(dialog, null, store, null, null);
+      navigation = new NavigationComponent(dialog, null, store, null, null, new MatrixFilterService(), null);
       input = document.createElement('input');
       input.type = 'file';
     });
@@ -280,16 +281,18 @@ describe('ColorPaletteSaveModalComponent', () => {
     it('should target the title for initial focus and return focus there after a successful import', async () => {
       const title: HTMLInputElement = fixture.nativeElement.querySelector('[formControlName="colorPaletteTitle"]');
       expect(title.hasAttribute('cdkFocusInitial')).toBe(true);
-      const input: HTMLInputElement = fixture.nativeElement.querySelector('input[type="file"]');
+      const input: HTMLInputElement = document.createElement('input');
+      input.type = 'file';
       const transfer = new DataTransfer();
       transfer.items.add(new File(['["#FFF"]'], 'Imported_26-10-17.json', { type: 'application/json' }));
       input.files = transfer.files;
-      const button: HTMLButtonElement = fixture.nativeElement.querySelector('.palette-dialog-header button');
-      button.focus();
+      document.body.appendChild(input);
+      input.focus();
       await component.importPaletteFile(input);
       fixture.detectChanges();
       expect(title.value).toBe('Imported');
       expect(document.activeElement).toBe(title);
+      input.remove();
     });
 
     it('should restore stored names into the JSON and visual views', () => {

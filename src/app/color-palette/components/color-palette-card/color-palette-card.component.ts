@@ -1,4 +1,5 @@
 import { ColorPalette } from './../../../core/models/color-palette.model';
+import { ColorPaletteState } from '../../../core/state/color-palette.state';
 import {
   DeleteColorPalette,
   SaveColorPalette,
@@ -16,8 +17,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgFor, NgIf } from '@angular/common';
 import { MatrixLoadingService } from '../../../core/services/matrix-loading.service';
+import { ColorMatrixService } from '../../../core/services/color-matrix.service';
+import { MatrixFilterService } from '../../../core/services/matrix-filter.service';
+import { AccessibleCombinationsExportService, AccessibleExportFormat } from '../../../core/services/accessible-combinations-export.service';
 
 @Component({
   selector: 'cm-color-palette-card',
@@ -29,6 +34,7 @@ import { MatrixLoadingService } from '../../../core/services/matrix-loading.serv
     MatIconModule,
     MatMenuModule,
     MatButtonModule,
+    MatTooltipModule,
     NgFor,
     MatDialogModule,
     NgIf
@@ -42,6 +48,9 @@ export class ColorPaletteCardComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private matrixLoading: MatrixLoadingService,
+    private colorMatrix: ColorMatrixService,
+    private matrixFilter: MatrixFilterService,
+    private accessibleExport: AccessibleCombinationsExportService,
     @Optional() private elementRef?: ElementRef<HTMLElement>
   ) { }
 
@@ -103,6 +112,45 @@ export class ColorPaletteCardComponent implements OnInit {
         this.store.dispatch(new SaveColorPalette(result));
       }
     });
+  }
+
+  public downloadColorPalette(): void {
+    const palette = this.colorPalette;
+    if (!palette) {
+      return;
+    }
+    const colors = palette.data.map((hex, index) => {
+      const name = palette.names?.[index]?.trim();
+      return name ? { hex, name } : hex;
+    });
+    const now = new Date();
+    const date = [String(now.getFullYear()).slice(-2), String(now.getMonth() + 1).padStart(2, '0'), String(now.getDate()).padStart(2, '0')].join('-');
+    const title = palette.title.trim().replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_').replace(/[. ]+$/g, '') || 'Palette';
+    const blob = new Blob([JSON.stringify(colors, null, 2)], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${title}_${date}.json`;
+    document.body.appendChild(link);
+    try {
+      link.click();
+    } finally {
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  public exportAccessibleCombinations(format: AccessibleExportFormat): void {
+    const matrix = this.store.selectSnapshot(ColorPaletteState.selectedMatrix);
+    if (!this.colorPalette || !matrix) {
+      return;
+    }
+    const model = matrix.contrastModel || 'WCAG';
+    const rows = this.colorPalette.data.map(backgroundColor => this.colorPalette.data.map(foregroundColor =>
+      this.colorMatrix.computeColorMatrixData(backgroundColor, foregroundColor, matrix.size, matrix.fontWeight, model)
+    ));
+    const accessibleCells = this.matrixFilter.getAccessibleCellsForRows(rows, model);
+    this.accessibleExport.download(format, this.colorPalette, matrix, accessibleCells);
   }
 
   public async goToColorPalette(): Promise<void> {

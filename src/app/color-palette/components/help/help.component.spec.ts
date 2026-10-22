@@ -5,6 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { NavigationComponent } from '../../../core/components/navigation/navigation.component';
+import { MatrixFilterService } from '../../../core/services/matrix-filter.service';
 
 describe('HelpComponent', () => {
   let component: HelpComponent;
@@ -50,7 +51,7 @@ describe('HelpComponent', () => {
     spyOn(window, 'matchMedia').and.returnValue({ matches: false } as MediaQueryList);
     const dialog = jasmine.createSpyObj('MatDialog', ['getDialogById', 'open']);
     const router = jasmine.createSpyObj('Router', ['navigate']);
-    const navigation = new NavigationComponent(dialog as MatDialog, router as Router, null, null, null);
+    const navigation = new NavigationComponent(dialog as MatDialog, router as Router, null, null, null, new MatrixFilterService(), null);
     navigation.goToHelp();
     expect(router.navigate).not.toHaveBeenCalled();
     expect(dialog.open).toHaveBeenCalledWith(HelpComponent, {
@@ -64,7 +65,7 @@ describe('HelpComponent', () => {
     const dialog = jasmine.createSpyObj('MatDialog', ['getDialogById', 'open']);
     const existing = {} as MatDialogRef<HelpComponent>;
     dialog.getDialogById.and.returnValue(existing);
-    const navigation = new NavigationComponent(dialog, null, null, null, null);
+    const navigation = new NavigationComponent(dialog, null, null, null, null, new MatrixFilterService(), null);
     expect(navigation.goToHelp()).toBe(existing);
     expect(dialog.open).not.toHaveBeenCalled();
   });
@@ -72,7 +73,7 @@ describe('HelpComponent', () => {
   it('should disable panel animation for reduced motion', () => {
     spyOn(window, 'matchMedia').and.returnValue({ matches: true } as MediaQueryList);
     const dialog = jasmine.createSpyObj('MatDialog', ['getDialogById', 'open']);
-    const navigation = new NavigationComponent(dialog, null, null, null, null);
+    const navigation = new NavigationComponent(dialog, null, null, null, null, new MatrixFilterService(), null);
     navigation.goToHelp();
     expect(dialog.open).toHaveBeenCalledWith(HelpComponent, jasmine.objectContaining({
       enterAnimationDuration: 0, exitAnimationDuration: 0

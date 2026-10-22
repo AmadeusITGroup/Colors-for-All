@@ -37,7 +37,7 @@ export const DEFAULT_COLOR_PALETTE_STATE = {
   entities: {},
   error: null,
   selected: null,
-  selectedMatrix: { size: 12, fontWeight: FontWeight.FOUR_HUNDRED, contrastModel: 'APCA' as const },
+  selectedMatrix: { size: 12, fontWeight: FontWeight.FOUR_HUNDRED, contrastModel: 'WCAG' as const },
   sizes: range(RANGE_START, RANGE_END),
   fontWeights: [
     FontWeight.LIGHTER,
@@ -133,7 +133,7 @@ export class ColorPaletteState implements NgxsOnInit {
       const selectedMatrix = this.normalizeMatrix({
         ...state.selectedMatrix,
         ...storedMatrix,
-        contrastModel: storedMatrix && storedMatrix.contrastModel === 'WCAG' ? 'WCAG' : 'APCA'
+        contrastModel: storedMatrix && storedMatrix.contrastModel === 'APCA' ? 'APCA' : 'WCAG'
       });
 
       if (
@@ -258,7 +258,7 @@ export class ColorPaletteState implements NgxsOnInit {
     const selectedMatrix = this.normalizeMatrix({
       size: action.size,
       fontWeight: action.fontWeight,
-      contrastModel: action.contrastModel || ctx.getState().selectedMatrix.contrastModel || 'APCA'
+      contrastModel: action.contrastModel || ctx.getState().selectedMatrix.contrastModel || 'WCAG'
     });
     ctx.patchState({
       selectedMatrix,

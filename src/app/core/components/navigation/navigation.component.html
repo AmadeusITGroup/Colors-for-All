@@ -1,20 +1,20 @@
 <mat-toolbar [ngClass]="{'fixed-header':currentHeaderType === HeaderType.COLOR_PALETTE}">
-  <mat-toolbar-row>
+  <mat-toolbar-row [class.detail-header-row]="currentHeaderType === HeaderType.DETAILED_COLOR_PALETTE">
     <ng-container *ngIf="currentHeaderType === HeaderType.COLOR_PALETTE">
       <div class="toolbar-left">
           <div class="title"><img src="favicon.ico" class="Appicon"><div>Colors for All</div></div>
         </div>
         <div class="toolbar-right">
-          <button type="button" mat-stroked-button color="primary" class="button-upload" (click)="paletteFile.click()">
+          <button type="button" mat-stroked-button color="primary" class="button-upload" matTooltip="Upload color palette" (click)="paletteFile.click()">
             <mat-icon>upload_file</mat-icon>
             <span>Upload file</span>
           </button>
           <input #paletteFile type="file" accept=".json,application/json" hidden (change)="createColorPalette(paletteFile)">
-          <button mat-flat-button color="primary" class="button-create" (click)="createColorPalette()">
-            <mat-icon class="icon-create">add</mat-icon>
+          <button mat-flat-button color="primary" class="button-create" matTooltip="Create color palette" (click)="createColorPalette()">
+            <mat-icon class="icon-create">add_circle</mat-icon>
             <span>Create</span>
           </button>
-          <button type="button" aria-label="Help" mat-icon-button (click)="goToHelp()">
+          <button type="button" aria-label="Help" mat-icon-button matTooltip="Help" (click)="goToHelp()">
             <mat-icon aria-label="Help">
               help_outline
             </mat-icon>
@@ -27,30 +27,60 @@
       <div class="toolbar-left">
         <div class="title" [ngClass]="{'truncate-small':currentScreenSize === ScreenSize.MEDIUM,'truncate':currentScreenSize === ScreenSize.SMALL}">{{selectedColorPaletteSnapShot?.title}}</div>
       </div>
-      <cm-matrix-custom-form class="custom-search desktop-settings"></cm-matrix-custom-form>
+      <cm-matrix-custom-form class="custom-search"></cm-matrix-custom-form>
       <div class="toolbar-right">
-        <button type="button" mat-icon-button [matMenuTriggerFor]="navigationMenu" aria-label="More options" title="More options">
+        <button type="button" mat-icon-button class="filter-button" [matMenuTriggerFor]="filterMenu" aria-label="Filters" matTooltip="Filters">
+          <mat-icon>filter_list</mat-icon>
+          <span *ngIf="filteredOutItemCount > 0" class="filter-count" aria-hidden="true">{{filteredOutItemCount}}</span>
+        </button>
+        <mat-menu #filterMenu="matMenu" class="matrix-filter-menu">
+          <div class="matrix-filter-options" role="group" [attr.aria-label]="isAPCA ? 'Usage filters' : 'WCAG level filters'"
+            (click)="$event.stopPropagation()">
+            <ng-container *ngIf="filterCounts$ | async as counts">
+            <ng-container *ngIf="isAPCA; else wcagFilterOptions">
+              <mat-checkbox *ngFor="let usage of apcaUsageOptions" [checked]="isAPCAUsageSelected(usage)"
+                (change)="setAPCAUsage(usage, $event.checked)">{{usage}} ({{counts.apcaUsages[usage] || 0}})</mat-checkbox>
+            </ng-container>
+            <ng-template #wcagFilterOptions>
+              <mat-checkbox *ngFor="let level of wcagLevelOptions" [checked]="isWCAGLevelSelected(level)"
+                (change)="setWCAGLevel(level, $event.checked)">{{level}} ({{counts.wcagLevels[level] || 0}})</mat-checkbox>
+            </ng-template>
+            </ng-container>
+          </div>
+        </mat-menu>
+        <button type="button" mat-icon-button [matMenuTriggerFor]="navigationMenu" aria-label="More options" matTooltip="More options">
           <mat-icon>more_vert</mat-icon>
         </button>
-        <mat-menu #navigationMenu="matMenu">
-          <button mat-menu-item (click)="downloadColorPalette()">
+        <mat-menu #navigationMenu="matMenu" class="navigation-actions-menu">
+          <button mat-menu-item [matMenuTriggerFor]="accessibleExportMenu" matTooltip="Export accessible colors">
+            <mat-icon>file_export</mat-icon>
+            <span>Export accessible colors</span>
+          </button>
+          <mat-menu #accessibleExportMenu="matMenu">
+            <button mat-menu-item (click)="exportAccessibleCombinations('json')"><span>JSON</span></button>
+            <button mat-menu-item (click)="exportAccessibleCombinations('xls')"><span>XLS</span></button>
+            <button mat-menu-item (click)="exportAccessibleCombinations('csv')"><span>CSV</span></button>
+            <button mat-menu-item (click)="exportAccessibleCombinations('txt')"><span>TXT</span></button>
+            <button mat-menu-item (click)="exportAccessibleCombinations('pdf')"><span>PDF</span></button>
+          </mat-menu>
+          <button mat-menu-item matTooltip="Download this palette as JSON" (click)="downloadColorPalette()">
             <mat-icon>download</mat-icon>
             <span>Download</span>
           </button>
-          <button mat-menu-item (click)="editColorPalette(selectedColorPaletteSnapShot?.id)">
+          <button mat-menu-item matTooltip="Edit this palette" (click)="editColorPalette(selectedColorPaletteSnapShot?.id)">
             <mat-icon>edit</mat-icon>
             <span>Edit</span>
           </button>
-          <button mat-menu-item (click)="duplicateColorPalette(selectedColorPaletteSnapShot?.id)">
+          <button mat-menu-item matTooltip="Duplicate this palette" (click)="duplicateColorPalette(selectedColorPaletteSnapShot?.id)">
             <mat-icon>file_copy</mat-icon>
             <span>Duplicate</span>
           </button>
-          <button mat-menu-item (click)="deleteColorPalette(selectedColorPaletteSnapShot?.id)">
+          <button mat-menu-item matTooltip="Delete this palette" (click)="deleteColorPalette(selectedColorPaletteSnapShot?.id)">
             <mat-icon>delete</mat-icon>
             <span>Delete</span>
           </button>
         </mat-menu>
-        <button type="button" aria-label="Close" title="Close" mat-icon-button (click)="goBackToColorPaletteList()">
+        <button type="button" aria-label="Close" mat-icon-button matTooltip="Close" (click)="goBackToColorPaletteList()">
           <mat-icon>close</mat-icon>
         </button>
       </div>
@@ -68,9 +98,6 @@
       </div>
 
     </ng-container>
-  </mat-toolbar-row>
-  <mat-toolbar-row class="settings-row" *ngIf="currentHeaderType === HeaderType.DETAILED_COLOR_PALETTE">
-    <cm-matrix-custom-form class="custom-search"></cm-matrix-custom-form>
   </mat-toolbar-row>
 </mat-toolbar>
 

@@ -10,7 +10,6 @@ import { ColorPaletteState } from '../../state/color-palette.state';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AccessibilityInfoPanelComponent } from '../accessibility-info-panel/accessibility-info-panel.component';
 
 @Component({
@@ -21,7 +20,6 @@ import { AccessibilityInfoPanelComponent } from '../accessibility-info-panel/acc
   imports: [
     MatFormFieldModule,
     MatSelectModule,
-    MatButtonToggleModule,
     NgFor,
     NgIf,
     AsyncPipe,
@@ -63,7 +61,7 @@ export class MatrixCustomFormComponent implements OnInit, OnDestroy {
           this.customPaletteSearch.setValue({
             size: defaultSelectedMatrix.size,
             fontWeight: defaultSelectedMatrix.fontWeight,
-            contrastModel: defaultSelectedMatrix.contrastModel || 'APCA'
+            contrastModel: defaultSelectedMatrix.contrastModel || 'WCAG'
           }, { emitEvent: false });
         }
       });

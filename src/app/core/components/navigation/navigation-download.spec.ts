@@ -1,4 +1,5 @@
 import { NavigationComponent } from './navigation.component';
+import { MatrixFilterService } from '../../services/matrix-filter.service';
 
 describe('Navigation palette download', () => {
   let component: NavigationComponent;
@@ -10,7 +11,7 @@ describe('Navigation palette download', () => {
   beforeEach(() => {
     jasmine.clock().install();
     jasmine.clock().mockDate(new Date(2026, 9, 17, 12, 0));
-    component = new NavigationComponent(null, null, null, null, null);
+    component = new NavigationComponent(null, null, null, null, null, new MatrixFilterService(), null);
     link = document.createElement('a');
     const createElement = document.createElement.bind(document);
     spyOn(document, 'createElement').and.callFake((tag: string) => tag === 'a' ? link : createElement(tag));

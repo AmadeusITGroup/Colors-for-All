@@ -3,10 +3,12 @@
     <thead>
       <tr>
         <th class="first-header-cell">
-          <div class="header-title">{{selectedMatrix?.size}} px</div>
-          <div class="header-fontweight">{{selectedMatrix?.fontWeight}}</div>
+          <div class="accessible-count">
+            <span class="accessible-count-number">{{accessibleCombinations}}</span>
+            <span class="accessible-count-label">accessible<br>combinations</span>
+          </div>
           </th>
-      <th scope="col" class="color-header text-header" [title]="(colorPalette?.names?.[columnIndex] ? colorPalette.names[columnIndex] + ' / ' : '') + backgroundColor" *ngFor="let backgroundColor of colorPalette?.data; let columnIndex = index" [style.backgroundColor]="backgroundColor">
+      <th scope="col" class="color-header text-header" [matTooltip]="(colorPalette?.names?.[columnIndex] ? colorPalette.names[columnIndex] + ' / ' : '') + backgroundColor" *ngFor="let backgroundColor of colorPalette?.data; let columnIndex = index" [style.backgroundColor]="backgroundColor">
           <div class="color-label">
             <span *ngIf="colorPalette?.names?.[columnIndex]" class="color-name">{{colorPalette.names[columnIndex]}}</span>
             <span class="color-hex">{{backgroundColor}}</span>
@@ -15,15 +17,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let backgroundColor of colorPalette?.data; let rowIndex = index">
-          <th scope="row" [title]="(colorPalette?.names?.[rowIndex] ? colorPalette.names[rowIndex] + ' / ' : '') + backgroundColor" class="text-header" [style.backgroundColor]="backgroundColor">
+      <tr *ngFor="let matrixRow of matrixRows; let rowIndex = index">
+          <th scope="row" [matTooltip]="(colorPalette?.names?.[rowIndex] ? colorPalette.names[rowIndex] + ' / ' : '') + colorPalette?.data?.[rowIndex]" class="text-header" [style.backgroundColor]="colorPalette?.data?.[rowIndex]">
             <div class="color-label row-label">
               <span *ngIf="colorPalette?.names?.[rowIndex]" class="color-name">{{colorPalette.names[rowIndex]}}</span>
-              <span class="color-hex">{{backgroundColor}}</span>
+              <span class="color-hex">{{colorPalette?.data?.[rowIndex]}}</span>
             </div>
           </th>
-          <td [style.backgroundColor]="backgroundColor" *ngFor="let foregroundColor of colorPalette?.data">
-            <cm-matrix-cell [numberOfColors]="colorPalette?.data.length" [data]="computeColorMatrixData(backgroundColor,foregroundColor,selectedMatrix.size,selectedMatrix.fontWeight,selectedMatrix.contrastModel)"></cm-matrix-cell>
+          <td [class.filtered-out]="!cell.visible" [style.backgroundColor]="cell.data.backgroundColor" *ngFor="let cell of matrixRow">
+            <cm-matrix-cell [numberOfColors]="colorPalette?.data.length" [data]="cell.data" [filtered]="!cell.visible"></cm-matrix-cell>
           </td>
       </tr>
     </tbody>

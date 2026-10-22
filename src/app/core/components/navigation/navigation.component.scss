@@ -76,29 +76,85 @@
       }
     }
   }
-  .settings-row {
-    display: none;
+  .detail-header-row {
+    height: auto;
+    min-height: 64px;
+    gap: 8px;
+    padding: 4px 16px;
+    box-sizing: border-box;
+    .toolbar-left {
+      flex: 0 1 240px;
+      min-width: 0;
+    }
+    .custom-search {
+      flex: 0 1 auto;
+      min-width: 0;
+      margin: 0;
+    }
+    .toolbar-right {
+      flex: 0 0 auto;
+    }
+    .filter-button {
+      position: relative;
+    }
+    .filter-count {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 3px;
+      box-sizing: border-box;
+      border-radius: 999px;
+      background: #d32f2f;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 16px;
+      pointer-events: none;
+    }
   }
   @media (max-width: 1199px) {
-    .desktop-settings {
-      display: none;
+    .detail-header-row {
+      gap: 4px;
+      padding: 4px 8px;
+      .toolbar-left {
+        flex-basis: 160px;
+      }
     }
-    .settings-row {
-      display: flex;
-      justify-content: center;
-      height: auto;
-      min-height: 80px;
-      padding: 8px;
-      box-sizing: border-box;
+  }
+  @media (max-width: 499px) {
+    .detail-header-row {
+      gap: 2px;
+      padding: 4px 1px;
+      .toolbar-left {
+        flex-basis: 72px;
+        .title {
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+      .toolbar-right button[mat-icon-button] {
+        width: 36px;
+        height: 36px;
+        padding: 6px;
+      }
+      .toolbar-right {
+        width: 108px;
+        flex-basis: 108px;
+      }
     }
-    .toolbar-left {
-      min-width: 0;
-      flex: 1;
+  }
+  @media (max-width: 379px) {
+    .detail-header-row .toolbar-left {
+      flex-basis: 40px;
       .title {
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        max-width: 40px;
       }
     }
   }

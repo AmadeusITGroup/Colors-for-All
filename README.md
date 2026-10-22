@@ -36,6 +36,7 @@ APCA cells show signed Lc values to one decimal place and a typography-aware rec
 for the selected size (12–120 CSS px) and weight (100–900). Rows are backgrounds and
 columns are text colors. A check indicates absolute Lc is at least 15, independently
 of typography; a cross and faded sample indicate lower contrast. WCAG retains its AA/AAA results.
+The accessible-combination count follows the selected mode; swapping foreground and background counts separately.
 The Lc value uses the selected size and weight. A check is not text-readability approval:
 the usage label is "No text" when the selected typography qualifies for no text category.
 Tooltips show minimum sizes and the numeric weight when the selected typography has no text usage,
@@ -78,8 +79,13 @@ The filename is `<palette title>_<YY-MM-DD>.json`, using the browser's local dat
 invalid filename characters are replaced with underscores. Downloading does not
 modify the saved palette.
 
-Use **Upload file** in the palette dialog header to load an exported JSON file.
-The homepage header also offers **Upload file**, to the left of **Create**:
+**More options > Export accessible colors** exports the combinations that
+pass the active contrast mode and filters as JSON, XLS, CSV, TXT, or PDF. PDF
+rows include small background and text color previews. Export filenames follow
+`<palette>_accessible_combination_<YYYYMMDD_HHMMSS>.<extension>`.
+
+Use **Upload file** in the homepage header, to the left of **Create**, to load an
+exported JSON file:
 selecting a file opens the creation dialog and uses the same import workflow.
 A valid import replaces all colors and optional names in both List and JSON views.
 The title inherits the filename without the JSON extension or export date suffix,

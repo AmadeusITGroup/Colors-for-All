@@ -1,15 +1,11 @@
 <div class="save-palette-form-container" [formGroup]="savePaletteFormGroup">
   <div mat-dialog-title class="palette-dialog-header">
     <span>{{data.action}} color palette</span>
-    <button type="button" mat-stroked-button color="primary" [disabled]="importingFile" (click)="paletteFile.click()">
-      <mat-icon>upload_file</mat-icon>Upload file
-    </button>
-    <input #paletteFile type="file" accept=".json,application/json" hidden (change)="importPaletteFile(paletteFile)">
   </div>
   <div mat-dialog-content class="save-palette-form-content">
     <p *ngIf="importError" class="color-error" role="alert">{{importError}}</p>
     <p *ngIf="importingFile" role="status">Importing file...</p>
-    <mat-form-field hintLabel="Min {{LABEL_MIN_LENGTH}} Max {{LABEL_MAX_LENGTH}} characters">
+    <mat-form-field hintLabel="{{LABEL_MIN_LENGTH}}-{{LABEL_MAX_LENGTH}} characters">
       <input #paletteTitle cdkFocusInitial formControlName="colorPaletteTitle" matInput placeholder="Title">
       <mat-error *ngIf="colorPaletteTitle.errors?.required">Field is required</mat-error>
       <mat-error *ngIf="colorPaletteTitle.errors?.minlength">The minimum length is set to {{LABEL_MIN_LENGTH}}</mat-error>
@@ -24,15 +20,15 @@
           <div cdkDropList [cdkDropListData]="colors" [cdkDropListDisabled]="jsonDraftInvalid" (cdkDropListDropped)="dropColor($event)" class="color-list" aria-label="Palette colors">
             <div *ngFor="let row of colors; let index = index; trackBy: trackColor" cdkDrag cdkDragPreviewContainer="parent" class="color-entry" [class.selected]="selectedColorId === row.id">
               <div class="color-row">
-                <button type="button" mat-icon-button cdkDragHandle class="row-icon drag-handle" [disabled]="jsonDraftInvalid" [attr.aria-label]="'Drag color ' + (index + 1)" title="Drag to reorder"><mat-icon>drag_indicator</mat-icon></button>
-                <button type="button" class="color-preview" [style.background-color]="row.hex" [disabled]="jsonDraftInvalid" (click)="openColorPicker(row, colorPicker)" [attr.aria-label]="'Pick color ' + (index + 1)" title="Pick color"></button>
+                <button type="button" mat-icon-button cdkDragHandle class="row-icon drag-handle" [disabled]="jsonDraftInvalid" [attr.aria-label]="'Drag color ' + (index + 1)" matTooltip="Drag to reorder"><mat-icon>drag_indicator</mat-icon></button>
+                <button type="button" class="color-preview" [style.background-color]="row.hex" [disabled]="jsonDraftInvalid" (click)="openColorPicker(row, colorPicker)" [attr.aria-label]="'Pick color ' + (index + 1)" matTooltip="Pick color"></button>
                 <div class="color-fields">
                   <input class="hex-input" [value]="row.draft" [disabled]="jsonDraftInvalid" [class.invalid]="row.invalid" [attr.aria-invalid]="row.invalid" [attr.aria-label]="'Color ' + (index + 1) + ' hex code'" (focus)="selectColor(row)" (input)="updateColorText(row, $any($event.target).value)" (blur)="commitColorText(row)" spellcheck="false" autocomplete="off">
-                  <input class="color-name-input" [value]="row.name" [disabled]="jsonDraftInvalid" [attr.aria-label]="'Color ' + (index + 1) + ' name (optional)'" placeholder="Name" [title]="row.name || 'Name (optional)'" (focus)="selectColor(row)" (input)="updateColorName(row, $any($event.target).value)" autocomplete="off">
+                  <input class="color-name-input" [value]="row.name" [disabled]="jsonDraftInvalid" [attr.aria-label]="'Color ' + (index + 1) + ' name (optional)'" placeholder="Name" [matTooltip]="row.name || 'Name (optional)'" (focus)="selectColor(row)" (input)="updateColorName(row, $any($event.target).value)" autocomplete="off">
                 </div>
-                <button type="button" mat-icon-button class="row-icon move-up" [disabled]="index === 0 || jsonDraftInvalid" (click)="moveColor(index, -1)" [attr.aria-label]="'Move color ' + (index + 1) + ' up'" title="Move up"><mat-icon>arrow_upward</mat-icon></button>
-                <button type="button" mat-icon-button class="row-icon move-down" [disabled]="index === colors.length - 1 || jsonDraftInvalid" (click)="moveColor(index, 1)" [attr.aria-label]="'Move color ' + (index + 1) + ' down'" title="Move down"><mat-icon>arrow_downward</mat-icon></button>
-                <button type="button" mat-icon-button class="row-icon color-menu-trigger" [matMenuTriggerFor]="colorMenu" [disabled]="jsonDraftInvalid" [attr.aria-label]="'More actions for color ' + (index + 1)" title="More actions"><mat-icon>more_vert</mat-icon></button>
+                <button type="button" mat-icon-button class="row-icon move-up" [disabled]="index === 0 || jsonDraftInvalid" (click)="moveColor(index, -1)" [attr.aria-label]="'Move color ' + (index + 1) + ' up'" matTooltip="Move up"><mat-icon>arrow_upward</mat-icon></button>
+                <button type="button" mat-icon-button class="row-icon move-down" [disabled]="index === colors.length - 1 || jsonDraftInvalid" (click)="moveColor(index, 1)" [attr.aria-label]="'Move color ' + (index + 1) + ' down'" matTooltip="Move down"><mat-icon>arrow_downward</mat-icon></button>
+                <button type="button" mat-icon-button class="row-icon color-menu-trigger" [matMenuTriggerFor]="colorMenu" [disabled]="jsonDraftInvalid" [attr.aria-label]="'More actions for color ' + (index + 1)" matTooltip="More actions"><mat-icon>more_vert</mat-icon></button>
                 <mat-menu #colorMenu="matMenu">
                   <button type="button" mat-menu-item [disabled]="row.invalid" (click)="duplicateColor(index)"><mat-icon>file_copy</mat-icon><span>Duplicate</span></button>
                   <button type="button" mat-menu-item (click)="deleteColor(index)"><mat-icon>delete</mat-icon><span>Delete</span></button>
@@ -68,7 +64,7 @@
   <div class="color-picker-popover" *ngIf="pickerRow">
     <div class="picker-toolbar">
       <strong>Color</strong>
-      <button type="button" mat-icon-button mat-dialog-close aria-label="Close color picker" title="Close"><mat-icon>close</mat-icon></button>
+      <button type="button" mat-icon-button mat-dialog-close aria-label="Close color picker" matTooltip="Close"><mat-icon>close</mat-icon></button>
     </div>
     <hex-color-picker [color]="pickerRow.hex" (color-changed)="updatePickerVisual($any($event).detail.value)"></hex-color-picker>
     <mat-button-toggle-group class="picker-formats" [value]="pickerFormat" (change)="setPickerFormat($event.value)" aria-label="Color format" [hideSingleSelectionIndicator]="true">

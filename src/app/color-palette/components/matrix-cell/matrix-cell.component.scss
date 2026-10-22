@@ -44,4 +44,12 @@
   .compliance-x-25 {
     color: rgba($color: white, $alpha: 0.25) !important;
   }
+  .filtered-cell.compliance-x-25 .compliance span {
+    background-color: #fff !important;
+    opacity: 0.25;
+  }
+  .filtered-cell.compliance-x-75 .compliance span {
+    background-color: #fff !important;
+    opacity: 0.75;
+  }
 }

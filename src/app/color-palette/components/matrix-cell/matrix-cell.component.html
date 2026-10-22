@@ -1,11 +1,12 @@
 <div
   class="cell-container"
   [ngClass]="{
-    'compliance-x-25': numberOfColors > 10 && data?.compliance === 'X',
-    'compliance-x-75': numberOfColors <= 10 && data?.compliance === 'X'
+    'compliance-x-25': numberOfColors > 10 && (data?.compliance === 'X' || filtered),
+    'compliance-x-75': numberOfColors <= 10 && (data?.compliance === 'X' || filtered),
+    'filtered-cell': filtered
   }"
   [ngStyle]="data?.style"
-  title="{{data?.title}}"
+  [matTooltip]="filtered ? (data?.title || '') + '\nCombination is valid but excluded by the current filter.' : data?.title"
 >
   <div class="compliance">
     <ng-container *ngIf="data?.compliance !== 'X' && data?.lc == null">
@@ -18,7 +19,7 @@
   </div>
   <ng-container *ngIf="data?.lc != null">
     <div class="apca-value">{{ data.lc | number:'1.1-1':'en-US' }}</div>
-    <div *ngIf="data.compliance !== 'X' && data.usage" class="apca-usage">{{ data.usage }}</div>
+    <div *ngIf="data?.compliance !== 'X' && data.usage" class="apca-usage">{{ data.usage }}</div>
   </ng-container>
   <div *ngIf="data?.lc == null" [ngClass]="{ 'ratio-with-badge': data?.compliance !== 'X' }">
     {{ data?.ratio }}

@@ -1,4 +1,6 @@
 :host {
+  display: block;
+  min-width: 0;
   .custom-search {
     margin: 25px;
   }
@@ -41,21 +43,29 @@
   }
   .custom-search-container {
     gap: 12px;
+    min-width: 0;
     .custom-search-form {
       align-items: center;
       gap: 8px;
       margin-left: 0;
+      min-width: 0;
     }
+  }
+  .modelField {
+    width: 112px;
   }
   .shortField {
     width: 112px;
   }
   .mediumField {
-    width: 128px;
+    width: 120px;
   }
   .shortField,
-  .mediumField {
-    font-size: 14px;
+  .mediumField,
+  .modelField {
+    flex: 0 0 auto;
+    min-width: 0;
+    font-size: 12px;
   }
   ::ng-deep .mat-mdc-form-field {
     margin-left: 0;
@@ -77,19 +87,71 @@
     display: flex;
     align-items: center;
   }
-  @media (max-width: 499px) {
+  ::ng-deep .mat-mdc-select-value-text {
+    font-size: 12px;
+    font-weight: 500;
+  }
+  ::ng-deep .mat-mdc-floating-label {
+    font-size: 11px;
+  }
+  @media (max-width: 1199px) {
     .custom-search-container {
-      flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       .custom-search-form {
-        display: grid;
-        grid-template-columns: 112px 128px;
-        gap: 8px;
+        gap: 4px;
       }
     }
-    .model-selector {
-      grid-column: 1 / -1;
-      justify-self: center;
+    .modelField {
+      width: 96px;
+    }
+    .shortField {
+      width: 100px;
+    }
+    .mediumField {
+      width: 108px;
+    }
+  }
+  @media (max-width: 499px) {
+    .custom-search-container {
+      gap: 2px;
+      .custom-search-form {
+        gap: 2px;
+      }
+    }
+    .modelField,
+    .shortField,
+    .mediumField {
+      width: 36px;
+      flex: 0 0 36px;
+    }
+    ::ng-deep .mobile-icon-select .mat-mdc-select-value,
+    ::ng-deep .mobile-icon-select .mdc-floating-label {
+      display: none;
+    }
+    ::ng-deep .mobile-icon-select .mat-mdc-select-trigger {
+      justify-content: center;
+    }
+    ::ng-deep .mobile-icon-select .mat-mdc-select-arrow-wrapper {
+      width: 16px;
+    }
+    ::ng-deep .mobile-icon-select .mat-mdc-text-field-wrapper {
+      padding-right: 0;
+      padding-left: 0;
+    }
+    ::ng-deep .mobile-icon-select .mat-mdc-form-field-infix {
+      min-width: 0;
+      padding: 0;
+    }
+  }
+  @media (max-width: 379px) {
+    .modelField,
+    .shortField,
+    .mediumField {
+      width: 32px;
+      flex-basis: 32px;
+    }
+    ::ng-deep cm-accessibility-info-panel {
+      display: none;
     }
   }
 }
