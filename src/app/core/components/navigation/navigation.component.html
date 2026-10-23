@@ -2,9 +2,13 @@
   <mat-toolbar-row [class.detail-header-row]="currentHeaderType === HeaderType.DETAILED_COLOR_PALETTE">
     <ng-container *ngIf="currentHeaderType === HeaderType.COLOR_PALETTE">
       <div class="toolbar-left">
-          <div class="title"><img src="favicon.ico" class="Appicon"><div>Colors for All</div></div>
-        </div>
-        <div class="toolbar-right">
+        <button *ngIf="currentScreenSize === ScreenSize.SMALL" type="button" mat-icon-button class="mobile-menu-trigger"
+          [matMenuTriggerFor]="homeMobileMenu" aria-label="Header menu" matTooltip="Header menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <div class="title"><img src="favicon.ico" class="Appicon"><div>Colors for All</div></div>
+      </div>
+      <div class="toolbar-right" [class.mobile-header-hidden]="currentScreenSize === ScreenSize.SMALL">
           <button type="button" mat-stroked-button color="primary" class="button-upload" matTooltip="Upload color palette" (click)="paletteFile.click()">
             <mat-icon>upload_file</mat-icon>
             <span>Upload file</span>
@@ -20,15 +24,24 @@
             </mat-icon>
           </button>
       </div>
+      <mat-menu #homeMobileMenu="matMenu" class="mobile-header-menu">
+        <button mat-menu-item (click)="paletteFile.click()"><mat-icon>upload_file</mat-icon><span>Upload file</span></button>
+        <button mat-menu-item (click)="createColorPalette()"><mat-icon>add_circle</mat-icon><span>Create</span></button>
+        <button mat-menu-item (click)="goToHelp()"><mat-icon>help_outline</mat-icon><span>Help</span></button>
+      </mat-menu>
 
     </ng-container>
 
     <ng-container *ngIf="currentHeaderType === HeaderType.DETAILED_COLOR_PALETTE">
       <div class="toolbar-left">
+        <button *ngIf="currentScreenSize === ScreenSize.SMALL" type="button" mat-icon-button class="mobile-menu-trigger"
+          [matMenuTriggerFor]="matrixMobileMenu" aria-label="Header menu" matTooltip="Header menu">
+          <mat-icon>menu</mat-icon>
+        </button>
         <div class="title" [ngClass]="{'truncate-small':currentScreenSize === ScreenSize.MEDIUM,'truncate':currentScreenSize === ScreenSize.SMALL}">{{selectedColorPaletteSnapShot?.title}}</div>
       </div>
-      <cm-matrix-custom-form class="custom-search"></cm-matrix-custom-form>
-      <div class="toolbar-right">
+      <cm-matrix-custom-form *ngIf="currentScreenSize !== ScreenSize.SMALL" class="custom-search"></cm-matrix-custom-form>
+      <div class="toolbar-right" [class.mobile-header-hidden]="currentScreenSize === ScreenSize.SMALL">
         <button type="button" mat-icon-button class="filter-button" [matMenuTriggerFor]="filterMenu" aria-label="Filters" matTooltip="Filters">
           <mat-icon>filter_list</mat-icon>
           <span *ngIf="filteredOutItemCount > 0" class="filter-count" aria-hidden="true">{{filteredOutItemCount}}</span>
@@ -38,8 +51,10 @@
             (click)="$event.stopPropagation()">
             <ng-container *ngIf="filterCounts$ | async as counts">
             <ng-container *ngIf="isAPCA; else wcagFilterOptions">
-              <mat-checkbox *ngFor="let usage of apcaUsageOptions" [checked]="isAPCAUsageSelected(usage)"
-                (change)="setAPCAUsage(usage, $event.checked)">{{usage}} ({{counts.apcaUsages[usage] || 0}})</mat-checkbox>
+              <ng-container *ngFor="let usage of apcaUsageOptions">
+                <mat-checkbox *ngIf="isAPCAUsageFilterVisible(usage)" [checked]="isAPCAUsageSelected(usage)"
+                  (change)="setAPCAUsage(usage, $event.checked)">Lc ≥ {{apcaUsageMinLc[usage]}} | {{usage}} ({{counts.apcaUsages[usage] || 0}})</mat-checkbox>
+              </ng-container>
             </ng-container>
             <ng-template #wcagFilterOptions>
               <mat-checkbox *ngFor="let level of wcagLevelOptions" [checked]="isWCAGLevelSelected(level)"
@@ -79,6 +94,53 @@
             <mat-icon>delete</mat-icon>
             <span>Delete</span>
           </button>
+        </mat-menu>
+        <mat-menu #matrixMobileMenu="matMenu" class="mobile-header-menu">
+          <button mat-menu-item [matMenuTriggerFor]="mobileModelMenu">
+            <span>Model</span><span class="mobile-menu-value">{{selectedMatrixSnapshot?.contrastModel || 'WCAG'}}</span><mat-icon>chevron_right</mat-icon>
+          </button>
+          <button *ngIf="isAPCA" mat-menu-item [matMenuTriggerFor]="mobileContentMenu">
+            <span>Usage</span><span class="mobile-menu-value">{{apcaContentMode}}</span><mat-icon>chevron_right</mat-icon>
+          </button>
+          <button *ngIf="!isAPCA || apcaContentMode === 'Text'" mat-menu-item [matMenuTriggerFor]="mobileSizeMenu">
+            <span>Size</span><span class="mobile-menu-value">{{selectedMatrixSnapshot?.size}} px</span><mat-icon>chevron_right</mat-icon>
+          </button>
+          <button *ngIf="!isAPCA || apcaContentMode === 'Text'" mat-menu-item [matMenuTriggerFor]="mobileWeightMenu">
+            <span>Weight</span><span class="mobile-menu-value">{{selectedMatrixSnapshot?.fontWeight}}</span><mat-icon>chevron_right</mat-icon>
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="filterMenu">
+            <span>Filters</span><span *ngIf="filteredOutItemCount" class="mobile-menu-value">{{filteredOutItemCount}}</span><mat-icon>chevron_right</mat-icon>
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="navigationMenu">
+            <span>More actions</span><mat-icon>chevron_right</mat-icon>
+          </button>
+          <button mat-menu-item (click)="goBackToColorPaletteList()">
+            <mat-icon>close</mat-icon><span>Close</span>
+          </button>
+        </mat-menu>
+        <mat-menu #mobileModelMenu="matMenu">
+          <button mat-menu-item (click)="setMatrixModel('WCAG')">WCAG</button>
+          <button mat-menu-item (click)="setMatrixModel('APCA')">APCA</button>
+        </mat-menu>
+        <mat-menu #mobileContentMenu="matMenu">
+          <button mat-menu-item (click)="setAPCAContentMode('Text')">Text</button>
+          <button mat-menu-item (click)="setAPCAContentMode('Non-text')">Non-text</button>
+        </mat-menu>
+        <mat-menu #mobileSizeMenu="matMenu">
+          <ng-container *ngIf="isAPCA; else mobileWcagSizes">
+            <button mat-menu-item *ngFor="let size of apcaSizes" (click)="setMatrixSize(size)">{{size}} px</button>
+          </ng-container>
+          <ng-template #mobileWcagSizes>
+            <button mat-menu-item *ngFor="let size of colorPalettesSizes$ | async" (click)="setMatrixSize(size)">{{size}} px</button>
+          </ng-template>
+        </mat-menu>
+        <mat-menu #mobileWeightMenu="matMenu">
+          <ng-container *ngIf="isAPCA; else mobileWcagWeights">
+            <button mat-menu-item *ngFor="let weight of apcaWeights" (click)="setMatrixWeight(weight)">{{weight}}</button>
+          </ng-container>
+          <ng-template #mobileWcagWeights>
+            <button mat-menu-item *ngFor="let weight of colorPalettesFontWeights$ | async" (click)="setMatrixWeight(weight)">{{weight}}</button>
+          </ng-template>
         </mat-menu>
         <button type="button" aria-label="Close" mat-icon-button matTooltip="Close" (click)="goBackToColorPaletteList()">
           <mat-icon>close</mat-icon>

@@ -9,7 +9,16 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field class="shortField mobile-icon-select">
+    <mat-form-field *ngIf="isAPCA" class="apcaModeField mobile-icon-select">
+      <mat-label>Usage</mat-label>
+      <mat-select [value]="apcaContentMode" (selectionChange)="setAPCAContentMode($event.value)"
+        aria-label="APCA usage mode" panelWidth="max-content" panelClass="matrix-select-panel">
+        <mat-option value="Text">Text</mat-option>
+        <mat-option value="Non-text">Non-text</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!isAPCA || apcaContentMode === 'Text'" class="shortField mobile-icon-select">
       <mat-label>Size</mat-label>
       <mat-select formControlName="size" aria-label="Font size" panelWidth="max-content" panelClass="matrix-select-panel">
         <mat-option *ngFor="let i of isAPCA ? apcaSizes : (colorPalettesSizes$ | async)" [value]="i">
@@ -17,7 +26,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="mediumField mobile-icon-select">
+    <mat-form-field *ngIf="!isAPCA || apcaContentMode === 'Text'" class="mediumField mobile-icon-select">
       <mat-label>Weight</mat-label>
       <mat-select formControlName="fontWeight" aria-label="Font weight" panelWidth="max-content" panelClass="matrix-select-panel">
         <mat-option *ngFor="let fw of isAPCA ? apcaWeights : (colorPalettesFontWeights$ | async)" [value]="fw">
@@ -27,4 +36,8 @@
     </mat-form-field>
   </div>
   <cm-accessibility-info-panel *ngIf="!isAPCA"></cm-accessibility-info-panel>
+  <div *ngIf="isAPCA && apcaContentMode === 'Text' && minimumAPCATextLc !== null" class="apca-minimum-info">
+    <span class="accessibility-chip">Text</span>
+    <span class="info">&ge;&nbsp;Lc {{minimumAPCATextLc | number:'1.1-1':'en-US'}}</span>
+  </div>
 </div>

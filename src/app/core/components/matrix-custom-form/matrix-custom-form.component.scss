@@ -54,6 +54,9 @@
   .modelField {
     width: 112px;
   }
+  .apcaModeField {
+    width: 112px;
+  }
   .shortField {
     width: 112px;
   }
@@ -62,7 +65,8 @@
   }
   .shortField,
   .mediumField,
-  .modelField {
+  .modelField,
+  .apcaModeField {
     flex: 0 0 auto;
     min-width: 0;
     font-size: 12px;
@@ -87,6 +91,25 @@
     display: flex;
     align-items: center;
   }
+  .apca-minimum-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 1px 8px;
+    font-size: 14px;
+    .accessibility-chip {
+      display: flex;
+      align-items: center;
+      border-radius: 15px;
+      padding: 2px 6px;
+      background-color: #757575;
+      color: #fff;
+    }
+    .info {
+      color: #757575;
+      white-space: nowrap;
+    }
+  }
   ::ng-deep .mat-mdc-select-value-text {
     font-size: 12px;
     font-weight: 500;
@@ -104,6 +127,9 @@
     .modelField {
       width: 96px;
     }
+    .apcaModeField {
+      width: 96px;
+    }
     .shortField {
       width: 100px;
     }
@@ -119,6 +145,7 @@
       }
     }
     .modelField,
+    .apcaModeField,
     .shortField,
     .mediumField {
       width: 36px;
@@ -145,6 +172,7 @@
   }
   @media (max-width: 379px) {
     .modelField,
+    .apcaModeField,
     .shortField,
     .mediumField {
       width: 32px;

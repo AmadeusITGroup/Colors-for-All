@@ -8,7 +8,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { MatrixCellComponent } from '../matrix-cell/matrix-cell.component';
 import { MatrixLoadingService } from '../../../core/services/matrix-loading.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatrixFilterService, MatrixFilters } from '../../../core/services/matrix-filter.service';
+import { APCA_USAGE_MAX_LC, APCA_USAGE_MIN_LC, MatrixFilterService, MatrixFilters } from '../../../core/services/matrix-filter.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -52,6 +52,12 @@ export class MatrixTableComponent implements OnChanges, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(filters => {
         this.filters = filters;
+        this.applyFilters();
+        this.changeDetector.markForCheck();
+      });
+    this.matrixFilter.apcaContentMode$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
         this.applyFilters();
         this.changeDetector.markForCheck();
       });
@@ -105,11 +111,22 @@ export class MatrixTableComponent implements OnChanges, OnDestroy {
     if (this.selectedMatrix?.contrastModel === 'WCAG') {
       return this.filters?.wcagLevels.includes(cell.compliance) ?? true;
     }
-    return this.filters?.apcaUsages.includes(cell.usage || '') ?? true;
+    if (this.matrixFilter.apcaContentMode === 'Text' && cell.usage === 'No text') {
+      return false;
+    }
+    const absoluteLc = Math.abs(cell.lc || 0);
+    return this.filters?.apcaUsages.some(usage => {
+      const maximum = APCA_USAGE_MAX_LC[usage];
+      return absoluteLc >= APCA_USAGE_MIN_LC[usage] && (maximum === undefined || absoluteLc < maximum);
+    }) ?? true;
   }
 
   public get hasColorNames(): boolean {
     return !!this.colorPalette?.names?.some(name => !!name?.trim());
+  }
+
+  public get isAPCATextMode(): boolean {
+    return this.matrixFilter.apcaContentMode === 'Text';
   }
 
   public computeColorMatrixData(

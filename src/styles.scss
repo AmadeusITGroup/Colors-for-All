@@ -117,6 +117,10 @@ button.mat-mdc-icon-button {
   min-height: 36px;
 }
 
+.mobile-header-menu .mat-mdc-menu-content {
+  min-width: 240px;
+}
+
 .navigation-actions-menu .mat-mdc-menu-item {
   min-height: 56px;
   align-items: center;

@@ -94,6 +94,19 @@ export class ColorMatrixService {
     );
   }
 
+  public calculateMinimumAPCATextLc(size: number, fontWeight: FontWeight): number | null {
+    const weight = this.normalizeFontWeight(fontWeight);
+    for (let tenthLc = 150; tenthLc <= 1200; tenthLc++) {
+      const lc = tenthLc / 10;
+      const lookupMinimum = Number(fontLookupAPCA(lc)[weight / 100]);
+      const recommendations = this.getAPCATextRecommendations(lc, weight, lookupMinimum);
+      if (recommendations.some(entry => entry.usage !== 'No text' && size >= entry.minimumFontSize)) {
+        return lc;
+      }
+    }
+    return null;
+  }
+
   public normalizeFontWeight(fontWeight: FontWeight): number {
     switch (fontWeight) {
       case FontWeight.LIGHTER:

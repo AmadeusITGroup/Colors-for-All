@@ -33,6 +33,8 @@ export class MatrixCellComponent implements OnInit {
   type: string;
   @Input()
   filtered = false;
+  @Input()
+  notAccessibleForText = false;
 
   ngOnInit() { }
 

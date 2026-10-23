@@ -57,6 +57,11 @@ describe('ColorMatrixService', () => {
   });
 
   describe('APCA', () => {
+    it('should calculate the minimum Lc for the selected text size and weight', () => {
+      expect(service.calculateMinimumAPCATextLc(12, FontWeight.FOUR_HUNDRED)).toBe(90);
+      expect(service.calculateMinimumAPCATextLc(15, FontWeight.FOUR_HUNDRED)).toBe(75);
+    });
+
     it('should classify 15px normal text at Lc 75 as non-body rather than body text', () => {
       const cell = service.computeColorMatrixData('#e9e4d0', '#1234b0', 15, FontWeight.FOUR_HUNDRED, 'APCA');
       expect(cell.compliance).toBe('Recommended');

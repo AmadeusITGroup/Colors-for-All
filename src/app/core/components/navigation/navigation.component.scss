@@ -29,6 +29,13 @@
       padding-right: 5px;
     }
   }
+  .mobile-menu-trigger {
+    display: none;
+  }
+  .mobile-menu-value {
+    margin-left: auto;
+    color: #69696f;
+  }
   .mat-nav-list {
     padding-top: 0px;
   }
@@ -127,12 +134,33 @@
     }
   }
   @media (max-width: 499px) {
+    .mobile-menu-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 36px;
+      width: 36px;
+      height: 36px;
+      margin-right: 4px;
+      padding: 5px;
+    }
+    .mobile-header-hidden {
+      display: none !important;
+    }
+    .toolbar-left {
+      min-width: 0;
+      flex: 1 1 auto;
+    }
     .detail-header-row {
       gap: 2px;
       padding: 4px 1px;
       .toolbar-left {
-        flex-basis: 72px;
+        flex: 1 1 auto;
+        flex-basis: 0;
+        gap: 4px;
         .title {
+          flex: 1 1 auto;
+          max-width: none;
           min-width: 0;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -152,9 +180,9 @@
   }
   @media (max-width: 379px) {
     .detail-header-row .toolbar-left {
-      flex-basis: 40px;
+      flex-basis: 0;
       .title {
-        max-width: 40px;
+        max-width: calc(100vw - 56px);
       }
     }
   }

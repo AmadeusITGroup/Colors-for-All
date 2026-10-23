@@ -25,7 +25,8 @@
             </div>
           </th>
           <td [class.filtered-out]="!cell.visible" [style.backgroundColor]="cell.data.backgroundColor" *ngFor="let cell of matrixRow">
-            <cm-matrix-cell [numberOfColors]="colorPalette?.data.length" [data]="cell.data" [filtered]="!cell.visible"></cm-matrix-cell>
+            <cm-matrix-cell [numberOfColors]="colorPalette?.data.length" [data]="cell.data" [filtered]="!cell.visible"
+              [notAccessibleForText]="selectedMatrix?.contrastModel === 'APCA' && isAPCATextMode && cell.data.compliance !== 'X' && cell.data.usage === 'No text'"></cm-matrix-cell>
           </td>
       </tr>
     </tbody>

@@ -1,25 +1,25 @@
 <div
   class="cell-container"
   [ngClass]="{
-    'compliance-x-25': numberOfColors > 10 && (data?.compliance === 'X' || filtered),
-    'compliance-x-75': numberOfColors <= 10 && (data?.compliance === 'X' || filtered),
+    'compliance-x-25': numberOfColors > 10 && (data?.compliance === 'X' || filtered || notAccessibleForText),
+    'compliance-x-75': numberOfColors <= 10 && (data?.compliance === 'X' || filtered || notAccessibleForText),
     'filtered-cell': filtered
   }"
   [ngStyle]="data?.style"
-  [matTooltip]="filtered ? (data?.title || '') + '\nCombination is valid but excluded by the current filter.' : data?.title"
+  [matTooltip]="notAccessibleForText ? (data?.title || '') + '\nNot accessible for text at the selected size and weight.' : filtered ? (data?.title || '') + '\nCombination is valid but excluded by the current filter.' : data?.title"
 >
   <div class="compliance">
     <ng-container *ngIf="data?.compliance !== 'X' && data?.lc == null">
       <span [ngStyle]="setBadgeStyle(data?.style)">{{ data?.compliance }}</span>
     </ng-container>
-    <mat-icon *ngIf="data?.lc != null && data?.compliance !== 'X'" aria-hidden="false" aria-label="APCA contrast threshold met">check</mat-icon>
-    <ng-container *ngIf="data?.compliance === 'X'">
+    <mat-icon *ngIf="data?.lc != null && data?.compliance !== 'X' && !notAccessibleForText" aria-hidden="false" aria-label="APCA contrast threshold met">check</mat-icon>
+    <mat-icon *ngIf="notAccessibleForText" aria-hidden="false" aria-label="No text usage is not accessible for text">clear</mat-icon>
+    <ng-container *ngIf="data?.compliance === 'X' && !notAccessibleForText">
       <mat-icon aria-hidden="false" [attr.aria-label]="data?.lc != null ? 'Below APCA contrast threshold' : 'Below WCAG AA'">clear</mat-icon>
     </ng-container>
   </div>
   <ng-container *ngIf="data?.lc != null">
     <div class="apca-value">{{ data.lc | number:'1.1-1':'en-US' }}</div>
-    <div *ngIf="data?.compliance !== 'X' && data.usage" class="apca-usage">{{ data.usage }}</div>
   </ng-container>
   <div *ngIf="data?.lc == null" [ngClass]="{ 'ratio-with-badge': data?.compliance !== 'X' }">
     {{ data?.ratio }}

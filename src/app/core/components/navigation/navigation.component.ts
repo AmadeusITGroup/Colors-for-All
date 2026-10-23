@@ -1,5 +1,7 @@
 import { ScreenSize } from './../../enums/screen-size.enum';
 import { ColorPalette } from './../../models/color-palette.model';
+import { ColorMatrixSelection, ContrastModel } from '../../models/color-matrix.model';
+import { FontWeight } from '../../enums/font-weight.enum';
 import { ColorPaletteSaveModalComponent } from './../../../core/components/color-palette-save-modal/color-palette-save-modal.component';
 import { HeaderType } from './../../../core/enums/header.enum';
 import { Component, OnInit } from '@angular/core';
@@ -9,7 +11,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import * as uuid from 'uuid';
 
-import { SaveColorPalette } from '../../../core/state/color-palette.actions';
+import { SaveColorPalette, SetSelectedMatrix } from '../../../core/state/color-palette.actions';
 import { ColorPaletteState } from '../../../core/state/color-palette.state';
 import { ColorPaletteConfirmDeleteModalComponent } from './../../../color-palette/components/color-palette-confirm-delete-modal/color-palette-confirm-delete-modal.component';
 import { DeleteColorPalette } from './../../../core/state/color-palette.actions';
@@ -24,7 +26,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatrixLoadingService } from '../../services/matrix-loading.service';
 import { HelpComponent } from '../../../color-palette/components/help/help.component';
-import { APCA_USAGE_FILTERS, MatrixFilterCounts, MatrixFilterService, WCAG_LEVEL_FILTERS } from '../../services/matrix-filter.service';
+import { APCAContentMode, APCA_USAGE_FILTERS, APCA_USAGE_MIN_LC, MatrixFilterCounts, MatrixFilterService, WCAG_LEVEL_FILTERS } from '../../services/matrix-filter.service';
 import { AccessibleCombinationsExportService, AccessibleExportFormat } from '../../services/accessible-combinations-export.service';
 
 @Component({
@@ -52,6 +54,10 @@ export class NavigationComponent implements OnInit {
 
   @Select(ColorPaletteState.colorPalettes)
   colorPalettes$: Observable<ColorPalette[]>;
+  @Select(ColorPaletteState.colorPaletteSizes)
+  colorPalettesSizes$: Observable<number[]>;
+  @Select(ColorPaletteState.colorPaletteFontWeights)
+  colorPalettesFontWeights$: Observable<string[]>;
 
   public currentHeaderType: HeaderType;
   public HeaderType = HeaderType;
@@ -59,7 +65,10 @@ export class NavigationComponent implements OnInit {
   public currentScreenSize: ScreenSize;
   public filterCounts$: Observable<MatrixFilterCounts>;
   public apcaUsageOptions = APCA_USAGE_FILTERS;
+  public apcaUsageMinLc = APCA_USAGE_MIN_LC;
   public wcagLevelOptions = WCAG_LEVEL_FILTERS;
+  public apcaSizes = Array.from({ length: 109 }, (_, index) => index + 12);
+  public apcaWeights = Array.from({ length: 9 }, (_, index) => String((index + 1) * 100));
   public ScreenSize = ScreenSize;
   constructor(
     private dialog: MatDialog,
@@ -77,15 +86,48 @@ export class NavigationComponent implements OnInit {
     return this.store.selectSnapshot(ColorPaletteState.selectedMatrix)?.contrastModel !== 'WCAG';
   }
 
+  public get selectedMatrixSnapshot(): ColorMatrixSelection {
+    return this.store.selectSnapshot(ColorPaletteState.selectedMatrix);
+  }
+
+  public get apcaContentMode(): APCAContentMode {
+    return this.matrixFilter.apcaContentMode;
+  }
+
+  public setMatrixModel(contrastModel: ContrastModel): void {
+    const matrix = this.selectedMatrixSnapshot;
+    this.store.dispatch(new SetSelectedMatrix(matrix.size, matrix.fontWeight, contrastModel));
+  }
+
+  public setMatrixSize(size: number): void {
+    const matrix = this.selectedMatrixSnapshot;
+    this.store.dispatch(new SetSelectedMatrix(size, matrix.fontWeight, matrix.contrastModel));
+  }
+
+  public setMatrixWeight(fontWeight: string): void {
+    const matrix = this.selectedMatrixSnapshot;
+    this.store.dispatch(new SetSelectedMatrix(matrix.size, fontWeight as FontWeight, matrix.contrastModel));
+  }
+
+  public setAPCAContentMode(mode: APCAContentMode): void {
+    this.matrixFilter.setAPCAContentMode(mode);
+  }
+
   public get filteredOutItemCount(): number {
     const filters = this.matrixFilter.filters;
-    return this.isAPCA
-      ? APCA_USAGE_FILTERS.length - filters.apcaUsages.length
-      : WCAG_LEVEL_FILTERS.length - filters.wcagLevels.length;
+    const activeOptions = this.isAPCA
+      ? APCA_USAGE_FILTERS.filter(usage => this.isAPCAUsageFilterVisible(usage))
+      : WCAG_LEVEL_FILTERS;
+    const selectedOptions = this.isAPCA ? filters.apcaUsages : filters.wcagLevels;
+    return activeOptions.filter(option => !selectedOptions.includes(option)).length;
   }
 
   public isAPCAUsageSelected(usage: string): boolean {
     return this.matrixFilter.filters.apcaUsages.includes(usage);
+  }
+
+  public isAPCAUsageFilterVisible(usage: string): boolean {
+    return this.matrixFilter.apcaContentMode !== 'Text' || usage !== 'No text';
   }
 
   public isWCAGLevelSelected(level: string): boolean {
