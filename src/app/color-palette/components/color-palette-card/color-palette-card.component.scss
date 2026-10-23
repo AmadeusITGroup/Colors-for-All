@@ -13,6 +13,7 @@
     }
     .mat-mdc-card-header {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       padding: 6px 16px 0!important;
       .mat-mdc-card-title {
@@ -26,7 +27,6 @@
         padding: 0px 0px 0!important;
       }
       .mat-icon {
-        margin-bottom: 20px;
         color: rgba(0, 0, 0, 0.4);
       }
     }

@@ -15,6 +15,7 @@ Try it now!
 You can perform the following actions for each palette :
 
 - create
+- Export accessible combinations
 - edit
 - duplicate
 - delete
