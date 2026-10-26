@@ -7,93 +7,53 @@
   </header>
   <div class="help-panel-body">
 <div class="help-container">
-  <div class="description">
+    <section class="description">
     <h2>What is Colors-for-all?</h2>
-    <div class="subsection">
-      Colors for All turns your brand colors into an interactive contrast matrix, revealing every text-and-background combination and accessibility compliance category at once. Switch between WCAG and APCA to compare established contrast ratios with perceptual guidance tailored to font size and weight. Unlike standard pair-by-pair checkers, it helps you spot usable combinations across your entire palette in seconds. Create, name, reorder and refine colors visually or through synchronized JSON, with palettes saved locally in your browser. Less repetitive checking. Faster, better-informed color decisions.
-    </div>
-  </div>
-  <div class="modes">
+      <p>Colors for All turns a palette into an interactive contrast matrix. Each cell shows a foreground/background combination and its accessibility result. Compare WCAG contrast ratios with APCA guidance for the selected font size and weight, then create, name, reorder, and refine colors in the visual editor or synchronized JSON. Palettes are saved locally in your browser.</p>
+    </section>
+    <section class="modes">
     <h2>Modes</h2>
-    <div class="subsection">
-      2 modes are offered: 
+      <p>Select a contrast model in the palette header:</p>
       <ul>
-        <li>WCAG (default)</li>
-        <li>APCA</li>
+        <li><strong>WCAG</strong> reports AA and AAA results.</li>
+        <li><strong>APCA</strong> reports signed Lc values and typography-aware usage guidance.</li>
       </ul>
-      The APCA / WCAG selector in a palette's header switches the entire matrix. Your choice is remembered locally.
-    </div>
-  </div>
-  <div class="features">
+      <p>Your selected model is remembered locally.</p>
+    </section>
+    <section class="features">
     <h2>Features</h2>
-      <div class="subsection">
-      You can perform the following actions for each palette :
-      <ul>
-        <li>Create</li>
-        <li>Export accessible combinations</li>
-        <li>Download</li>
-        <li>Upload</li>
-        <li>Edit</li>
-        <li>Duplicate</li>
-        <li>Delete</li>
-        <li>Save locally</li>
-      </ul>
-      There is no limit in the number of colors for each palette. The application generates automatically a matrix
-      (same colors horizontally and vertically) from this palette. Each cell of the matrix is the combination between 2
-      colors (foreground/background). The ratio (WCAG) or Lc value (APCA) is automatically computed and displayed for each
-      combination. All accessible matches are visually highlighted. The count in the matrix's top-left cell follows the
-      selected contrast mode; swapping foreground and background counts as a separate combination.
-      The More options menu can download the palette as <code>palette-name_YY-MM-DD.json</code> or export accessible
-      combinations in JSON, XLS, CSV, TXT, or PDF. Exports follow the active contrast mode and filters; PDF includes
-      small previews of both colors. Use Upload file in the homepage header to import a palette, then Click Save.
-    </div>
-  </div>
-  <div class="features">
+      <h3>Palette actions</h3>
+      <p>Each palette can be created, edited, duplicated, deleted, downloaded, or saved locally. There is no fixed limit on the number of colors.</p>
+      <p><strong>More options &gt; Download</strong> saves the palette as <code>palette-name_YY-MM-DD.json</code>.</p>
+      <h3>Reading the matrix</h3>
+      <p>The matrix places background colors in rows and text colors in columns. WCAG ratios or APCA Lc values are computed for every pair, and accessible results are highlighted. The count in the top-left cell follows the selected model and filters. Reversing foreground and background creates a separate combination.</p>
+      <h3>Export accessible combinations</h3>
+      <p>Choose <strong>More options &gt; Export accessible colors</strong> to export only combinations that pass the selected model and the active filters. JSON, XLS, CSV, TXT, and PDF are available. XLS, PDF, and TXT headers identify the selected filters and show the palette, model, relevant APCA mode and typography, and result count together in one pipe-delimited row. PDF also includes previews of both colors.</p>
+      <h3>Import a palette</h3>
+      <p>Use <strong>Upload file</strong> in the homepage header to import a palette, then <strong>Click Save</strong> in the creation dialog.</p>
+    </section>
+    <section class="features">
     <h2>Palette Editor</h2>
-    <div class="subsection">
-      The palette editor has two synchronized tabs: Color picker and JSON. Valid JSON edits immediately update
-      the visual list, and visual edits immediately update the hexadecimal JSON array. An incomplete or invalid
-      JSON draft is preserved without replacing the last valid list; saving remains disabled until it is corrected.
-      Each color has a rectangular preview, editable color value, drag handle, up/down controls, and a menu for
-      duplication or deletion. Add color appends a new color at the end of the palette.
-    </div>
-    <div class="subsection">
-      Each color can have an optional name. Edit its Name field in Color picker, or use a named JSON entry such as
-      <code>&#123;"hex":"#0C66E1","name":"Primary-60"&#125;</code> alongside unnamed hex strings.
-      Names follow their colors when moved, duplicated, or deleted. The matrix shows each name before its hex code,
-      on separate lines with the same styling, in both row and column headers. Removing a name restores hex-only display.
-    </div>
-    <div class="subsection">
-      Clicking a color's rectangular preview opens the integrated color picker in HEX format every time.
-      RGB and HSL are available within that window. There is no additional mode or channel panel in the list.
-      Colors are saved as opaque six-digit sRGB hex values. Transparent colors are not supported by palette storage.
-      Cancel discards the editor's unsaved changes.
-    </div>
-  </div>
-  <div class="rules" id="apca-contrast">
+      <h3>Color picker and JSON</h3>
+      <p>The editor has two synchronized tabs. Valid JSON edits update the visual list, and visual edits update the JSON. Invalid drafts remain visible without replacing the last valid list; saving stays disabled until the draft is corrected.</p>
+      <p>Each color has a preview, editable value, drag handle, move controls, and a menu for duplication or deletion. <strong>Add color</strong> appends a new color.</p>
+      <h3>Color names</h3>
+      <p>Names are optional. Set a name in the Color picker, or use an object such as <code>&#123;"hex":"#0C66E1","name":"Primary-60"&#125;</code> alongside unnamed hex strings in JSON. Names follow colors when they are moved, duplicated, or deleted. Matrix headers show a name above its hex value; clearing a name restores hex-only display.</p>
+      <h3>Color values and saving</h3>
+      <p>Select a color preview to open the integrated picker in HEX format. RGB and HSL are available in the picker window. Palette colors are stored as opaque six-digit sRGB hex values; transparent colors are not supported. Cancel discards unsaved changes.</p>
+    </section>
+  <section class="rules" id="apca-contrast">
     <h2>APCA rules</h2>
     <div class="subsection">
-      <a target="_blank" href="https://git.apcacontrast.com/documentation/APCA_in_a_Nutshell.html">APCA</a> reports a signed lightness contrast (Lc), rounded to one decimal place. Positive values mean dark text
-      on a light background; negative values mean light text on a dark background. Rows are background colors, columns are text colors. Swapping colors can change the contrast magnitude as well as its sign.
+      <p><a target="_blank" rel="noopener noreferrer" href="https://git.apcacontrast.com/documentation/APCA_in_a_Nutshell.html">APCA</a> reports signed lightness contrast (Lc), rounded to one decimal place. Positive values mean dark text on a light background; negative values mean light text on a dark background. Rows are backgrounds and columns are text colors. Reversing the colors can change both the sign and magnitude.</p>
     </div>
     <div class="subsection">
-      A check marks combinations with an unrounded absolute Lc of at least 15, regardless of selected size or weight.
-      A cross and a faded sample mark combinations below that contrast threshold. The check is not a text-readability
-      approval. The Lc value remains displayed in the selected size and weight in either case. When the selected typography
-      does not qualify for a text usage, the tooltip
-      shows the minimum font size and numeric weight when a text recommendation exists.
-      For combinations meeting the contrast threshold, a usage label is displayed below the Lc value at 13px.
-      It is the most readable usage supported by both the unrounded absolute Lc and the selected typography,
-      not simply the highest contrast band. Body, fluent, and large-text classifications use the Bronze guidance below.
-      When no text usage qualifies, the label is "No text", even if Lc is above 30; the cell still receives a check
-      and uses its text color. Absolute Lc values from 15 to below 30 always show "No text".
-      Spot-text eligibility uses fontLookupAPCA to supply the size/weight minimum not specified in the Bronze summary;
-      this fallback never grants a body or fluent label. Tooltip minimums refer to the lowest supported text usage,
-      which may be spot text rather than body text. Non-text-only and unsupported entries do not pass as text.
-      Weights 800 and 900 use the 700-weight Bronze bracket. Sizes are CSS reference pixels, based on Arial/Helvetica-like
-      fonts with an x-height ratio around 0.52. Other typefaces can require size or weight adjustments.
-      These reference guidelines are not a guarantee for every typeface or prolonged body-text reading.
-      APCA recommendations are not WCAG 2 AA/AAA conformance and APCA remains a developing method.
+      <h3>Checks and usage labels</h3>
+      <p>A check marks combinations with an unrounded absolute Lc of at least 15, regardless of selected size or weight. A cross and faded sample mark combinations below that threshold. A check is not approval of text readability. The Lc value remains visible for the selected typography.</p>
+      <p>When a combination meets the contrast threshold, its usage label reflects both unrounded absolute Lc and the selected typography, not just the highest contrast band. Body, fluent, and large-text labels use the Bronze guidance below. When no text usage qualifies, the label is “No text”; the cell can still receive a check. Absolute Lc values from 15 to below 30 always show “No text”.</p>
+      <p>Spot-text eligibility uses <code>fontLookupAPCA</code> for a size/weight minimum not specified in the Bronze summary. This fallback never grants a body or fluent label. Tooltip minimums identify the lowest supported text usage, which may be spot text. Non-text-only and unsupported entries do not qualify as text.</p>
+      <p>Weights 800 and 900 use the 700-weight Bronze bracket. Sizes are CSS reference pixels based on Arial/Helvetica-like fonts with an x-height ratio around 0.52; other typefaces may need size or weight adjustments. These guidelines are not a guarantee for every typeface or for prolonged body-text reading.</p>
+      <p>APCA recommendations are not WCAG 2 AA/AAA conformance. APCA remains a developing method.</p>
     </div>
     <div class="subsection">
       <h3>APCA Usage Levels</h3>
@@ -155,28 +115,19 @@
       </div>
     </div>
     <div class="subsection">
-      Lc 90 is a suggested maximum for text larger than 36px at bold weight (700 or heavier), and for large areas
-      of color. A tooltip warns when selected very large bold text exceeds that level; this advisory does not change
-      the Lc or automatically fail the combination. Small fonts have no maximum. This text matrix does not evaluate
-      icon shape, stroke thickness, solid dimensions, or whether a non-text element is semantic. Its check/cross
-      must not be interpreted as passing those non-text requirements.
+      <h3>Limits and non-text</h3>
+      <p>Lc 90 is a suggested maximum for text larger than 36px at bold weight (700 or heavier), and for large areas of color. A tooltip warns when selected very large bold text exceeds that level; this advisory does not change Lc or automatically fail the combination. Small fonts have no maximum.</p>
+      <p>The matrix does not evaluate icon shape, stroke thickness, solid dimensions, or whether a non-text element is semantic. Its check or cross does not certify those non-text requirements.</p>
     </div>
     <div class="subsection">
-      Calculations run locally using the unmodified apca-w3 0.1.9 library (algorithm 0.0.98G-4g),
-      by Andrew Somers / Myndex. Reference:
-      <a href="https://apcacontrast.com/" target="_blank" rel="noopener noreferrer">APCA Contrast Calculator</a>.
-      Background and documentation:
-      <a href="https://git.apcacontrast.com/documentation/WhyAPCA" target="_blank" rel="noopener noreferrer">Why APCA</a>.
-      <a href="https://github.com/Myndex/apca-w3#font-lookup-table" target="_blank" rel="noopener noreferrer">Font lookup tables</a>.
-      <a href="https://github.com/Myndex/SAPC-APCA/discussions" target="_blank" rel="noopener noreferrer">Questions and issues</a>.
-      This integration is intended for evaluating web content on self-illuminated displays and is subject to the
-      <a href="assets/apca-w3/LICENSE.md" target="_blank" rel="noopener noreferrer">APCA-W3 license and notices</a>.
+      <h3>Calculation and references</h3>
+      <p>Calculations run locally using the unmodified apca-w3 0.1.9 library (algorithm 0.0.98G-4g), by Andrew Somers / Myndex. References: <a href="https://apcacontrast.com/" target="_blank" rel="noopener noreferrer">APCA Contrast Calculator</a>, <a href="https://git.apcacontrast.com/documentation/WhyAPCA" target="_blank" rel="noopener noreferrer">Why APCA</a>, <a href="https://github.com/Myndex/apca-w3#font-lookup-table" target="_blank" rel="noopener noreferrer">font lookup tables</a>, and <a href="https://github.com/Myndex/SAPC-APCA/discussions" target="_blank" rel="noopener noreferrer">questions and issues</a>.</p>
+      <p>This integration is intended for evaluating web content on self-illuminated displays and is subject to the <a href="assets/apca-w3/LICENSE.md" target="_blank" rel="noopener noreferrer">APCA-W3 license and notices</a>.</p>
     </div>
-  </div>
-  <div class="rules">
+  </section>
+  <section class="rules">
     <h2>WCAG rules</h2>
-    WCAG mode retains its AA and AAA contrast ratios. Please find below a summary of the rules as defined by <a target="_blank" href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum"
-      class="href">WCAG 2.2</a> regarding contrast ratio:
+    <p>WCAG mode reports AA and AAA contrast ratios. The table summarizes the contrast rules in <a target="_blank" rel="noopener noreferrer" href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum" class="href">WCAG 2.2 Contrast (Minimum)</a>.</p>
     <div class="table-container">
       <table>
         <thead>
@@ -233,8 +184,8 @@
         </tbody>
       </table>
     </div>
-  </div>
-  <div class="contributors">
+  </section>
+  <section class="contributors">
     <h2>Contributors</h2>
     <ul>
       <li><a href="mailto:jean-pierre.boutherin@amadeus.com">Jean-Pierre Boutherin</a></li>
@@ -243,13 +194,14 @@
       <li>Vincent Léon</li>
       <li>Fabien Berger</li>
     </ul>
-  </div>
+  </section>
 
-  <div class="github">
+  <section class="github">
     <h2>Want to contribute?</h2>
-    Go to <a target="_blank" href="https://github.com/AmadeusITGroup/Colors-for-All"
+    <p>Visit <a target="_blank" rel="noopener noreferrer" href="https://github.com/AmadeusITGroup/Colors-for-All"
       class="href">https://github.com/AmadeusITGroup/Colors-for-All</a>
-  </div>
+    </p>
+  </section>
 </div>
   </div>
 </section>

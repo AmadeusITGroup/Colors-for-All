@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { ColorMatrixSelection } from '../models/color-matrix.model';
 import { ColorPalette } from '../models/color-palette.model';
-import { AccessibleMatrixCell, MatrixFilterService } from './matrix-filter.service';
+import { APCA_USAGE_MIN_LC, AccessibleMatrixCell, MatrixFilterService } from './matrix-filter.service';
 
 export type AccessibleExportFormat = 'json' | 'xls' | 'csv' | 'txt' | 'pdf';
 
@@ -43,7 +43,8 @@ export class AccessibleCombinationsExportService {
     accessibleCells: AccessibleMatrixCell[] = this.matrixFilter.accessibleCells
   ): void | Promise<void> {
     const model = matrix.contrastModel || 'WCAG';
-    const rows = accessibleCells.map(({ data, backgroundIndex, textIndex }) => ({
+    const filteredCells = this.matrixFilter.filterAccessibleCells(accessibleCells, model);
+    const rows = filteredCells.map(({ data, backgroundIndex, textIndex }) => ({
       backgroundName: palette.names?.[backgroundIndex]?.trim() || '',
       backgroundColor: palette.data[backgroundIndex],
       textName: palette.names?.[textIndex]?.trim() || '',
@@ -65,10 +66,10 @@ export class AccessibleCombinationsExportService {
         this.downloadBlob('\uFEFF' + this.toDelimited(rows, ','), 'text/csv;charset=utf-8', filename);
         break;
       case 'txt':
-        this.downloadBlob(this.toDelimited(rows, '\t'), 'text/plain;charset=utf-8', filename);
+        this.downloadBlob(`${this.exportHeader(palette.title, model, matrix, rows.length)}\r\n${this.toDelimited(rows, '\t')}`, 'text/plain;charset=utf-8', filename);
         break;
       case 'xls':
-        this.downloadBlob(this.toExcelXml(rows), 'application/vnd.ms-excel;charset=utf-8', filename);
+        this.downloadBlob(this.toExcelXml(rows, this.exportHeader(palette.title, model, matrix, rows.length)), 'application/vnd.ms-excel;charset=utf-8', filename);
         break;
       case 'pdf':
         return this.downloadPdf(palette.title, model, matrix, rows, filename);
@@ -97,7 +98,7 @@ export class AccessibleCombinationsExportService {
     }).join(delimiter)).join('\r\n');
   }
 
-  private toExcelXml(rows: AccessibleCombinationRow[]): string {
+  private toExcelXml(rows: AccessibleCombinationRow[], exportHeader: string): string {
     const colorStyle = (color: string): string => `Color_${this.normalizeExcelHex(color)}`;
     const colors: string[] = [];
     rows.forEach(row => {
@@ -118,6 +119,7 @@ export class AccessibleCombinationsExportService {
       'Text preview',
       ...EXPORT_HEADERS.slice(2)
     ];
+    const filterHeader = `<Row><Cell ss:MergeAcross="11" ss:StyleID="Header"><Data ss:Type="String">${this.escapeHtml(exportHeader)}</Data></Cell></Row>`;
     const header = `<Row>${xlsHeaders.map(value => `<Cell ss:StyleID="Header"><Data ss:Type="String">${this.escapeHtml(value)}</Data></Cell>`).join('')}</Row>`;
     const tableRows = rows.map(row => {
       const values = [
@@ -135,7 +137,7 @@ export class AccessibleCombinationsExportService {
         return `<Cell><Data ss:Type="String">${this.escapeHtml(String(value ?? ''))}</Data></Cell>`;
       }).join('')}</Row>`;
     }).join('');
-    return `<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Styles>${styles}</Styles><Worksheet ss:Name="Accessible"><Table>${columns}${header}${tableRows}</Table></Worksheet></Workbook>`;
+    return `<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Styles>${styles}</Styles><Worksheet ss:Name="Accessible"><Table>${columns}${filterHeader}${header}${tableRows}</Table></Worksheet></Workbook>`;
   }
 
   private normalizeExcelHex(color: string): string {
@@ -157,16 +159,27 @@ export class AccessibleCombinationsExportService {
     const columns = { background: 10, backgroundName: 21, text: 82, textName: 93, result: 158, usage: 198 };
     let y = 12;
 
-    const drawHeading = () => {
-      document.setFontSize(14);
+    const drawHeading = (includeTitle: boolean, includeExportHeader: boolean) => {
+      if (includeTitle) {
+        document.setFontSize(14);
+        document.setFont('helvetica', 'bold');
+        document.text('Accessible combinations', margin, y);
+        y += 6;
+      }
+      if (includeExportHeader) {
+        document.setFontSize(8);
+        document.setFont('helvetica', 'normal');
+        const exportHeader = this.exportHeader(paletteTitle, model, matrix, rows.length);
+        const availableWidth = document.internal.pageSize.getWidth() - margin * 2;
+        const headerWidth = document.getTextWidth(exportHeader);
+        if (headerWidth > availableWidth) {
+          document.setFontSize(Math.max(5, 8 * availableWidth / headerWidth));
+        }
+        document.text(exportHeader, margin, y);
+        y += 6;
+      }
       document.setFont('helvetica', 'bold');
-      document.text('Accessible combinations', margin, y);
-      y += 6;
       document.setFontSize(8);
-      document.setFont('helvetica', 'normal');
-      document.text(`${paletteTitle} | ${model} | ${matrix.size}px / ${matrix.fontWeight} | ${rows.length} combinations`, margin, y);
-      y += 7;
-      document.setFont('helvetica', 'bold');
       document.text('Background', columns.background, y);
       document.text('Text color', columns.text, y);
       document.text(model === 'WCAG' ? 'Result' : 'Contrast', columns.result, y);
@@ -185,12 +198,12 @@ export class AccessibleCombinationsExportService {
       document.rect(x, top, 7, 6, 'FD');
     };
 
-    drawHeading();
+    drawHeading(true, true);
     rows.forEach(row => {
       if (y + 10 > pageHeight - margin) {
         document.addPage();
         y = 12;
-        drawHeading();
+        drawHeading(false, false);
       }
       drawSwatch(row.backgroundColor, columns.background, y - 5);
       drawSwatch(row.textColor, columns.text, y - 5);
@@ -219,6 +232,31 @@ export class AccessibleCombinationsExportService {
 
   private sanitizeFilename(title: string): string {
     return title.trim().replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_').replace(/[. ]+$/g, '') || 'Palette';
+  }
+
+  private exportHeader(paletteTitle: string, model: string, matrix: ColorMatrixSelection, count: number): string {
+    const parts = [paletteTitle, model];
+
+    if (model === 'APCA') {
+      const mode = this.matrixFilter.apcaContentMode;
+      parts.push(mode);
+      if (mode === 'Text') {
+        parts.push(`${matrix.size}px, ${matrix.fontWeight}`);
+      }
+      const thresholds = this.matrixFilter.filters.apcaUsages
+        .filter(usage => mode !== 'Text' || usage !== 'No text')
+        .map(usage => APCA_USAGE_MIN_LC[usage])
+        .sort((left, right) => left - right)
+        .map(lc => `Lc>${lc}`);
+      parts.push(`Filtered accessible combinations only ${thresholds.join(', ') || 'none'}`);
+    } else {
+      parts.push(`${matrix.size}px, ${matrix.fontWeight}`);
+      const levels = this.matrixFilter.filters.wcagLevels;
+      parts.push(`Filtered accessible combinations only ${levels.join(', ') || 'none'}`);
+    }
+
+    parts.push(`${count} combination${count === 1 ? '' : 's'}`);
+    return parts.join(' | ');
   }
 
   private timestamp(): string {

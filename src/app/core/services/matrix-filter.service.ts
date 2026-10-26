@@ -111,7 +111,11 @@ export class MatrixFilterService {
   }
 
   public get accessibleCells(): AccessibleMatrixCell[] {
-    return this.filterCells(this.matrixCells, this.currentContrastModel);
+    return this.filterAccessibleCells(this.matrixCells, this.currentContrastModel);
+  }
+
+  public filterAccessibleCells(cells: AccessibleMatrixCell[], contrastModel: ContrastModel): AccessibleMatrixCell[] {
+    return this.filterCells(cells, contrastModel);
   }
 
   public getAccessibleCellsForRows(rows: ColorMatrixCell[][], contrastModel: ContrastModel): AccessibleMatrixCell[] {
@@ -119,7 +123,7 @@ export class MatrixFilterService {
     rows.forEach((row, backgroundIndex) => row.forEach((data, textIndex) => {
       cells.push({ data, backgroundIndex, textIndex });
     }));
-    return this.filterCells(cells, contrastModel);
+    return this.filterAccessibleCells(cells, contrastModel);
   }
 
   private matchesAPCAUsageBand(lc: number, usage: string): boolean {

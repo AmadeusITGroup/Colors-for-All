@@ -38,6 +38,12 @@ describe('HelpComponent', () => {
     expect(features.textContent).toContain('Click Save');
   });
 
+  it('should explain that accessible exports use active filters', () => {
+    const features: HTMLElement = fixture.nativeElement.querySelector('.features');
+    expect(features.textContent).toContain('only combinations that pass the selected model and the active filters');
+    expect(features.textContent).toContain('headers identify the selected filters');
+  });
+
   it('should close through the header cross while keeping the help content', () => {
     const button: HTMLButtonElement = fixture.nativeElement.querySelector('#help-close-button');
     expect(button.getAttribute('aria-label')).toBe('Close Help');
