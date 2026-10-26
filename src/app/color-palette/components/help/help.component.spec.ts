@@ -35,13 +35,13 @@ describe('HelpComponent', () => {
     expect(features.textContent).toContain('More options');
     expect(features.textContent).toContain('palette-name_YY-MM-DD.json');
     expect(features.textContent).toContain('Upload file');
-    expect(features.textContent).toContain('Click Save');
+    expect(features.textContent).toContain('select Save');
   });
 
   it('should explain that accessible exports use active filters', () => {
     const features: HTMLElement = fixture.nativeElement.querySelector('.features');
-    expect(features.textContent).toContain('only combinations that pass the selected model and the active filters');
-    expect(features.textContent).toContain('headers identify the selected filters');
+    expect(features.textContent).toContain('only combinations that pass the selected model and active filters');
+    expect(features.textContent).toContain('headers list the palette, model, applicable APCA mode and typography');
   });
 
   it('should close through the header cross while keeping the help content', () => {

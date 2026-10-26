@@ -8,8 +8,8 @@
   <div class="help-panel-body">
 <div class="help-container">
     <section class="description">
-    <h2>What is Colors-for-all?</h2>
-      <p>Colors for All turns a palette into an interactive contrast matrix. Each cell shows a foreground/background combination and its accessibility result. Compare WCAG contrast ratios with APCA guidance for the selected font size and weight, then create, name, reorder, and refine colors in the visual editor or synchronized JSON. Palettes are saved locally in your browser.</p>
+    <h2>What is Colors for All?</h2>
+      <p>Colors for All turns a palette into an interactive contrast matrix. Each cell shows a foreground/background combination and its accessibility result. Compare WCAG contrast ratios with APCA guidance for the selected font size and weight, then create, name, reorder, and refine colors in the visual editor or synchronized JSON. Palettes are saved locally in your browser. They can be saved as JSON files for later use or shared with colleagues.</p>
     </section>
     <section class="modes">
     <h2>Modes</h2>
@@ -18,7 +18,7 @@
         <li><strong>WCAG</strong> reports AA and AAA results.</li>
         <li><strong>APCA</strong> reports signed Lc values and typography-aware usage guidance.</li>
       </ul>
-      <p>Your selected model is remembered locally.</p>
+      <p>The selected model is remembered locally.</p>
     </section>
     <section class="features">
     <h2>Features</h2>
@@ -28,15 +28,15 @@
       <h3>Reading the matrix</h3>
       <p>The matrix places background colors in rows and text colors in columns. WCAG ratios or APCA Lc values are computed for every pair, and accessible results are highlighted. The count in the top-left cell follows the selected model and filters. Reversing foreground and background creates a separate combination.</p>
       <h3>Export accessible combinations</h3>
-      <p>Choose <strong>More options &gt; Export accessible colors</strong> to export only combinations that pass the selected model and the active filters. JSON, XLS, CSV, TXT, and PDF are available. XLS, PDF, and TXT headers identify the selected filters and show the palette, model, relevant APCA mode and typography, and result count together in one pipe-delimited row. PDF also includes previews of both colors.</p>
+      <p>Choose <strong>More options &gt; Export accessible colors</strong> to export only combinations that pass the selected model and active filters. Exports are available as JSON, XLS, CSV, TXT, or PDF. The XLS, PDF, and TXT headers list the palette, model, applicable APCA mode and typography, selected filters, and result count in a single pipe-delimited row. PDF and XLS also include previews of both colors.</p>
       <h3>Import a palette</h3>
-      <p>Use <strong>Upload file</strong> in the homepage header to import a palette, then <strong>Click Save</strong> in the creation dialog.</p>
+      <p>Use <strong>Upload file</strong> in the homepage header to import a palette, then select <strong>Save</strong> in the creation dialog.</p>
     </section>
     <section class="features">
     <h2>Palette Editor</h2>
       <h3>Color picker and JSON</h3>
       <p>The editor has two synchronized tabs. Valid JSON edits update the visual list, and visual edits update the JSON. Invalid drafts remain visible without replacing the last valid list; saving stays disabled until the draft is corrected.</p>
-      <p>Each color has a preview, editable value, drag handle, move controls, and a menu for duplication or deletion. <strong>Add color</strong> appends a new color.</p>
+      <p>Each color has a preview, editable color value, drag handle, move controls, and a menu for duplication or deletion. <strong>Add color</strong> appends a new color.</p>
       <h3>Color names</h3>
       <p>Names are optional. Set a name in the Color picker, or use an object such as <code>&#123;"hex":"#0C66E1","name":"Primary-60"&#125;</code> alongside unnamed hex strings in JSON. Names follow colors when they are moved, duplicated, or deleted. Matrix headers show a name above its hex value; clearing a name restores hex-only display.</p>
       <h3>Color values and saving</h3>
@@ -49,10 +49,10 @@
     </div>
     <div class="subsection">
       <h3>Checks and usage labels</h3>
-      <p>A check marks combinations with an unrounded absolute Lc of at least 15, regardless of selected size or weight. A cross and faded sample mark combinations below that threshold. A check is not approval of text readability. The Lc value remains visible for the selected typography.</p>
-      <p>When a combination meets the contrast threshold, its usage label reflects both unrounded absolute Lc and the selected typography, not just the highest contrast band. Body, fluent, and large-text labels use the Bronze guidance below. When no text usage qualifies, the label is “No text”; the cell can still receive a check. Absolute Lc values from 15 to below 30 always show “No text”.</p>
-      <p>Spot-text eligibility uses <code>fontLookupAPCA</code> for a size/weight minimum not specified in the Bronze summary. This fallback never grants a body or fluent label. Tooltip minimums identify the lowest supported text usage, which may be spot text. Non-text-only and unsupported entries do not qualify as text.</p>
-      <p>Weights 800 and 900 use the 700-weight Bronze bracket. Sizes are CSS reference pixels based on Arial/Helvetica-like fonts with an x-height ratio around 0.52; other typefaces may need size or weight adjustments. These guidelines are not a guarantee for every typeface or for prolonged body-text reading.</p>
+      <p>A check marks combinations with an unrounded absolute Lc of 15 or higher, regardless of the selected size or weight. A cross and faded sample mark combinations below that threshold. A check does not indicate that text is readable. The Lc value remains visible for the selected typography.</p>
+      <p>When a combination meets the contrast threshold, its usage label reflects both the unrounded absolute Lc and the selected typography, not just the highest contrast band. Body, fluent, and large-text labels use the Bronze guidance below. If no text usage qualifies, the label is “No text”; the cell can still receive a check. Absolute Lc values of 15 or higher but below 30 always show “No text”.</p>
+      <p>Spot-text eligibility uses <code>fontLookupAPCA</code> to supply a size/weight minimum not specified in the Bronze summary. This fallback never grants a body or fluent label. Tooltip minimums identify the lowest supported text usage, which may correspond to spot text. Non-text-only and unsupported entries do not qualify as text.</p>
+      <p>Weights 800 and 900 use the 700-weight Bronze bracket. Sizes are CSS reference pixels based on Arial/Helvetica-like fonts with an x-height ratio around 0.52; other typefaces may need size or weight adjustments. These guidelines do not guarantee readability for every typeface or during prolonged body-text reading.</p>
       <p>APCA recommendations are not WCAG 2 AA/AAA conformance. APCA remains a developing method.</p>
     </div>
     <div class="subsection">
@@ -90,9 +90,9 @@
             </tr>
             <tr>
               <td>15</td><td>No text</td>
-              <td>Non-semantic non-text only, with a smallest solid dimension of at least 5px: for example, dividers
-                or thick outlines, not fine details. This does not qualify any text combination as accessible.
-                Treat lower contrast as invisible for many users.</td>
+              <td>For non-semantic, non-text elements with a smallest solid dimension of at least 5px, such as dividers
+                or thick outlines, but not fine details. This does not qualify text as accessible. Treat lower contrast
+                as invisible to many users.</td>
             </tr>
           </tbody>
         </table>

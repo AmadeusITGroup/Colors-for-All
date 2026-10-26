@@ -1,7 +1,8 @@
 :host {
-  .mat-dialog-actions {
+  .delete-dialog-actions {
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
+    gap: 8px;
   }
 }

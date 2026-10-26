@@ -1,7 +1,11 @@
 <div class="modal-container">
-  <div mat-dialog-title>Are you sure you want to delete "{{data.title}}" color palette?</div>
-  <div mat-dialog-actions>
-    <button mat-raised-button color="default" (click)="cancel()">No</button>
-    <button mat-raised-button color="primary" class="button-import" (keyup.enter)="confirmColorPaletteDeletion()" (click)="confirmColorPaletteDeletion()">Yes</button>
+  <h2 mat-dialog-title>Delete palette</h2>
+  <div mat-dialog-content>
+    <p>You are about to delete the <strong>{{data.title}}</strong> palette.</p>
+    <p>All corresponding colors will be lost.</p>
+  </div>
+  <div mat-dialog-actions class="delete-dialog-actions">
+    <button mat-button (click)="cancel()">Keep</button>
+    <button mat-raised-button color="primary" (keyup.enter)="confirmColorPaletteDeletion()" (click)="confirmColorPaletteDeletion()">Delete</button>
   </div>
 </div>

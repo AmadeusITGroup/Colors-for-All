@@ -2,11 +2,8 @@ import { ColorPaletteState } from './../../../core/state/color-palette.state';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ColorPaletteConfirmDeleteModalComponent } from './color-palette-confirm-delete-modal.component';
-import {
-  MatDialogRef,
-  MatButtonModule,
-  MAT_DIALOG_DATA
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsModule } from '@ngxs/store';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -19,6 +16,7 @@ describe('ColorPaletteConfirmDeleteModalComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         MatButtonModule,
+        ColorPaletteConfirmDeleteModalComponent,
         BrowserAnimationsModule,
         NgxsModule.forRoot([ColorPaletteState]),
         RouterTestingModule.withRoutes([])
@@ -35,7 +33,7 @@ describe('ColorPaletteConfirmDeleteModalComponent', () => {
           useValue: jasmine.createSpyObj('MatDialogRef', ['close'])
         }
       ],
-      declarations: [ColorPaletteConfirmDeleteModalComponent]
+      declarations: []
     }).compileComponents();
   }));
 
@@ -48,6 +46,19 @@ describe('ColorPaletteConfirmDeleteModalComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should identify the destructive action and warn that palette colors will be lost', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.querySelector('h2').textContent.trim()).toBe('Delete palette');
+    expect(element.querySelector('.mat-mdc-dialog-content strong').textContent).toBe('test');
+    expect(element.querySelector('.mat-mdc-dialog-content').textContent).toContain('All corresponding colors will be lost.');
+
+    const buttons = Array.from(element.querySelectorAll('.mat-mdc-dialog-actions button'));
+    expect(buttons.map(button => button.textContent.trim())).toEqual(['Keep', 'Delete']);
+    expect(buttons[0].classList.contains('mat-mdc-button-base')).toBe(true);
+    expect(buttons[1].classList.contains('mat-primary')).toBe(true);
+    expect(element.querySelector('.mat-mdc-dialog-actions').classList.contains('delete-dialog-actions')).toBe(true);
   });
 
   it('should cancel color palette deletion', () => {
