@@ -34,6 +34,8 @@ jobs:
         run: npm ci
       - name: build
         run: npm run build:prod
+      - name: Add SPA fallback for deep links
+        run: cp dist/colors-for-all/index.html dist/colors-for-all/404.html
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
