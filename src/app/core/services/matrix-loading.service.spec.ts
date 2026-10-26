@@ -1,5 +1,5 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { NavigationCancel, NavigationError, NavigationSkipped, Router } from '@angular/router';
+import { NavigationCancel, NavigationError, NavigationSkipped, NavigationStart, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { MatrixLoadingService } from './matrix-loading.service';
 import { Store } from '@ngxs/store';
@@ -16,12 +16,14 @@ describe('MatrixLoadingService', () => {
   let card: ColorPaletteCardComponent;
   let navigate: jasmine.Spy;
   let dispatch: jasmine.Spy;
+  let router: { events: Subject<unknown>; navigate: jasmine.Spy; navigated: boolean };
 
   beforeEach(() => {
     events = new Subject();
     navigate = jasmine.createSpy('navigate').and.returnValue(Promise.resolve(true));
     dispatch = jasmine.createSpy('dispatch');
-    TestBed.configureTestingModule({ providers: [{ provide: Router, useValue: { events, navigate } }] });
+    router = { events, navigate, navigated: false };
+    TestBed.configureTestingModule({ providers: [{ provide: Router, useValue: router }] });
     service = TestBed.inject(MatrixLoadingService);
     card = new ColorPaletteCardComponent(
       { dispatch } as unknown as Store,
@@ -49,6 +51,20 @@ describe('MatrixLoadingService', () => {
     expect(ready).toBe(true);
     expect(service.isLoading).toBe(true);
     service.finish();
+    expect(service.isLoading).toBe(false);
+  }));
+
+  it('should show the skeleton for an initial matrix deep link only', fakeAsync(() => {
+    events.next(new NavigationStart(1, '/color-palette/palette-one'));
+    expect(service.isLoading).toBe(true);
+    expect(service.skeletonVisible).toBe(true);
+    tick(32);
+    service.finish();
+
+    router.navigated = true;
+    events.next(new NavigationStart(2, '/color-palette/palette-one'));
+    expect(service.isLoading).toBe(false);
+    events.next(new NavigationStart(3, '/color-palette'));
     expect(service.isLoading).toBe(false);
   }));
 

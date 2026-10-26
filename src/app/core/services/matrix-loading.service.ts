@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable, NgZone } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationCancel, NavigationError, NavigationSkipped, Router } from '@angular/router';
+import { NavigationCancel, NavigationError, NavigationSkipped, NavigationStart, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ColorPalette } from '../models/color-palette.model';
 
@@ -30,6 +30,9 @@ export class MatrixLoadingService {
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: TransitionDocument, private zone: NgZone) {
     router.events.pipe(takeUntilDestroyed()).subscribe(event => {
+      if (event instanceof NavigationStart && !router.navigated && /^\/color-palette\/[^/?#]+(?:[?#].*)?$/.test(event.url)) {
+        void this.start();
+      }
       if (event instanceof NavigationCancel || event instanceof NavigationError || event instanceof NavigationSkipped) {
         this.finish();
       }
