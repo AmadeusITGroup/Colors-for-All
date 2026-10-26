@@ -13,6 +13,7 @@
     "app/color-palette/components/matrix-table/matrix-table.component.spec.ts",
     "app/color-palette/components/help/help.component.spec.ts",
     "app/core/components/navigation/navigation-download.spec.ts",
-    "app/core/services/accessible-combinations-export.service.spec.ts"
+    "app/core/services/accessible-combinations-export.service.spec.ts",
+    "app/core/components/matrix-custom-form/matrix-custom-form.component.spec.ts"
   ]
 }

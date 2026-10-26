@@ -36,8 +36,8 @@
     </mat-form-field>
   </div>
   <cm-accessibility-info-panel *ngIf="!isAPCA"></cm-accessibility-info-panel>
-  <div *ngIf="isAPCA && apcaContentMode === 'Text' && minimumAPCATextLc !== null" class="apca-minimum-info">
-    <span class="accessibility-chip">Text</span>
-    <span class="info">&ge;&nbsp;Lc {{minimumAPCATextLc | number:'1.1-1':'en-US'}}</span>
+  <div *ngIf="isAPCA && (apcaContentMode === 'Non-text' || minimumAPCATextLc !== null)" class="apca-minimum-info">
+    <span class="accessibility-chip">{{apcaContentMode}}</span>
+    <span class="info">&ge;&nbsp;Lc {{(apcaContentMode === 'Text' ? minimumAPCATextLc : 15) | number:'1.1-1':'en-US'}}</span>
   </div>
 </div>
